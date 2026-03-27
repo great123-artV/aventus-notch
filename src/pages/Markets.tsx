@@ -96,7 +96,7 @@ const Markets = () => {
                   {isPositive ? "+" : ""}{asset.changePercent.toFixed(2)}%
                 </div>
                 <p className="text-sm text-muted-foreground text-right hidden sm:block">
-                  {asset.marketCap || asset.volume}
+                  {"marketCap" in asset ? (asset as any).marketCap : asset.volume}
                 </p>
               </Link>
             );
