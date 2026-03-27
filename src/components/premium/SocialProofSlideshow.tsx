@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, User } from 'lucide-react';
-import { mockWins } from '@/lib/mockData';
+
+const mockWins = [
+  { id: 1, user: "James K.", location: "London, UK", invested: 5000, returned: 12400, asset: "Bitcoin" },
+  { id: 2, user: "Sarah M.", location: "New York, USA", invested: 1200, returned: 3100, asset: "Tesla Stock" },
+  { id: 3, user: "Ahmed Y.", location: "Dubai, UAE", invested: 25000, returned: 68000, asset: "Real Estate" },
+  { id: 4, user: "Elena P.", location: "Berlin, Germany", invested: 800, returned: 2200, asset: "Ethereum" },
+  { id: 5, user: "Chen L.", location: "Singapore", invested: 15000, returned: 34500, asset: "Gold" },
+];
 
 export const SocialProofSlideshow = ({ compact = false }) => {
   const [index, setIndex] = useState(0);
