@@ -2,11 +2,12 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   BarChart3, TrendingUp, Globe, Building2, PiggyBank, Shield, Users, ArrowRight,
-  Lock, Zap, ChevronRight, LineChart, Star
+  Lock, Zap, ChevronRight, LineChart, Star, ArrowUpRight
 } from "lucide-react";
 import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow";
 import { GlobalActivityTicker } from "@/components/premium/GlobalActivityTicker";
 import { MarketTicker } from "@/components/premium/TradingViewWidget";
+import { Sponsorships } from "@/components/premium/Sponsorships";
 import { motion } from "framer-motion";
 
 const categories = [
@@ -14,6 +15,7 @@ const categories = [
   { icon: LineChart, title: "Cryptocurrency", desc: "Trade Bitcoin, Ethereum, and 200+ digital assets with live pricing.", color: "from-purple-500/20 to-purple-600/5" },
   { icon: Globe, title: "Forex Trading", desc: "Access global currency markets with competitive spreads and leverage.", color: "from-yellow-500/20 to-yellow-600/5" },
   { icon: Building2, title: "Real Estate", desc: "Own fractions of premium properties starting from $50,000.", color: "from-emerald-500/20 to-emerald-600/5" },
+  { icon: Zap, title: "Oil & Gas", desc: "Invest in energy markets and global oil production assets.", color: "from-orange-500/20 to-orange-600/5" },
   { icon: PiggyBank, title: "Retirement Plans", desc: "Plan your future with smart retirement calculators and projections.", color: "from-pink-500/20 to-pink-600/5" },
 ];
 
@@ -146,13 +148,22 @@ const Index = () => {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map((cat, idx) => (
-              <motion.div
+              <Link
                 key={cat.title}
+                to={
+                  cat.title === "Oil & Gas" ? "/oil-gas" :
+                  cat.title === "Forex Trading" || cat.title === "Cryptocurrency" ? "/analysis" :
+                  cat.title === "Real Estate" ? "/real-estate" :
+                  cat.title === "Retirement Plans" ? "/retirement" :
+                  "/markets"
+                }
+              >
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="group glass-card p-8 rounded-3xl hover:border-primary/50 transition-all duration-500 cursor-pointer relative overflow-hidden"
+                className="group glass-card p-8 rounded-3xl hover:border-primary/50 transition-all duration-500 cursor-pointer relative overflow-hidden h-full"
               >
                 <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   <ArrowUpRight className="w-6 h-6 text-primary" />
@@ -163,10 +174,14 @@ const Index = () => {
                 <h3 className="text-2xl font-bold font-display mb-4">{cat.title}</h3>
                 <p className="text-muted-foreground leading-relaxed text-lg">{cat.desc}</p>
               </motion.div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Sponsorships */}
+      <Sponsorships />
 
       {/* Stats */}
       <section className="py-20 px-4">
