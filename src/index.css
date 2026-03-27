@@ -61,20 +61,36 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    font-family: 'Satoshi', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer utilities {
   .glass {
-    @apply bg-card/60 backdrop-blur-xl border border-glass-border rounded-xl;
+    @apply bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
   .glass-strong {
-    @apply bg-card/80 backdrop-blur-2xl border border-glass-border rounded-xl;
+    @apply bg-card/80 backdrop-blur-3xl border border-white/20 rounded-2xl;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .glass-card {
+    @apply glass hover:bg-card/60 transition-all duration-300;
+  }
+
+  .neon-glow-primary {
+    box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.5);
+  }
+
+  .neon-glow-profit {
+    box-shadow: 0 0 20px -5px hsl(var(--profit) / 0.5);
   }
 
   .gradient-primary {
@@ -97,10 +113,14 @@
   }
 
   .shadow-neon {
-    box-shadow: 0 0 20px hsl(217 91% 60% / 0.15), 0 0 40px hsl(217 91% 60% / 0.05);
+    box-shadow: 0 0 20px hsl(217 91% 60% / 0.3), 0 0 40px hsl(217 91% 60% / 0.1);
   }
 
   .shadow-glow {
-    box-shadow: 0 4px 30px hsl(217 91% 60% / 0.2);
+    box-shadow: 0 8px 32px hsl(217 91% 60% / 0.25);
+  }
+
+  .card-hover {
+    @apply hover:-translate-y-1 transition-transform duration-300 ease-out;
   }
 }

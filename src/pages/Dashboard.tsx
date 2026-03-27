@@ -1,141 +1,209 @@
-import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, Send, Bot, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, Send, Bot, ChevronRight, PieChart as PieIcon, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 import { portfolioData, profitLossData, mockTransactions } from "@/lib/mock-data";
 import { Link } from "react-router-dom";
+import { TradingViewChart } from "@/components/premium/TradingViewWidget";
+import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const { totalBalance, totalProfit, profitPercent, distribution } = portfolioData;
 
   return (
-    <div className="pt-20 pb-10 px-4 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold font-display">Welcome back, Investor</h1>
-        <p className="text-muted-foreground mt-1">Here's your portfolio overview</p>
+    <div className="pt-24 pb-10 px-4 max-w-7xl mx-auto space-y-8 selection:bg-primary/30">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-bold font-display tracking-tight">Welcome back, Investor</h1>
+          <p className="text-muted-foreground mt-1 text-lg">Your portfolio is performing <span className="text-profit font-semibold">well today.</span></p>
+        </div>
+        <div className="hidden md:block w-72">
+          <SocialProofSlideshow compact />
+        </div>
       </div>
 
       {/* Balance + Quick Actions */}
-      <div className="grid lg:grid-cols-3 gap-5 mb-6">
-        <div className="lg:col-span-2 glass p-6 rounded-xl">
-          <p className="text-sm text-muted-foreground mb-1">Total Portfolio Value</p>
-          <div className="flex items-end gap-3 mb-4">
-            <span className="text-3xl sm:text-4xl font-bold font-display">${totalBalance.toLocaleString()}</span>
-            <span className={`flex items-center gap-1 text-sm font-medium ${totalProfit >= 0 ? "text-profit" : "text-loss"}`}>
-              {totalProfit >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-              ${Math.abs(totalProfit).toLocaleString()} ({profitPercent}%)
+      <div className="grid lg:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="lg:col-span-2 glass p-8 rounded-3xl relative overflow-hidden group"
+        >
+          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+            <Activity className="w-32 h-32" />
+          </div>
+          <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Portfolio Value</p>
+          <div className="flex items-baseline gap-4 mb-8">
+            <span className="text-4xl sm:text-6xl font-bold font-display">${totalBalance.toLocaleString()}</span>
+            <span className={`flex items-center gap-1 text-lg font-bold ${totalProfit >= 0 ? "text-profit" : "text-loss"}`}>
+              {totalProfit >= 0 ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+              {profitPercent}%
             </span>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-4 relative z-10">
             <Link to="/markets">
-              <Button size="sm" className="gradient-primary border-0 text-foreground shadow-glow">
-                <TrendingUp className="w-4 h-4 mr-1" /> Invest
+              <Button size="lg" className="gradient-primary border-0 text-white shadow-glow px-8 rounded-2xl font-bold neon-glow-primary transition-all hover:scale-105 active:scale-95">
+                <TrendingUp className="w-5 h-5 mr-2" /> Invest Now
               </Button>
             </Link>
-            <Button size="sm" variant="outline" className="bg-secondary/30 border-glass-border">
-              <Wallet className="w-4 h-4 mr-1" /> Withdraw
+            <Button size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
+              <Wallet className="w-5 h-5 mr-2" /> Withdraw
             </Button>
-            <Button size="sm" variant="outline" className="bg-secondary/30 border-glass-border">
-              <Send className="w-4 h-4 mr-1" /> Transfer
+            <Button size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
+              <Send className="w-5 h-5 mr-2" /> Transfer
             </Button>
           </div>
-        </div>
+        </motion.div>
 
         {/* AI Assistant */}
-        <div className="glass p-6 rounded-xl border-primary/20">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-              <Bot className="w-4 h-4 text-foreground" />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="glass p-8 rounded-3xl border-primary/20 relative flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center shadow-glow neon-glow-primary">
+                <Bot className="w-6 h-6 text-white" />
+              </div>
+              <span className="font-bold text-xl font-display">AI Insights</span>
             </div>
-            <span className="font-semibold text-sm font-display">AI Assistant</span>
+            <p className="text-muted-foreground mb-6 leading-relaxed text-lg">
+              "Your portfolio is heavily weighted in stocks. Consider diversifying into crypto or real estate for better risk-adjusted returns."
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
-            Your portfolio is heavily weighted in stocks. Consider diversifying into crypto or real estate for better risk-adjusted returns.
-          </p>
-          <Button variant="ghost" size="sm" className="text-primary p-0 h-auto">
-            View Suggestions <ChevronRight className="w-4 h-4" />
+          <Button variant="ghost" size="lg" className="text-primary p-0 h-auto font-bold hover:bg-transparent hover:text-primary/80 group text-lg">
+            Optimization Strategy <ChevronRight className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" />
           </Button>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Charts */}
-      <div className="grid lg:grid-cols-5 gap-5 mb-6">
-        {/* P/L Chart */}
-        <div className="lg:col-span-3 glass p-6 rounded-xl">
-          <h3 className="font-semibold font-display mb-4">Portfolio Performance</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={profitLossData}>
-              <defs>
-                <linearGradient id="plGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(217, 91%, 60%)" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="hsl(217, 91%, 60%)" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 12 }} />
-              <YAxis hide />
-              <Tooltip
-                contentStyle={{ background: "hsl(222, 41%, 8%)", border: "1px solid hsl(222, 20%, 18%)", borderRadius: "8px", color: "hsl(210, 40%, 96%)" }}
-                formatter={(v: number) => [`$${v.toLocaleString()}`, "Value"]}
-              />
-              <Area type="monotone" dataKey="value" stroke="hsl(217, 91%, 60%)" strokeWidth={2} fill="url(#plGrad)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+      {/* Main Charts Section */}
+      <div className="grid lg:grid-cols-5 gap-6">
+        {/* TradingView Live Chart */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+          className="lg:col-span-3 space-y-4"
+        >
+          <div className="flex items-center justify-between px-2">
+            <h3 className="font-bold font-display text-xl flex items-center gap-2">
+              <Activity className="w-5 h-5 text-primary" /> Live Market Analysis
+            </h3>
+            <div className="flex gap-2">
+              <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase tracking-widest text-muted-foreground">BTC/USDT</span>
+              <span className="px-3 py-1 bg-profit/20 rounded-full text-[10px] font-bold uppercase tracking-widest text-profit">Live</span>
+            </div>
+          </div>
+          <TradingViewChart />
+        </motion.div>
 
-        {/* Distribution Donut */}
-        <div className="lg:col-span-2 glass p-6 rounded-xl">
-          <h3 className="font-semibold font-display mb-4">Allocation</h3>
-          <div className="flex items-center justify-center">
-            <PieChart width={180} height={180}>
-              <Pie data={distribution} cx={90} cy={90} innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="value">
-                {distribution.map((entry, i) => (
-                  <Cell key={i} fill={entry.color} />
-                ))}
-              </Pie>
-            </PieChart>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            {distribution.map((d) => (
-              <div key={d.name} className="flex items-center gap-2 text-xs">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: d.color }} />
-                <span className="text-muted-foreground">{d.name}</span>
+        {/* Portfolio Mini Charts & Distribution */}
+        <div className="lg:col-span-2 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="glass p-6 rounded-3xl"
+          >
+            <h3 className="font-bold font-display mb-4 flex items-center gap-2">
+              <PieIcon className="w-5 h-5 text-primary" /> Asset Allocation
+            </h3>
+            <div className="flex items-center justify-between">
+              <div className="flex-1 h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={distribution} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={5} dataKey="value">
+                      {distribution.map((entry, i) => (
+                        <Cell key={i} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-            ))}
-          </div>
+              <div className="flex-1 space-y-2 pl-4">
+                {distribution.map((d) => (
+                  <div key={d.name} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full" style={{ background: d.color }} />
+                      <span className="text-muted-foreground">{d.name}</span>
+                    </div>
+                    <span className="font-bold">{d.value}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            className="glass p-6 rounded-3xl bg-gradient-to-br from-card/40 to-primary/5"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold font-display flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-profit" /> Profit History
+              </h3>
+              <span className="text-xs font-bold text-profit">+12.4% THIS MONTH</span>
+            </div>
+            <ResponsiveContainer width="100%" height={120}>
+              <AreaChart data={profitLossData}>
+                <defs>
+                  <linearGradient id="profitGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--profit))" stopOpacity={0.3} />
+                    <stop offset="100%" stopColor="hsl(var(--profit))" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <Area type="monotone" dataKey="value" stroke="hsl(var(--profit))" strokeWidth={3} fill="url(#profitGrad)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </motion.div>
         </div>
       </div>
 
       {/* Recent Transactions */}
-      <div className="glass p-6 rounded-xl">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold font-display">Recent Transactions</h3>
-          <Button variant="ghost" size="sm" className="text-primary">View All</Button>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="glass p-8 rounded-3xl"
+      >
+        <div className="flex items-center justify-between mb-8">
+          <h3 className="text-2xl font-bold font-display">Recent Activity</h3>
+          <Button variant="ghost" className="text-primary font-bold hover:bg-primary/10">View Detailed Statement</Button>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {mockTransactions.map((tx) => (
-            <div key={tx.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-              <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+            <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group cursor-pointer">
+              <div className="flex items-center gap-5">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 ${
                   tx.type === "buy" ? "bg-profit/10 text-profit" :
                   tx.type === "sell" ? "bg-loss/10 text-loss" :
                   "bg-primary/10 text-primary"
                 }`}>
-                  {tx.type === "buy" ? <ArrowDownRight className="w-4 h-4" /> :
-                   tx.type === "sell" ? <ArrowUpRight className="w-4 h-4" /> :
-                   <Wallet className="w-4 h-4" />}
+                  {tx.type === "buy" ? <ArrowDownRight className="w-6 h-6" /> :
+                   tx.type === "sell" ? <ArrowUpRight className="w-6 h-6" /> :
+                   <Wallet className="w-6 h-6" />}
                 </div>
                 <div>
-                  <p className="text-sm font-medium capitalize">{tx.type} {tx.asset}</p>
-                  <p className="text-xs text-muted-foreground">{tx.date}</p>
+                  <p className="text-lg font-bold capitalize">{tx.type} {tx.asset}</p>
+                  <p className="text-sm text-muted-foreground">{tx.date}</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm font-medium">${tx.value.toLocaleString()}</p>
-                <p className={`text-xs capitalize ${tx.status === "completed" ? "text-profit" : "text-yellow-500"}`}>{tx.status}</p>
+                <p className="text-lg font-bold font-mono">${tx.value.toLocaleString()}</p>
+                <p className={`text-xs font-bold uppercase tracking-widest ${tx.status === "completed" ? "text-profit" : "text-yellow-500"}`}>{tx.status}</p>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

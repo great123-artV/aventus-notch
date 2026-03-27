@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navbar } from "@/components/layout/Navbar";
+import { BottomNav } from "@/components/layout/BottomNav";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Markets from "./pages/Markets";
@@ -12,6 +13,7 @@ import RealEstate from "./pages/RealEstate";
 import Retirement from "./pages/Retirement";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,8 +34,10 @@ const App = () => (
           <Route path="/retirement" element={<Retirement />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <BottomNav />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
