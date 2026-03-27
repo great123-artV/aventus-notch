@@ -3,8 +3,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { Navbar } from "@/components/layout/Navbar";
+import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
+import Markets from "./pages/Markets";
+import AssetDetail from "./pages/AssetDetail";
+import RealEstate from "./pages/RealEstate";
+import Retirement from "./pages/Retirement";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -14,9 +22,16 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/markets" element={<Markets />} />
+          <Route path="/asset/:id" element={<AssetDetail />} />
+          <Route path="/real-estate" element={<RealEstate />} />
+          <Route path="/retirement" element={<Retirement />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
