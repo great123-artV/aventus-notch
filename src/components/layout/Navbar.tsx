@@ -6,10 +6,7 @@ import { useState } from "react";
 const navItems = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Markets", path: "/markets" },
-  { label: "Analysis", path: "/analysis" },
-  { label: "Oil & Gas", path: "/oil-gas" },
   { label: "Real Estate", path: "/real-estate" },
-  { label: "How to Invest", path: "/how-to-invest" },
   { label: "Retirement", path: "/retirement" },
 ];
 

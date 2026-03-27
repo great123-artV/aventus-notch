@@ -112,15 +112,6 @@
     background-image: linear-gradient(135deg, hsl(217 91% 65%), hsl(270 80% 65%));
   }
 
-  .text-gradient-orange {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #f97316, #fb923c, #ea580c);
-  }
-
-  .gradient-orange {
-    background: linear-gradient(135deg, #f97316, #ea580c);
-  }
-
   .shadow-neon {
     box-shadow: 0 0 20px hsl(217 91% 60% / 0.3), 0 0 40px hsl(217 91% 60% / 0.1);
   }
