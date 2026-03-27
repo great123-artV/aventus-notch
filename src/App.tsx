@@ -11,6 +11,9 @@ import Markets from "./pages/Markets";
 import AssetDetail from "./pages/AssetDetail";
 import RealEstate from "./pages/RealEstate";
 import Retirement from "./pages/Retirement";
+import OilGas from "./pages/OilGas";
+import MarketAnalysis from "./pages/MarketAnalysis";
+import HowToInvest from "./pages/HowToInvest";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
@@ -32,6 +35,9 @@ const App = () => (
           <Route path="/asset/:id" element={<AssetDetail />} />
           <Route path="/real-estate" element={<RealEstate />} />
           <Route path="/retirement" element={<Retirement />} />
+          <Route path="/oil-gas" element={<OilGas />} />
+          <Route path="/analysis" element={<MarketAnalysis />} />
+          <Route path="/how-to-invest" element={<HowToInvest />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
