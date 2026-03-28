@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Bell, Menu, X, User } from "lucide-react";
+import { BarChart3, Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { NotificationsDropdown } from "@/components/NotificationsDropdown";
 import { useState } from "react";
 
 const navItems = [
@@ -56,10 +57,7 @@ export function Navbar() {
               </>
             ) : (
               <>
-                <button className="relative p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-                  <Bell className="w-5 h-5 text-muted-foreground" />
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
-                </button>
+                <NotificationsDropdown />
                 <Link to="/login" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors">
                   <User className="w-5 h-5 text-muted-foreground" />
                 </Link>

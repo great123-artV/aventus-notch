@@ -45,9 +45,10 @@
     --sidebar-border: 222 20% 15%;
     --sidebar-ring: 217 91% 60%;
 
-    --profit: 160 84% 39%;
+    --profit: 152 82% 45%;
     --loss: 0 84% 60%;
     --neon: 217 91% 60%;
+    --gold: 45 93% 58%;
     --glass: 222 30% 12%;
     --glass-border: 222 20% 22%;
   }
@@ -102,5 +103,19 @@
 
   .shadow-glow {
     box-shadow: 0 4px 30px hsl(217 91% 60% / 0.2);
+  }
+
+  .gradient-gold {
+    background: linear-gradient(135deg, hsl(45 93% 58%), hsl(38 92% 50%));
+  }
+
+  .animate-shimmer {
+    background-size: 200% 200%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
 }
