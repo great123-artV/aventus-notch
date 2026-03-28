@@ -64,6 +64,7 @@ export default {
         profit: "hsl(var(--profit))",
         loss: "hsl(var(--loss))",
         neon: "hsl(var(--neon))",
+        gold: "hsl(var(--gold))",
         glass: {
           DEFAULT: "hsl(var(--glass))",
           border: "hsl(var(--glass-border))",
