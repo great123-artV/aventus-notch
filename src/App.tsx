@@ -1,8 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
@@ -16,6 +17,25 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Index />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/markets" element={<Markets />} />
+        <Route path="/asset/:id" element={<AssetDetail />} />
+        <Route path="/real-estate" element={<RealEstate />} />
+        <Route path="/retirement" element={<Retirement />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -23,17 +43,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/markets" element={<Markets />} />
-          <Route path="/asset/:id" element={<AssetDetail />} />
-          <Route path="/real-estate" element={<RealEstate />} />
-          <Route path="/retirement" element={<Retirement />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnimatedRoutes />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
