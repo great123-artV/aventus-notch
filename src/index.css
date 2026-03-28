@@ -104,4 +104,18 @@
   .shadow-glow {
     box-shadow: 0 4px 30px hsl(217 91% 60% / 0.2);
   }
+
+  .gradient-gold {
+    background: linear-gradient(135deg, hsl(45 93% 58%), hsl(38 92% 50%));
+  }
+
+  .animate-shimmer {
+    background-size: 200% 200%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
 }
