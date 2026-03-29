@@ -5,7 +5,8 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root,
+  .dark {
     --background: 222 47% 5%;
     --foreground: 210 40% 96%;
 
@@ -52,6 +53,52 @@
     --glass: 222 30% 12%;
     --glass-border: 222 20% 22%;
   }
+
+  .light {
+    --background: 220 20% 97%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 217 91% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 92%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 220 14% 92%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 160 84% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 87%;
+    --input: 220 13% 87%;
+    --ring: 217 91% 55%;
+
+    --sidebar-background: 220 20% 96%;
+    --sidebar-foreground: 222 30% 30%;
+    --sidebar-primary: 217 91% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 92%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 87%;
+    --sidebar-ring: 217 91% 55%;
+
+    --profit: 152 82% 38%;
+    --loss: 0 84% 55%;
+    --neon: 217 91% 55%;
+    --gold: 45 93% 48%;
+    --glass: 220 14% 95%;
+    --glass-border: 220 13% 82%;
+  }
 }
 
 @layer base {
@@ -74,8 +121,16 @@
     @apply bg-card/60 backdrop-blur-xl border border-glass-border rounded-xl;
   }
 
+  .light .glass {
+    @apply bg-card/80 shadow-sm;
+  }
+
   .glass-strong {
     @apply bg-card/80 backdrop-blur-2xl border border-glass-border rounded-xl;
+  }
+
+  .light .glass-strong {
+    @apply bg-card/95 shadow-md;
   }
 
   .gradient-primary {
@@ -92,6 +147,12 @@
                 radial-gradient(ellipse at 50% 100%, hsl(160 84% 39% / 0.05) 0%, transparent 50%);
   }
 
+  .light .gradient-hero {
+    background: radial-gradient(ellipse at 20% 50%, hsl(217 91% 60% / 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, hsl(270 80% 60% / 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, hsl(160 84% 39% / 0.04) 0%, transparent 50%);
+  }
+
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, hsl(217 91% 65%), hsl(270 80% 65%));
@@ -101,8 +162,16 @@
     box-shadow: 0 0 20px hsl(217 91% 60% / 0.15), 0 0 40px hsl(217 91% 60% / 0.05);
   }
 
+  .light .shadow-neon {
+    box-shadow: 0 0 20px hsl(217 91% 60% / 0.08);
+  }
+
   .shadow-glow {
     box-shadow: 0 4px 30px hsl(217 91% 60% / 0.2);
+  }
+
+  .light .shadow-glow {
+    box-shadow: 0 4px 20px hsl(217 91% 60% / 0.15);
   }
 
   .gradient-gold {

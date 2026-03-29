@@ -2,11 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import { BarChart3, Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NotificationsDropdown } from "@/components/NotificationsDropdown";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
 
 const navItems = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Markets", path: "/markets" },
+  { label: "Analytics", path: "/analytics" },
   { label: "Real Estate", path: "/real-estate" },
   { label: "Retirement", path: "/retirement" },
 ];
@@ -43,7 +45,8 @@ export function Navbar() {
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
             {isLanding ? (
               <>
                 <Link to="/login">
@@ -65,9 +68,12 @@ export function Navbar() {
             )}
           </div>
 
-          <button className="md:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
+            <button className="p-2" onClick={() => setMobileOpen(!mobileOpen)}>
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 

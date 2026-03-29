@@ -8,6 +8,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Markets from "./pages/Markets";
+import Analytics from "./pages/Analytics";
 import AssetDetail from "./pages/AssetDetail";
 import RealEstate from "./pages/RealEstate";
 import Retirement from "./pages/Retirement";
@@ -25,6 +26,7 @@ function AnimatedRoutes() {
         <Route path="/" element={<Index />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/markets" element={<Markets />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/asset/:id" element={<AssetDetail />} />
         <Route path="/real-estate" element={<RealEstate />} />
         <Route path="/retirement" element={<Retirement />} />
