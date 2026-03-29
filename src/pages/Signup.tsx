@@ -12,54 +12,56 @@ const Signup = () => (
       <div className="absolute inset-0 gradient-hero" />
       <motion.div
         className="relative w-full max-w-md"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
             <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center">
-              <BarChart3 className="w-6 h-6 text-foreground" />
+              <BarChart3 className="w-6 h-6 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold font-display">Aventus-Notch</span>
           </Link>
-          <h1 className="text-2xl font-bold font-display">Create your account</h1>
+          <h1 className="text-2xl font-bold font-display tracking-tight">Create your account</h1>
           <p className="text-sm text-muted-foreground mt-1">Start investing in minutes</p>
         </div>
 
-        <div className="glass-strong p-8 rounded-2xl space-y-6">
+        <div className="glass-strong p-8 space-y-5">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="first">First Name</Label>
-              <Input id="first" placeholder="John" className="bg-secondary/30 border-glass-border" />
+              <Label htmlFor="first" className="text-xs font-medium">First Name</Label>
+              <Input id="first" placeholder="John" className="bg-secondary/30 border-border rounded-xl h-11" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="last">Last Name</Label>
-              <Input id="last" placeholder="Doe" className="bg-secondary/30 border-glass-border" />
+              <Label htmlFor="last" className="text-xs font-medium">Last Name</Label>
+              <Input id="last" placeholder="Doe" className="bg-secondary/30 border-border rounded-xl h-11" />
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" className="bg-secondary/30 border-glass-border" />
+            <Label htmlFor="email" className="text-xs font-medium">Email</Label>
+            <Input id="email" type="email" placeholder="you@example.com" className="bg-secondary/30 border-border rounded-xl h-11" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" className="bg-secondary/30 border-glass-border" />
+            <Label htmlFor="password" className="text-xs font-medium">Password</Label>
+            <Input id="password" type="password" placeholder="••••••••" className="bg-secondary/30 border-border rounded-xl h-11" />
           </div>
-          <Button className="w-full gradient-primary border-0 text-foreground shadow-glow py-5">Create Account</Button>
+          <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+            <Button className="w-full gradient-primary border-0 text-primary-foreground shadow-glow py-5 rounded-xl font-semibold">Create Account</Button>
+          </motion.div>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-            <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">or continue with</span></div>
+            <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-3 text-muted-foreground">or</span></div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="bg-secondary/30 border-glass-border">Google</Button>
-            <Button variant="outline" className="bg-secondary/30 border-glass-border">Apple</Button>
+            <Button variant="outline" className="bg-secondary/20 border-border rounded-xl h-11">Google</Button>
+            <Button variant="outline" className="bg-secondary/20 border-border rounded-xl h-11">Apple</Button>
           </div>
 
           <p className="text-center text-sm text-muted-foreground">
-            Already have an account? <Link to="/login" className="text-primary hover:underline">Sign in</Link>
+            Already have an account? <Link to="/login" className="text-primary hover:underline font-medium">Sign in</Link>
           </p>
         </div>
 

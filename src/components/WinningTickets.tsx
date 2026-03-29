@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { TrendingUp, Trophy, Sparkles } from "lucide-react";
+import { Trophy, Sparkles } from "lucide-react";
 
 const winners = [
   { name: "James M.", avatar: "JM", invested: 5000, gained: 12450, asset: "Bitcoin", time: "2 min ago", flag: "🇺🇸" },
@@ -30,42 +30,32 @@ export function WinningTickets() {
   ];
 
   return (
-    <div className="glass p-6 rounded-xl border-profit/20">
+    <div className="glass p-6 border-profit/10">
       <div className="flex items-center gap-2 mb-4">
-        <motion.div
-          animate={{ rotate: [0, 10, -10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <Trophy className="w-5 h-5 text-yellow-500" />
-        </motion.div>
+        <Trophy className="w-4 h-4 text-gold" />
         <h3 className="font-semibold font-display text-sm">Live Investor Wins</h3>
         <motion.div
           className="w-2 h-2 rounded-full bg-profit"
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         />
-        <span className="text-xs text-profit">LIVE</span>
+        <span className="text-[10px] font-bold text-profit uppercase tracking-wider">Live</span>
       </div>
 
-      <div className="space-y-3 min-h-[180px]">
+      <div className="space-y-2 min-h-[180px]">
         <AnimatePresence mode="popLayout">
           {visibleWinners.map((w, i) => (
             <motion.div
               key={`${w.name}-${visibleIdx}-${i}`}
-              initial={{ opacity: 0, x: 40, scale: 0.95 }}
+              initial={{ opacity: 0, x: 30, scale: 0.97 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -40, scale: 0.95 }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="relative overflow-hidden rounded-lg border border-profit/20 bg-gradient-to-r from-profit/5 to-transparent p-3"
+              exit={{ opacity: 0, x: -30, scale: 0.97 }}
+              transition={{ duration: 0.35, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              className="relative overflow-hidden rounded-xl border border-profit/10 bg-profit/[0.03] p-3"
             >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-profit/10 to-transparent"
-                animate={{ opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
-              />
-              <div className="relative flex items-center justify-between">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-profit/20 flex items-center justify-center text-xs font-bold text-profit">
+                  <div className="w-9 h-9 rounded-full bg-profit/10 flex items-center justify-center text-xs font-bold text-profit">
                     {w.avatar}
                   </div>
                   <div>
@@ -79,11 +69,11 @@ export function WinningTickets() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="flex items-center gap-1 text-profit font-bold text-sm">
+                  <div className="flex items-center gap-1 text-profit font-bold text-sm tabular-nums">
                     <Sparkles className="w-3 h-3" />
                     +${(w.gained - w.invested).toLocaleString()}
                   </div>
-                  <p className="text-xs text-muted-foreground">{w.time}</p>
+                  <p className="text-[10px] text-muted-foreground">{w.time}</p>
                 </div>
               </div>
             </motion.div>
