@@ -65,6 +65,7 @@ export default {
         loss: "hsl(var(--loss))",
         neon: "hsl(var(--neon))",
         gold: "hsl(var(--gold))",
+        "primary-foreground-alt": "hsl(var(--primary-foreground))",
         glass: {
           DEFAULT: "hsl(var(--glass))",
           border: "hsl(var(--glass-border))",
