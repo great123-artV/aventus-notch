@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { Search, TrendingUp, TrendingDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useCryptoPrices } from "@/hooks/use-crypto-prices";
+import { usePriceSimulation } from "@/hooks/use-price-simulation";
 import { mockStocks, mockForex } from "@/lib/mock-data";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedPage } from "@/components/AnimatedPage";
 
 type TabKey = "all" | "stocks" | "crypto" | "forex";
@@ -23,6 +24,11 @@ const Markets = () => {
       return matchTab && matchSearch;
     });
   }, [tab, search, cryptoData]);
+
+  const { getTickPrice, getTickDirection } = usePriceSimulation(
+    allAssets.map((a) => ({ id: a.id, price: a.price })),
+    2500
+  );
 
   const tabs: { key: TabKey; label: string }[] = [
     { key: "all", label: "All" },
@@ -73,7 +79,10 @@ const Markets = () => {
           </div>
           <div className="divide-y divide-border">
             {allAssets.map((asset, i) => {
+              const livePrice = getTickPrice(asset.id, asset.price);
+              const direction = getTickDirection(asset.id);
               const isPositive = asset.changePercent >= 0;
+
               return (
                 <motion.div
                   key={asset.id}
@@ -97,9 +106,49 @@ const Markets = () => {
                         <p className="text-xs text-muted-foreground">{asset.symbol}</p>
                       </div>
                     </div>
-                    <p className="text-sm font-medium text-right">
-                      {asset.category === "forex" ? asset.price.toFixed(4) : `$${asset.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-                    </p>
+
+                    {/* Animated Price Cell */}
+                    <div className="text-right relative">
+                      <AnimatePresence mode="popLayout">
+                        <motion.p
+                          key={livePrice.toFixed(4)}
+                          className={`text-sm font-medium tabular-nums ${
+                            direction === "up"
+                              ? "text-profit"
+                              : direction === "down"
+                              ? "text-loss"
+                              : "text-foreground"
+                          }`}
+                          initial={{
+                            opacity: 0.6,
+                            y: direction === "up" ? 8 : direction === "down" ? -8 : 0,
+                            scale: 0.95,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            y: 0,
+                            scale: 1,
+                          }}
+                          transition={{ duration: 0.4, ease: "easeOut" }}
+                        >
+                          {asset.category === "forex"
+                            ? livePrice.toFixed(4)
+                            : `$${livePrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                        </motion.p>
+                      </AnimatePresence>
+                      {/* Flash indicator */}
+                      {direction !== "neutral" && (
+                        <motion.div
+                          className={`absolute inset-0 rounded ${
+                            direction === "up" ? "bg-profit/10" : "bg-loss/10"
+                          }`}
+                          initial={{ opacity: 0.6 }}
+                          animate={{ opacity: 0 }}
+                          transition={{ duration: 1 }}
+                        />
+                      )}
+                    </div>
+
                     <div className={`flex items-center justify-end gap-1 text-sm font-medium ${isPositive ? "text-profit" : "text-loss"}`}>
                       {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
                       {isPositive ? "+" : ""}{asset.changePercent.toFixed(2)}%
