@@ -10,24 +10,25 @@ interface AnimatedCoinProps {
 export function AnimatedCoin({ symbol, size = 40, delay = 0, color }: AnimatedCoinProps) {
   return (
     <motion.div
-      className="rounded-full flex items-center justify-center font-bold text-xs border border-glass-border"
+      className="rounded-full flex items-center justify-center font-bold text-xs shadow-lg"
       style={{
         width: size,
         height: size,
-        background: color || "linear-gradient(135deg, hsl(217 91% 60%), hsl(270 80% 60%))",
+        background: color || "linear-gradient(135deg, hsl(75 80% 50%), hsl(85 75% 45%))",
+        perspective: "600px",
       }}
       animate={{
-        y: [0, -6, 0],
+        y: [0, -8, 0],
         rotateY: [0, 180, 360],
       }}
       transition={{
-        duration: 4,
+        duration: 5,
         repeat: Infinity,
         delay,
         ease: "easeInOut",
       }}
     >
-      <span className="text-foreground">{symbol}</span>
+      <span className="text-background font-bold">{symbol}</span>
     </motion.div>
   );
 }
