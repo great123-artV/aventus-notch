@@ -168,7 +168,7 @@ const Index = () => {
             </div>
 
             {/* Right — 3D Phone */}
-            <div className="flex-shrink-0 hidden md:flex items-center justify-center">
+            <div className="flex-shrink-0 flex items-center justify-center mt-8 lg:mt-0">
               <Phone3D />
             </div>
           </motion.div>
