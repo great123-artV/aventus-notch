@@ -267,7 +267,30 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Stats — Large counters with Revolut scroll animation */}
+        {/* Dashboard Mockup Section */}
+        <section className="py-24 px-4">
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              className="text-center mb-14"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <h2 className="text-3xl sm:text-5xl font-bold font-display mb-5 tracking-tight">
+                Your Wealth,
+                <br />
+                <span className="text-gradient">At a Glance.</span>
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+                A powerful dashboard that puts your entire portfolio in one beautiful view.
+              </p>
+            </motion.div>
+            <DashboardMockup />
+          </div>
+        </section>
+
+        {/* Stats */}
         <section className="py-24 px-4">
           <motion.div
             className="max-w-5xl mx-auto glass-strong p-12 sm:p-16"
@@ -295,6 +318,9 @@ const Index = () => {
             </div>
           </motion.div>
         </section>
+
+        {/* Testimonials */}
+        <Testimonials />
 
         {/* CTA — Bold, simple like Robinhood */}
         <section className="py-24 px-4">
