@@ -7,6 +7,7 @@ import {
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { AnimatedPage } from "@/components/AnimatedPage";
 import { AnimatedCoin } from "@/components/AnimatedCoin";
+import { HeroBackground } from "@/components/HeroBackground";
 import { useRef, useEffect, useState } from "react";
 
 function CountUp({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
