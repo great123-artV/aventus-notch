@@ -7,6 +7,7 @@ import {
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { AnimatedPage } from "@/components/AnimatedPage";
 import { AnimatedCoin } from "@/components/AnimatedCoin";
+import { HeroBackground } from "@/components/HeroBackground";
 import { useRef, useEffect, useState } from "react";
 
 function CountUp({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
@@ -73,14 +74,8 @@ const Index = () => {
     <AnimatedPage>
       <div className="min-h-screen overflow-hidden">
         {/* Hero — Robinhood-style bold, dark, neon accent */}
-        <section ref={heroRef} className="relative min-h-[100vh] flex items-center justify-center px-4 overflow-hidden">
-          <div className="absolute inset-0 gradient-hero" />
-          
-          {/* Subtle grid overlay */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: "linear-gradient(hsl(0 0% 50%) 1px, transparent 1px), linear-gradient(90deg, hsl(0 0% 50%) 1px, transparent 1px)",
-            backgroundSize: "60px 60px"
-          }} />
+         <section ref={heroRef} className="relative min-h-[100vh] flex items-center justify-center px-4 overflow-hidden">
+          <HeroBackground />
 
           {/* Floating coins */}
           <div className="absolute top-[20%] right-[12%] hidden lg:block">
