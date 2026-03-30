@@ -89,78 +89,85 @@ const Index = () => {
             <AnimatedCoin symbol="$" size={32} delay={0.8} color="linear-gradient(135deg, hsl(152 82% 39%), hsl(152 82% 50%))" />
           </div>
 
-          <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative max-w-5xl mx-auto text-center z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 16, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-secondary/40 backdrop-blur-sm text-sm text-muted-foreground mb-8"
-            >
-              <Zap className="w-4 h-4 text-primary" />
-              <span>AI-Powered Portfolio Insights — Now Live</span>
-              <ChevronRight className="w-4 h-4" />
-            </motion.div>
+          <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative max-w-7xl mx-auto z-10 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+            {/* Left — Text content */}
+            <div className="flex-1 text-center lg:text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 16, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-secondary/40 backdrop-blur-sm text-sm text-muted-foreground mb-8"
+              >
+                <Zap className="w-4 h-4 text-primary" />
+                <span>AI-Powered Portfolio Insights — Now Live</span>
+                <ChevronRight className="w-4 h-4" />
+              </motion.div>
 
-            <motion.h1
-              className="text-5xl sm:text-6xl lg:text-8xl font-bold font-display leading-[0.95] mb-8 tracking-tight"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
-              Invest Smarter.
-              <br />
-              <span className="text-gradient">Grow Without</span>
-              <br />
-              <span className="text-gradient">Limits.</span>
-            </motion.h1>
+              <motion.h1
+                className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold font-display leading-[0.95] mb-8 tracking-tight"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              >
+                Invest Smarter.
+                <br />
+                <span className="text-gradient">Grow Without</span>
+                <br />
+                <span className="text-gradient">Limits.</span>
+              </motion.h1>
 
-            <motion.p
-              className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-            >
-              One platform for stocks, crypto, forex, real estate, and retirement.
-              Build wealth with institutional-grade tools designed for everyone.
-            </motion.p>
+              <motion.p
+                className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+              >
+                One platform for stocks, crypto, forex, real estate, and retirement.
+                Build wealth with institutional-grade tools designed for everyone.
+              </motion.p>
 
-            <motion.div
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-            >
-              <Link to="/signup">
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button size="lg" className="gradient-primary border-0 text-primary-foreground shadow-glow text-base px-10 py-7 rounded-full font-semibold">
-                    Get Started Free
-                    <ArrowRight className="w-5 h-5 ml-1" />
-                  </Button>
-                </motion.div>
-              </Link>
-              <Link to="/markets">
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button variant="outline" size="lg" className="border-border bg-secondary/20 backdrop-blur-sm text-foreground text-base px-10 py-7 rounded-full hover:bg-secondary/40">
-                    Explore Markets
-                  </Button>
-                </motion.div>
-              </Link>
-            </motion.div>
+              <motion.div
+                className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+              >
+                <Link to="/signup">
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button size="lg" className="gradient-primary border-0 text-primary-foreground shadow-glow text-base px-10 py-7 rounded-full font-semibold">
+                      Get Started Free
+                      <ArrowRight className="w-5 h-5 ml-1" />
+                    </Button>
+                  </motion.div>
+                </Link>
+                <Link to="/markets">
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button variant="outline" size="lg" className="border-border bg-secondary/20 backdrop-blur-sm text-foreground text-base px-10 py-7 rounded-full hover:bg-secondary/40">
+                      Explore Markets
+                    </Button>
+                  </motion.div>
+                </Link>
+              </motion.div>
 
-            {/* Feature list under CTA — Robinhood style */}
-            <motion.div
-              className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 text-sm text-muted-foreground"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-            >
-              {features.map((f) => (
-                <span key={f} className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-profit" />
-                  {f}
-                </span>
-              ))}
-            </motion.div>
+              <motion.div
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2 mt-10 text-sm text-muted-foreground"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
+              >
+                {features.map((f) => (
+                  <span key={f} className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-profit" />
+                    {f}
+                  </span>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Right — 3D Phone */}
+            <div className="flex-shrink-0 hidden md:flex items-center justify-center">
+              <Phone3D />
+            </div>
           </motion.div>
 
           {/* Scroll indicator */}
