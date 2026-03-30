@@ -12,7 +12,6 @@ import { Phone3D } from "@/components/Phone3D";
 import { DashboardMockup } from "@/components/DashboardMockup";
 import { Testimonials } from "@/components/Testimonials";
 import { useRef, useEffect, useState } from "react";
-import { useRef, useEffect, useState } from "react";
 
 function CountUp({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
   const [count, setCount] = useState(0);
