@@ -323,6 +323,9 @@ const Index = () => {
         {/* Testimonials */}
         <Testimonials />
 
+        {/* Comparison Table */}
+        <ComparisonTable />
+
         {/* CTA — Bold, simple like Robinhood */}
         <section className="py-24 px-4">
           <motion.div
