@@ -11,6 +11,7 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { Phone3D } from "@/components/Phone3D";
 import { DashboardMockup } from "@/components/DashboardMockup";
 import { Testimonials } from "@/components/Testimonials";
+import { ComparisonTable } from "@/components/ComparisonTable";
 import { useRef, useEffect, useState } from "react";
 
 function CountUp({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
