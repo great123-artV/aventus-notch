@@ -93,7 +93,7 @@ const Index = () => {
           </div>
 
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative max-w-7xl mx-auto z-10 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
-            {/* Left — Text content */}
+            {/* Left — Text content (fades on scroll) */}
             <div className="flex-1 text-center lg:text-left">
               <motion.div
                 initial={{ opacity: 0, y: 16, scale: 0.95 }}
