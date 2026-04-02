@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import avatarSarah from "@/assets/avatar-sarah.jpg";
+import avatarMarcus from "@/assets/avatar-marcus.jpg";
+import avatarElena from "@/assets/avatar-elena.jpg";
+import avatarJames from "@/assets/avatar-james.jpg";
 
 const testimonials = [
   {
     name: "Sarah Chen",
     role: "Software Engineer",
-    avatar: "SC",
+    avatar: avatarSarah,
     quote: "Aventus-Notch completely transformed my investment strategy. The AI insights helped me achieve 34% returns in my first year.",
     returns: "+34.2%",
     invested: "$25,000",
@@ -15,7 +19,7 @@ const testimonials = [
   {
     name: "Marcus Williams",
     role: "Business Owner",
-    avatar: "MW",
+    avatar: avatarMarcus,
     quote: "The fractional real estate feature is a game-changer. I diversified into property markets I never had access to before.",
     returns: "+28.7%",
     invested: "$120,000",
@@ -25,7 +29,7 @@ const testimonials = [
   {
     name: "Elena Rodriguez",
     role: "Physician",
-    avatar: "ER",
+    avatar: avatarElena,
     quote: "I love how everything is in one place — stocks, crypto, retirement planning. The interface is incredibly intuitive.",
     returns: "+41.5%",
     invested: "$85,000",
@@ -35,7 +39,7 @@ const testimonials = [
   {
     name: "James Okafor",
     role: "Data Analyst",
-    avatar: "JO",
+    avatar: avatarJames,
     quote: "The real-time signals and portfolio analytics gave me the edge I needed. Best investment platform I've ever used.",
     returns: "+22.9%",
     invested: "$15,000",
@@ -87,28 +91,29 @@ export function Testimonials() {
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
               className="group glass p-6 sm:p-8 relative overflow-hidden"
             >
-              {/* Background gradient accent */}
               <div className={`absolute inset-0 bg-gradient-to-br ${t.gradientFrom} ${t.gradientTo} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
               <div className="relative z-10">
-                {/* Stars */}
                 <div className="flex gap-0.5 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
 
-                {/* Quote */}
                 <p className="text-sm sm:text-base text-foreground/80 leading-relaxed mb-6">
                   "{t.quote}"
                 </p>
 
-                {/* Author + stats */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-primary">
-                      {t.avatar}
-                    </div>
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+                      loading="lazy"
+                      width={40}
+                      height={40}
+                    />
                     <div>
                       <div className="text-sm font-semibold">{t.name}</div>
                       <div className="text-xs text-muted-foreground">{t.role}</div>
