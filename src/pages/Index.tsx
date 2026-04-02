@@ -93,8 +93,8 @@ const Index = () => {
           </div>
 
           <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative max-w-7xl mx-auto z-10 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
-            {/* Left — Text content */}
-            <div className="flex-1 text-center lg:text-left">
+            {/* Left — Text content (fades on scroll) */}
+            <div className="flex-1 text-center lg:text-left lg:max-w-[55%]">
               <motion.div
                 initial={{ opacity: 0, y: 16, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -166,11 +166,27 @@ const Index = () => {
                 ))}
               </motion.div>
             </div>
+          </motion.div>
 
-            {/* Right — 3D Phone */}
-            <div className="flex-shrink-0 flex items-center justify-center mt-8 lg:mt-0">
-              <Phone3D />
-            </div>
+          {/* Right — 3D Phone (stays visible on scroll) */}
+          <motion.div
+            className="absolute right-[5%] top-1/2 -translate-y-1/2 z-10 hidden lg:flex items-center justify-center"
+            style={{ y: heroY }}
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Phone3D />
+          </motion.div>
+
+          {/* Phone for mobile (inline, no fade) */}
+          <motion.div
+            className="relative z-10 flex lg:hidden items-center justify-center mt-4"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.7 }}
+          >
+            <Phone3D />
           </motion.div>
 
           {/* Scroll indicator */}
