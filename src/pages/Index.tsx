@@ -9,8 +9,6 @@ import { GlobalActivityTicker } from "@/components/premium/GlobalActivityTicker"
 import { MarketTicker } from "@/components/premium/TradingViewWidget";
 import { TrustBadges } from "@/components/TrustBadges";
 import { motion } from "framer-motion";
-import { MarketTicker } from "@/components/premium/TradingViewWidget";
-import { motion } from "framer-motion";
 
 const categories = [
   { icon: TrendingUp, title: "Stocks & Shares", desc: "Invest in top-performing companies worldwide with real-time market data.", color: "from-blue-500/20 to-blue-600/5" },
