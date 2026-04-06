@@ -1,8 +1,13 @@
 import { User, Shield, Bell, CreditCard, ChevronRight, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const { user, signOut, isAdmin } = useAuth();
+  const navigate = useNavigate();
+
   const menuItems = [
     { icon: User, label: "Personal Information", desc: "Update your details and account settings" },
     { icon: Shield, label: "Security & Privacy", desc: "Manage your password and 2FA" },
@@ -10,6 +15,11 @@ const Profile = () => {
     { icon: CreditCard, label: "Payment Methods", desc: "Manage your bank accounts and cards" },
     { icon: Settings, label: "App Settings", desc: "Theme and language preferences" },
   ];
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <div className="pt-24 pb-24 px-4 max-w-2xl mx-auto space-y-8">
@@ -23,10 +33,15 @@ const Profile = () => {
             <User className="w-12 h-12 text-primary" />
           </div>
         </motion.div>
-        <h1 className="text-3xl font-bold font-display">Investor Profile</h1>
-        <p className="text-muted-foreground mt-1">investor@aventus-notch.com</p>
+        <h1 className="text-3xl font-bold font-display">
+          {user?.user_metadata?.first_name
+            ? `${user.user_metadata.first_name} ${user.user_metadata.last_name || ""}`
+            : "Investor Profile"
+          }
+        </h1>
+        <p className="text-muted-foreground mt-1">{user?.email || "Not signed in"}</p>
         <div className="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-white/10 text-xs font-bold uppercase tracking-widest text-profit">
-          <Shield className="w-3 h-3" /> Level 3 Verified
+          <Shield className="w-3 h-3" /> {isAdmin ? "Admin" : "Verified Investor"}
         </div>
       </div>
 
@@ -53,7 +68,7 @@ const Profile = () => {
         ))}
       </div>
 
-      <Button variant="ghost" className="w-full h-14 rounded-2xl text-red-400 hover:text-red-300 hover:bg-red-500/10 font-bold text-lg gap-2">
+      <Button onClick={handleLogout} variant="ghost" className="w-full h-14 rounded-2xl text-red-400 hover:text-red-300 hover:bg-red-500/10 font-bold text-lg gap-2">
         <LogOut className="w-5 h-5" /> Log Out
       </Button>
     </div>
