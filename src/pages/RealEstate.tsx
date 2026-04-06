@@ -3,13 +3,24 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { mockRealEstate } from "@/lib/mock-data";
 import { useState } from "react";
+import { TransactionModal } from "@/components/wallet/TransactionModal";
 
 const filters = ["All", "Residential", "Commercial", "Hospitality"];
 
 const RealEstate = () => {
   const [filter, setFilter] = useState("All");
+  const [selectedProperty, setSelectedProperty] = useState<any>(null);
+  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
 
   const properties = filter === "All" ? mockRealEstate : mockRealEstate.filter((p) => p.type === filter);
+
+  const handleInvest = (prop: any) => {
+    setSelectedProperty({
+      ...prop,
+      symbol: "REIT-" + prop.id.toUpperCase(),
+    });
+    setIsBuyModalOpen(true);
+  };
 
   return (
     <div className="pt-20 pb-10 px-4 max-w-7xl mx-auto">
@@ -57,13 +68,32 @@ const RealEstate = () => {
                 </div>
                 <Progress value={prop.funded} className="h-1.5 bg-secondary" />
               </div>
-              <Button className="w-full gradient-primary border-0 text-foreground shadow-glow" size="sm">
+              <Button
+                onClick={() => handleInvest(prop)}
+                className="w-full gradient-primary border-0 text-foreground shadow-glow font-bold"
+                size="sm"
+              >
                 <Building2 className="w-4 h-4 mr-1" /> Invest Now
               </Button>
             </div>
           </div>
         ))}
       </div>
+
+      {selectedProperty && (
+        <TransactionModal
+          open={isBuyModalOpen}
+          onOpenChange={setIsBuyModalOpen}
+          asset={{
+            id: selectedProperty.id,
+            name: selectedProperty.name,
+            symbol: selectedProperty.symbol,
+            price: selectedProperty.minInvestment, // In real estate, the min investment is the "price" for a fraction
+            category: "real-estate"
+          }}
+          type="buy"
+        />
+      )}
     </div>
   );
 };

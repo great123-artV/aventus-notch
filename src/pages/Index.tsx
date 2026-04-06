@@ -8,6 +8,7 @@ import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow"
 import { GlobalActivityTicker } from "@/components/premium/GlobalActivityTicker";
 import { MarketTicker } from "@/components/premium/TradingViewWidget";
 import { TrustBadges } from "@/components/TrustBadges";
+import { ThreeDPhone } from "@/components/premium/ThreeDPhone";
 import { motion } from "framer-motion";
 
 const categories = [
@@ -27,7 +28,7 @@ const stats = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-[#020617] selection:bg-primary/30">
+    <div className="min-h-screen bg-[#020617] selection:bg-primary/30 overflow-x-hidden">
       <GlobalActivityTicker />
 
       {/* Hero */}
@@ -36,56 +37,94 @@ const Index = () => {
         <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse-glow" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: "1.5s" }} />
 
-        <div className="relative max-w-5xl mx-auto text-center">
+        {/* Floating Crypto Coins */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-muted-foreground mb-8 border-white/10"
+            animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[15%] left-[10%] crypto-coin bg-crypto-btc crypto-glow-btc hidden lg:flex"
           >
-            <Zap className="w-4 h-4 text-primary" />
-            <span className="font-medium">Now with AI-Powered Portfolio Insights</span>
-            <ChevronRight className="w-4 h-4" />
+            BTC
           </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-8xl font-bold font-display leading-[1.1] mb-8 tracking-tight"
-          >
-            Invest Smarter.
-            <br />
-            <span className="text-gradient">Grow Without Limits.</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
-          >
-            One platform for stocks, crypto, forex, real estate, and retirement.
-            Build wealth with institutional-grade tools designed for everyone.
-          </motion.p>
-
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16"
+            animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute top-[25%] right-[15%] crypto-coin bg-crypto-eth crypto-glow-eth hidden lg:flex"
           >
-            <Link to="/signup">
-              <Button size="lg" className="gradient-primary border-0 text-white shadow-glow text-lg px-10 py-7 rounded-2xl font-bold neon-glow-primary">
-                Get Started Free
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Link to="/markets">
-              <Button variant="outline" size="lg" className="bg-white/5 border-white/10 backdrop-blur-md text-foreground text-lg px-10 py-7 rounded-2xl hover:bg-white/10 transition-all duration-300">
-                Explore Markets
-              </Button>
-            </Link>
+            ETH
           </motion.div>
+          <motion.div
+            animate={{ y: [0, -15, 0], rotate: [0, 15, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute bottom-[20%] left-[15%] crypto-coin bg-crypto-sol crypto-glow-sol hidden lg:flex"
+          >
+            SOL
+          </motion.div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 pt-10">
+            <div className="text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-muted-foreground mb-8 border-white/10"
+              >
+                <Zap className="w-4 h-4 text-primary" />
+                <span className="font-medium">Now with AI-Powered Portfolio Insights</span>
+                <ChevronRight className="w-4 h-4" />
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-5xl sm:text-6xl lg:text-8xl font-bold font-display leading-[1.1] mb-8 tracking-tight"
+              >
+                Invest Smarter.
+                <br />
+                <span className="text-gradient">Grow Without Limits.</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed"
+              >
+                One platform for stocks, crypto, forex, real estate, and retirement.
+                Build wealth with institutional-grade tools designed for everyone.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="flex flex-col sm:flex-row items-center gap-6"
+              >
+                <Link to="/signup">
+                  <Button size="lg" className="gradient-primary border-0 text-white shadow-glow text-lg px-10 py-7 rounded-2xl font-bold neon-glow-primary">
+                    Get Started Free
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+                <Link to="/markets">
+                  <Button variant="outline" size="lg" className="bg-white/5 border-white/10 backdrop-blur-md text-foreground text-lg px-10 py-7 rounded-2xl hover:bg-white/10 transition-all duration-300">
+                    Explore Markets
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="hidden lg:flex justify-center"
+            >
+              <ThreeDPhone />
+            </motion.div>
+          </div>
 
           <motion.div
             initial={{ opacity: 0 }}

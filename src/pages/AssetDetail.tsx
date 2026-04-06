@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { mockStocks, mockForex, generateChartData } from "@/lib/mock-data";
 import { useCryptoPrices } from "@/hooks/use-crypto-prices";
+import { TransactionModal } from "@/components/wallet/TransactionModal";
 
 const ranges = [
   { key: "1D", days: 1 },
@@ -16,6 +17,8 @@ const ranges = [
 const AssetDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [range, setRange] = useState("1M");
+  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
+  const [isSellModalOpen, setIsSellModalOpen] = useState(false);
   const { data: cryptoData } = useCryptoPrices();
 
   const asset = useMemo(() => {
@@ -69,10 +72,34 @@ const AssetDetail = () => {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button className="gradient-primary border-0 text-foreground shadow-glow">Buy</Button>
-          <Button variant="outline" className="bg-secondary/30 border-glass-border">Sell</Button>
+          <Button
+            onClick={() => setIsBuyModalOpen(true)}
+            className="gradient-primary border-0 text-foreground shadow-glow px-8 rounded-xl font-bold"
+          >
+            Buy
+          </Button>
+          <Button
+            onClick={() => setIsSellModalOpen(true)}
+            variant="outline"
+            className="bg-secondary/30 border-glass-border px-8 rounded-xl font-bold"
+          >
+            Sell
+          </Button>
         </div>
       </div>
+
+      <TransactionModal
+        open={isBuyModalOpen}
+        onOpenChange={setIsBuyModalOpen}
+        asset={asset}
+        type="buy"
+      />
+      <TransactionModal
+        open={isSellModalOpen}
+        onOpenChange={setIsSellModalOpen}
+        asset={asset}
+        type="sell"
+      />
 
       {/* Chart */}
       <div className="glass p-6 rounded-xl mb-6">
