@@ -5,7 +5,7 @@ import {
   Lock, Zap, ChevronRight, LineChart, Star, ArrowUpRight
 } from "lucide-react";
 import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow";
-import { GlobalActivityTicker } from "@/components/premium/GlobalActivityTicker";
+import { InvestorTicker } from "@/components/premium/InvestorTicker";
 import { MarketTicker } from "@/components/premium/TradingViewWidget";
 import { TrustBadges } from "@/components/TrustBadges";
 import { ThreeDPhone } from "@/components/premium/ThreeDPhone";
@@ -29,7 +29,7 @@ const stats = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-[#020617] selection:bg-primary/30 overflow-x-hidden">
-      <GlobalActivityTicker />
+      <InvestorTicker />
 
       {/* Hero */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
