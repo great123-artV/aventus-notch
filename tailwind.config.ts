@@ -64,6 +64,12 @@ export default {
         profit: "hsl(var(--profit))",
         loss: "hsl(var(--loss))",
         neon: "hsl(var(--neon))",
+        crypto: {
+          btc: "#F7931A",
+          eth: "#627EEA",
+          sol: "#14F195",
+          usdt: "#26A17B",
+        },
         glass: {
           DEFAULT: "hsl(var(--glass))",
           border: "hsl(var(--glass-border))",
@@ -89,7 +95,15 @@ export default {
         },
         "float": {
           "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "float-delayed": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-15px)" },
+        },
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
         },
       },
       animation: {
@@ -97,7 +111,9 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
         "float": "float 6s ease-in-out infinite",
+        "float-delayed": "float-delayed 8s ease-in-out infinite",
         "marquee": "marquee 30s linear infinite",
+        "spin-slow": "spin-slow 12s linear infinite",
       },
       keyframes: {
         "accordion-down": {

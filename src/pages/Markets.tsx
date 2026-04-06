@@ -77,25 +77,30 @@ const Markets = () => {
               <Link
                 key={asset.id}
                 to={`/asset/${asset.id}`}
-                className="grid sm:grid-cols-[2fr_1fr_1fr_1fr] gap-2 sm:gap-4 px-6 py-4 hover:bg-secondary/20 transition-colors items-center"
+                className="grid grid-cols-2 sm:grid-cols-[2fr_1fr_1fr_1fr] gap-2 sm:gap-4 px-4 sm:px-6 py-4 hover:bg-secondary/20 transition-colors items-center"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-secondary/50 flex items-center justify-center text-xs font-bold">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-secondary/50 flex items-center justify-center text-[10px] sm:text-xs font-bold">
                     {asset.symbol.slice(0, 2)}
                   </div>
-                  <div>
-                    <p className="font-medium text-sm">{asset.name}</p>
-                    <p className="text-xs text-muted-foreground">{asset.symbol}</p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-xs sm:text-sm truncate">{asset.name}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground">{asset.symbol}</p>
                   </div>
                 </div>
-                <p className="text-sm font-medium text-right">
-                  {asset.category === "forex" ? asset.price.toFixed(4) : `$${asset.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-                </p>
-                <div className={`flex items-center justify-end gap-1 text-sm font-medium ${isPositive ? "text-profit" : "text-loss"}`}>
-                  {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                  {isPositive ? "+" : ""}{asset.changePercent.toFixed(2)}%
+
+                {/* Mobile: Price and Change stack on the right. Desktop: separate columns */}
+                <div className="flex flex-col items-end sm:contents">
+                  <p className="text-xs sm:text-sm font-medium text-right order-1">
+                    {asset.category === "forex" ? asset.price.toFixed(4) : `$${asset.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                  </p>
+                  <div className={`flex items-center justify-end gap-1 text-[10px] sm:text-sm font-medium order-2 sm:order-3 ${isPositive ? "text-profit" : "text-loss"}`}>
+                    {isPositive ? <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" /> : <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4" />}
+                    {isPositive ? "+" : ""}{asset.changePercent.toFixed(2)}%
+                  </div>
                 </div>
-                <p className="text-sm text-muted-foreground text-right hidden sm:block">
+
+                <p className="text-sm text-muted-foreground text-right hidden sm:block order-4">
                   {"marketCap" in asset ? (asset as any).marketCap : asset.volume}
                 </p>
               </Link>

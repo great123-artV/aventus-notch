@@ -4,11 +4,14 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import { retirementPlans } from "@/lib/mock-data";
 import { PiggyBank, TrendingUp, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TransactionModal } from "@/components/wallet/TransactionModal";
 
 const Retirement = () => {
   const [monthly, setMonthly] = useState(500);
   const [years, setYears] = useState(25);
   const [returnRate, setReturnRate] = useState(8);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
+  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
 
   const { futureValue, chartData } = useMemo(() => {
     const r = returnRate / 100 / 12;
@@ -120,11 +123,36 @@ const Retirement = () => {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mb-4">{plan.description}</p>
-              <Button variant="outline" className="w-full bg-secondary/30 border-glass-border" size="sm">Select Plan</Button>
+              <Button
+                onClick={() => {
+                  setSelectedPlan(plan);
+                  setIsBuyModalOpen(true);
+                }}
+                variant="outline"
+                className="w-full bg-secondary/30 border-glass-border hover:bg-primary/10 transition-colors font-bold"
+                size="sm"
+              >
+                Select Plan
+              </Button>
             </div>
           ))}
         </div>
       </div>
+
+      {selectedPlan && (
+        <TransactionModal
+          open={isBuyModalOpen}
+          onOpenChange={setIsBuyModalOpen}
+          asset={{
+            id: selectedPlan.name.toLowerCase(),
+            name: selectedPlan.name + " Plan",
+            symbol: "RETR-" + selectedPlan.name.toUpperCase().slice(0, 3),
+            price: monthly, // Using monthly contribution as the initial buy price
+            category: "retirement"
+          }}
+          type="buy"
+        />
+      )}
     </div>
   );
 };

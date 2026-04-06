@@ -47,17 +47,52 @@ export function AIChatWidget() {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button (Glowing Orb) */}
       <AnimatePresence>
         {!open && (
           <motion.button
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full gradient-primary shadow-glow neon-glow-primary flex items-center justify-center hover:scale-110 transition-transform"
+            className="fixed bottom-24 right-6 z-50 w-16 h-16 rounded-full flex items-center justify-center overflow-hidden"
           >
-            <Bot className="w-6 h-6 text-white" />
+            {/* Multi-layered Animated Orb */}
+            <motion.div
+              animate={{ scale: [1, 1.1, 1], rotate: 360 }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 bg-gradient-to-tr from-primary via-purple-500 to-accent opacity-80 blur-sm"
+            />
+            <motion.div
+              animate={{ scale: [1.2, 1, 1.2] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-2 bg-gradient-to-bl from-accent via-primary to-purple-600 rounded-full mix-blend-screen"
+            />
+            <div className="absolute inset-0 border border-white/20 rounded-full shadow-[0_0_30px_rgba(59,130,246,0.5)]" />
+
+            <Sparkles className="w-7 h-7 text-white relative z-10 animate-pulse" />
+
+            {/* Animated particles around the orb */}
+            <div className="absolute inset-0 pointer-events-none">
+              {[...Array(4)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  animate={{
+                    scale: [0, 1, 0],
+                    x: [0, (i % 2 === 0 ? 20 : -20), 0],
+                    y: [0, (i < 2 ? 20 : -20), 0],
+                    opacity: [0, 0.5, 0]
+                  }}
+                  transition={{
+                    duration: 2 + i,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.5
+                  }}
+                  className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-white rounded-full blur-[1px]"
+                />
+              ))}
+            </div>
           </motion.button>
         )}
       </AnimatePresence>
