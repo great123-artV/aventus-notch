@@ -9,11 +9,27 @@ interface Message {
   content: string;
 }
 
+function TypewriterText({ text }: { text: string }) {
+  const [displayedText, setDisplayedText] = useState("");
+
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      setDisplayedText(text.slice(0, index));
+      index++;
+      if (index > text.length) clearInterval(interval);
+    }, 45); // Professionally slow and steady
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return <span>{displayedText}</span>;
+}
+
 export function AIChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Hi! I'm your AI investment assistant. Ask me about portfolio strategies, market trends, risk management, or which assets might be right for your goals. 📈" }
+    { role: "assistant", content: "Welcome to Aventus-Notch. I am your professional investment strategist. How may I assist you with your portfolio or market analysis today?" }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -31,8 +47,21 @@ export function AIChatWidget() {
     setIsLoading(true);
 
     try {
+      // Try to fetch real-time prices for major assets to provide context
+      let priceContext = "";
+      try {
+        const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
+        const prices = await response.json();
+        priceContext = prices.map((p: any) => `${p.symbol}: $${parseFloat(p.price).toFixed(2)}`).join(", ");
+      } catch (e) {
+        console.error("Failed to fetch price context", e);
+      }
+
       const { data, error } = await supabase.functions.invoke("ai-advisor", {
-        body: { messages: newMessages },
+        body: {
+          messages: newMessages,
+          context: priceContext ? `Current real-time prices: ${priceContext}` : undefined
+        },
       });
 
       if (error) throw error;
@@ -126,7 +155,11 @@ export function AIChatWidget() {
                       ? "gradient-primary text-white rounded-br-sm"
                       : "bg-white/5 text-foreground rounded-bl-sm"
                   }`}>
-                    {msg.content}
+                    {msg.role === "assistant" && i === messages.length - 1 ? (
+                      <TypewriterText text={msg.content} />
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                 </div>
               ))}
