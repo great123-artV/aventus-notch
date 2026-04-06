@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Bell, Menu, X, User, Shield, LogOut } from "lucide-react";
+import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePWA } from "@/hooks/usePWA";
 
 const navItems = [
   { label: "Dashboard", path: "/dashboard" },
@@ -16,6 +17,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isLanding = location.pathname === "/";
   const { user, isAdmin, signOut } = useAuth();
+  const { isInstallable, installApp } = usePWA();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/5">
@@ -57,6 +59,17 @@ export function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
+            {isInstallable && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={installApp}
+                className="bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary group"
+              >
+                <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
+                Download App
+              </Button>
+            )}
             {!user ? (
               <>
                 <Link to="/login">
@@ -109,6 +122,15 @@ export function Navbar() {
               <Link to="/admin" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground">
                 🛡️ Admin Dashboard
               </Link>
+            )}
+            {isInstallable && (
+              <button
+                onClick={() => { installApp(); setMobileOpen(false); }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-primary bg-primary/10 mb-2"
+              >
+                <Download className="w-5 h-5" />
+                Download Aventus App
+              </button>
             )}
             <div className="pt-2 flex gap-2">
               {!user ? (
