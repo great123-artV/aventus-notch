@@ -3,8 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar } from "lucide-react";
-import { AreaChart, Area, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell } from "recharts";
+import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Check, X } from "lucide-react";
+import { AreaChart, Area, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
+import { toast } from "sonner";
 
 interface VisitorLog {
   id: string;
@@ -32,6 +33,7 @@ const AdminDashboard = () => {
   const [totalUsers, setTotalUsers] = useState(0);
   const [investments, setInvestments] = useState<InvestmentSummary[]>([]);
   const [pageStats, setPageStats] = useState<{ name: string; visits: number }[]>([]);
+  const [pendingTransactions, setPendingTransactions] = useState<any[]>([]);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -76,6 +78,30 @@ const AdminDashboard = () => {
       });
       setInvestments(Object.values(grouped));
       setTotalUsers(Object.keys(grouped).length);
+    }
+
+    // Fetch pending transactions
+    const { data: txData } = await supabase
+      .from("transactions")
+      .select("*, profiles(first_name, last_name)")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false });
+    if (txData) setPendingTransactions(txData);
+  };
+
+  const handleTransaction = async (id: string, status: 'completed' | 'rejected') => {
+    try {
+      const { data, error } = await supabase.rpc("review_transaction", {
+        p_transaction_id: id,
+        p_new_status: status
+      });
+
+      if (error) throw error;
+
+      toast.success(`Transaction ${status}`);
+      fetchData();
+    } catch (err: any) {
+      toast.error(err.message || "Action failed");
     }
   };
 
@@ -166,6 +192,70 @@ const AdminDashboard = () => {
           </ResponsiveContainer>
         </motion.div>
       </div>
+
+      {/* Pending Transactions */}
+      {pendingTransactions.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="glass p-6 rounded-2xl border-yellow-500/20">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold font-display text-xl flex items-center gap-2">
+              <Activity className="w-5 h-5 text-yellow-500" /> Pending Review
+            </h3>
+            <span className="px-3 py-1 bg-yellow-500/10 text-yellow-500 rounded-full text-xs font-bold uppercase tracking-wider">
+              {pendingTransactions.length} Pending
+            </span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10 text-muted-foreground text-xs uppercase tracking-wider">
+                  <th className="text-left py-3 px-4">User</th>
+                  <th className="text-left py-3 px-4">Type</th>
+                  <th className="text-left py-3 px-4">Amount</th>
+                  <th className="text-left py-3 px-4">Details</th>
+                  <th className="text-right py-3 px-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingTransactions.map(tx => (
+                  <tr key={tx.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+                    <td className="py-3 px-4">
+                      <div className="font-medium">{tx.profiles?.first_name} {tx.profiles?.last_name}</div>
+                      <div className="text-[10px] text-muted-foreground">{tx.user_id.slice(0, 8)}...</div>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className={`capitalize font-bold ${tx.type === 'deposit' ? 'text-profit' : 'text-loss'}`}>
+                        {tx.type}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 font-mono font-bold">${tx.amount.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-xs text-muted-foreground truncate max-w-[150px]">
+                      {tx.wallet_address || "N/A"}
+                    </td>
+                    <td className="py-3 px-4 text-right space-x-2">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() => handleTransaction(tx.id, 'completed')}
+                        className="h-8 w-8 rounded-lg border-profit/50 text-profit hover:bg-profit/10"
+                      >
+                        <Check className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() => handleTransaction(tx.id, 'rejected')}
+                        className="h-8 w-8 rounded-lg border-loss/50 text-loss hover:bg-loss/10"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+      )}
 
       {/* Recent Visitors Table */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="glass p-6 rounded-2xl">

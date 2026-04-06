@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { BarChart3, Shield, Lock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -28,6 +29,18 @@ const Signup = () => {
       toast.error(err.message || "Signup failed");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleOAuthSignIn = async (provider: 'google' | 'apple') => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: window.location.origin + "/dashboard" },
+      });
+      if (error) throw error;
+    } catch (err: any) {
+      toast.error(err.message || `${provider} login failed`);
     }
   };
 
@@ -75,8 +88,8 @@ const Signup = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Button type="button" variant="outline" className="bg-secondary/30 border-glass-border">Google</Button>
-            <Button type="button" variant="outline" className="bg-secondary/30 border-glass-border">Apple</Button>
+            <Button type="button" variant="outline" onClick={() => handleOAuthSignIn('google')} className="bg-secondary/30 border-glass-border">Google</Button>
+            <Button type="button" variant="outline" onClick={() => handleOAuthSignIn('apple')} className="bg-secondary/30 border-glass-border">Apple</Button>
           </div>
 
           <p className="text-center text-sm text-muted-foreground">

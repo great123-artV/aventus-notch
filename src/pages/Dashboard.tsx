@@ -1,14 +1,38 @@
+import { useState, useEffect } from "react";
 import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, Send, Bot, ChevronRight, PieChart as PieIcon, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
-import { portfolioData, profitLossData, mockTransactions } from "@/lib/mock-data";
+import { portfolioData, profitLossData } from "@/lib/mock-data";
 import { Link } from "react-router-dom";
 import { TradingViewChart } from "@/components/premium/TradingViewWidget";
 import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { DepositModal } from "@/components/wallet/DepositModal";
+import { WithdrawModal } from "@/components/wallet/WithdrawModal";
+import { supabase } from "@/integrations/supabase/client";
 
 const Dashboard = () => {
-  const { totalBalance, totalProfit, profitPercent, distribution } = portfolioData;
+  const { balance, user } = useAuth();
+  const { totalProfit, profitPercent, distribution } = portfolioData;
+  const [isDepositOpen, setIsDepositOpen] = useState(false);
+  const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const [transactions, setTransactions] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      fetchTransactions();
+    }
+  }, [user]);
+
+  const fetchTransactions = async () => {
+    const { data } = await supabase
+      .from("transactions")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(10);
+    if (data) setTransactions(data);
+  };
 
   return (
     <div className="pt-24 pb-10 px-4 max-w-7xl mx-auto space-y-8 selection:bg-primary/30">
@@ -34,24 +58,24 @@ const Dashboard = () => {
           </div>
           <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Portfolio Value</p>
           <div className="flex items-baseline gap-4 mb-8">
-            <span className="text-4xl sm:text-6xl font-bold font-display">${totalBalance.toLocaleString()}</span>
+            <span className="text-4xl sm:text-6xl font-bold font-display">${balance.toLocaleString()}</span>
             <span className={`flex items-center gap-1 text-lg font-bold ${totalProfit >= 0 ? "text-profit" : "text-loss"}`}>
               {totalProfit >= 0 ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
               {profitPercent}%
             </span>
           </div>
           <div className="flex flex-wrap gap-4 relative z-10">
+            <Button onClick={() => setIsDepositOpen(true)} size="lg" className="gradient-primary border-0 text-white shadow-glow px-8 rounded-2xl font-bold neon-glow-primary transition-all hover:scale-105 active:scale-95">
+              <Wallet className="w-5 h-5 mr-2" /> Deposit
+            </Button>
+            <Button onClick={() => setIsWithdrawOpen(true)} size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
+              <ArrowUpRight className="w-5 h-5 mr-2" /> Withdraw
+            </Button>
             <Link to="/markets">
-              <Button size="lg" className="gradient-primary border-0 text-white shadow-glow px-8 rounded-2xl font-bold neon-glow-primary transition-all hover:scale-105 active:scale-95">
+              <Button size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
                 <TrendingUp className="w-5 h-5 mr-2" /> Invest Now
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
-              <Wallet className="w-5 h-5 mr-2" /> Withdraw
-            </Button>
-            <Button size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
-              <Send className="w-5 h-5 mr-2" /> Transfer
-            </Button>
           </div>
         </motion.div>
 
@@ -179,31 +203,42 @@ const Dashboard = () => {
           <Button variant="ghost" className="text-primary font-bold hover:bg-primary/10">View Detailed Statement</Button>
         </div>
         <div className="space-y-4">
-          {mockTransactions.map((tx) => (
-            <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group cursor-pointer">
-              <div className="flex items-center gap-5">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 ${
-                  tx.type === "buy" ? "bg-profit/10 text-profit" :
-                  tx.type === "sell" ? "bg-loss/10 text-loss" :
-                  "bg-primary/10 text-primary"
-                }`}>
-                  {tx.type === "buy" ? <ArrowDownRight className="w-6 h-6" /> :
-                   tx.type === "sell" ? <ArrowUpRight className="w-6 h-6" /> :
-                   <Wallet className="w-6 h-6" />}
+          {transactions.length === 0 ? (
+            <p className="text-center text-muted-foreground py-10">No recent activity found.</p>
+          ) : (
+            transactions.map((tx) => (
+              <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group cursor-pointer">
+                <div className="flex items-center gap-5">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 ${
+                    tx.type === "deposit" ? "bg-profit/10 text-profit" :
+                    tx.type === "withdrawal" ? "bg-loss/10 text-loss" :
+                    "bg-primary/10 text-primary"
+                  }`}>
+                    {tx.type === "deposit" ? <Wallet className="w-6 h-6" /> :
+                     tx.type === "withdrawal" ? <ArrowUpRight className="w-6 h-6" /> :
+                     <Activity className="w-6 h-6" />}
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold capitalize">{tx.type} {tx.asset}</p>
+                    <p className="text-sm text-muted-foreground">{new Date(tx.created_at).toLocaleDateString()}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-lg font-bold capitalize">{tx.type} {tx.asset}</p>
-                  <p className="text-sm text-muted-foreground">{tx.date}</p>
+                <div className="text-right">
+                  <p className="text-lg font-bold font-mono">${tx.amount.toLocaleString()}</p>
+                  <p className={`text-xs font-bold uppercase tracking-widest ${
+                    tx.status === "completed" ? "text-profit" :
+                    tx.status === "pending" ? "text-yellow-500" :
+                    "text-loss"
+                  }`}>{tx.status}</p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="text-lg font-bold font-mono">${tx.value.toLocaleString()}</p>
-                <p className={`text-xs font-bold uppercase tracking-widest ${tx.status === "completed" ? "text-profit" : "text-yellow-500"}`}>{tx.status}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </motion.div>
+
+      <DepositModal open={isDepositOpen} onOpenChange={setIsDepositOpen} />
+      <WithdrawModal open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen} />
     </div>
   );
 };
