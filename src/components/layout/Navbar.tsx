@@ -1,7 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Bell, Menu, X, User } from "lucide-react";
+import { BarChart3, Bell, Menu, X, User, Shield, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "Dashboard", path: "/dashboard" },
@@ -14,6 +15,7 @@ export function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const isLanding = location.pathname === "/";
+  const { user, isAdmin, signOut } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/5">
@@ -40,10 +42,22 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className={`px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
+                  location.pathname === "/admin"
+                    ? "bg-primary/15 text-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                }`}
+              >
+                <span className="flex items-center gap-1.5"><Shield className="w-4 h-4" /> Admin</span>
+              </Link>
+            )}
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            {isLanding ? (
+            {!user ? (
               <>
                 <Link to="/login">
                   <Button variant="ghost" size="sm">Log In</Button>
@@ -60,9 +74,12 @@ export function Navbar() {
                   <Bell className="w-5 h-5 text-muted-foreground" />
                   <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
                 </button>
-                <Link to="/login" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors">
+                <Link to="/profile" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors">
                   <User className="w-5 h-5 text-muted-foreground" />
                 </Link>
+                <button onClick={signOut} className="p-2 rounded-lg hover:bg-secondary/50 transition-colors" title="Sign out">
+                  <LogOut className="w-5 h-5 text-muted-foreground" />
+                </button>
               </>
             )}
           </div>
@@ -88,13 +105,26 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
+            {isAdmin && (
+              <Link to="/admin" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground">
+                🛡️ Admin Dashboard
+              </Link>
+            )}
             <div className="pt-2 flex gap-2">
-              <Link to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                <Button variant="outline" className="w-full">Log In</Button>
-              </Link>
-              <Link to="/signup" className="flex-1" onClick={() => setMobileOpen(false)}>
-                <Button className="w-full gradient-primary border-0">Get Started</Button>
-              </Link>
+              {!user ? (
+                <>
+                  <Link to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
+                    <Button variant="outline" className="w-full">Log In</Button>
+                  </Link>
+                  <Link to="/signup" className="flex-1" onClick={() => setMobileOpen(false)}>
+                    <Button className="w-full gradient-primary border-0">Get Started</Button>
+                  </Link>
+                </>
+              ) : (
+                <Button variant="outline" className="w-full" onClick={() => { signOut(); setMobileOpen(false); }}>
+                  <LogOut className="w-4 h-4 mr-2" /> Sign Out
+                </Button>
+              )}
             </div>
           </div>
         </div>

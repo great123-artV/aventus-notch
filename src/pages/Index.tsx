@@ -7,6 +7,7 @@ import {
 import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow";
 import { GlobalActivityTicker } from "@/components/premium/GlobalActivityTicker";
 import { MarketTicker } from "@/components/premium/TradingViewWidget";
+import { TrustBadges } from "@/components/TrustBadges";
 import { motion } from "framer-motion";
 
 const categories = [
@@ -130,6 +131,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <TrustBadges />
 
       {/* Investment Categories */}
       <section className="py-32 px-4 relative">

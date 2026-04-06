@@ -1,0 +1,239 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { Navigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar } from "lucide-react";
+import { AreaChart, Area, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell } from "recharts";
+
+interface VisitorLog {
+  id: string;
+  user_id: string | null;
+  page_path: string | null;
+  user_agent: string | null;
+  visited_at: string;
+  country: string | null;
+  city: string | null;
+}
+
+interface InvestmentSummary {
+  user_id: string;
+  total_invested: number;
+  total_value: number;
+  email?: string;
+}
+
+const COLORS = ["hsl(217, 91%, 60%)", "hsl(160, 84%, 39%)", "hsl(270, 80%, 60%)", "hsl(45, 93%, 58%)", "hsl(340, 82%, 52%)"];
+
+const AdminDashboard = () => {
+  const { user, isAdmin, loading } = useAuth();
+  const [visitors, setVisitors] = useState<VisitorLog[]>([]);
+  const [todayCount, setTodayCount] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [investments, setInvestments] = useState<InvestmentSummary[]>([]);
+  const [pageStats, setPageStats] = useState<{ name: string; visits: number }[]>([]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    fetchData();
+  }, [isAdmin]);
+
+  const fetchData = async () => {
+    // Fetch visitor logs
+    const { data: visitorData } = await supabase
+      .from("visitor_logs")
+      .select("*")
+      .order("visited_at", { ascending: false })
+      .limit(200);
+    
+    if (visitorData) {
+      setVisitors(visitorData);
+      const today = new Date().toDateString();
+      setTodayCount(visitorData.filter(v => new Date(v.visited_at).toDateString() === today).length);
+      
+      // Page stats
+      const pageCounts: Record<string, number> = {};
+      visitorData.forEach(v => {
+        const page = v.page_path || "unknown";
+        pageCounts[page] = (pageCounts[page] || 0) + 1;
+      });
+      setPageStats(Object.entries(pageCounts).map(([name, visits]) => ({ name, visits })).sort((a, b) => b.visits - a.visits).slice(0, 8));
+    }
+
+    // Fetch investments (admin can see all)
+    const { data: investData } = await supabase
+      .from("investments")
+      .select("user_id, amount_invested, current_value");
+    
+    if (investData) {
+      const grouped: Record<string, InvestmentSummary> = {};
+      investData.forEach(inv => {
+        if (!grouped[inv.user_id]) {
+          grouped[inv.user_id] = { user_id: inv.user_id, total_invested: 0, total_value: 0 };
+        }
+        grouped[inv.user_id].total_invested += Number(inv.amount_invested);
+        grouped[inv.user_id].total_value += Number(inv.current_value);
+      });
+      setInvestments(Object.values(grouped));
+      setTotalUsers(Object.keys(grouped).length);
+    }
+  };
+
+  if (loading) return <div className="pt-24 text-center text-muted-foreground">Loading...</div>;
+  if (!user || !isAdmin) return <Navigate to="/dashboard" replace />;
+
+  const totalInvested = investments.reduce((sum, i) => sum + i.total_invested, 0);
+  const totalValue = investments.reduce((sum, i) => sum + i.total_value, 0);
+
+  // Generate mock daily visitor chart data from actual visitors
+  const dailyVisitors = (() => {
+    const days: Record<string, number> = {};
+    visitors.forEach(v => {
+      const day = new Date(v.visited_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      days[day] = (days[day] || 0) + 1;
+    });
+    return Object.entries(days).slice(0, 7).reverse().map(([date, count]) => ({ date, visitors: count }));
+  })();
+
+  return (
+    <div className="pt-24 pb-10 px-4 max-w-7xl mx-auto space-y-8">
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center shadow-glow">
+          <Shield className="w-6 h-6 text-white" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold font-display">Admin Dashboard</h1>
+          <p className="text-muted-foreground">Full platform overview</p>
+        </div>
+      </div>
+
+      {/* Stat Cards */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          { icon: Eye, label: "Today's Visits", value: todayCount, color: "text-primary" },
+          { icon: Users, label: "Total Investors", value: totalUsers, color: "text-profit" },
+          { icon: DollarSign, label: "Total Invested", value: `$${totalInvested.toLocaleString()}`, color: "text-yellow-500" },
+          { icon: TrendingUp, label: "Portfolio Value", value: `$${totalValue.toLocaleString()}`, color: "text-profit" },
+        ].map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="glass p-6 rounded-2xl"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <stat.icon className={`w-5 h-5 ${stat.color}`} />
+              <span className="text-sm text-muted-foreground font-medium">{stat.label}</span>
+            </div>
+            <p className="text-3xl font-bold font-display">{stat.value}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Charts */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="glass p-6 rounded-2xl">
+          <h3 className="font-bold font-display mb-4 flex items-center gap-2">
+            <Activity className="w-5 h-5 text-primary" /> Daily Visitors
+          </h3>
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={dailyVisitors}>
+              <defs>
+                <linearGradient id="adminGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(217, 91%, 60%)" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="hsl(217, 91%, 60%)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="date" tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 11 }} />
+              <Area type="monotone" dataKey="visitors" stroke="hsl(217, 91%, 60%)" strokeWidth={2} fill="url(#adminGrad)" />
+              <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="glass p-6 rounded-2xl">
+          <h3 className="font-bold font-display mb-4 flex items-center gap-2">
+            <Globe className="w-5 h-5 text-profit" /> Top Pages
+          </h3>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={pageStats}>
+              <XAxis dataKey="name" tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 10 }} />
+              <YAxis tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 11 }} />
+              <Bar dataKey="visits" fill="hsl(217, 91%, 60%)" radius={[4, 4, 0, 0]} />
+              <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }} />
+            </BarChart>
+          </ResponsiveContainer>
+        </motion.div>
+      </div>
+
+      {/* Recent Visitors Table */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="glass p-6 rounded-2xl">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="font-bold font-display text-xl flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-primary" /> Recent Visitors
+          </h3>
+          <span className="text-xs font-bold text-muted-foreground">{visitors.length} records</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/10 text-muted-foreground text-xs uppercase tracking-wider">
+                <th className="text-left py-3 px-4">Page</th>
+                <th className="text-left py-3 px-4">User</th>
+                <th className="text-left py-3 px-4">Time</th>
+                <th className="text-left py-3 px-4">Agent</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visitors.slice(0, 20).map(v => (
+                <tr key={v.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+                  <td className="py-3 px-4 font-medium">{v.page_path || "/"}</td>
+                  <td className="py-3 px-4 text-muted-foreground">{v.user_id ? v.user_id.slice(0, 8) + "..." : "Anonymous"}</td>
+                  <td className="py-3 px-4 text-muted-foreground">{new Date(v.visited_at).toLocaleString()}</td>
+                  <td className="py-3 px-4 text-muted-foreground truncate max-w-[200px]">{v.user_agent?.slice(0, 50)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </motion.div>
+
+      {/* Investor Portfolios */}
+      {investments.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="glass p-6 rounded-2xl">
+          <h3 className="font-bold font-display text-xl flex items-center gap-2 mb-6">
+            <DollarSign className="w-5 h-5 text-yellow-500" /> Investor Portfolios
+          </h3>
+          <div className="space-y-3">
+            {investments.map((inv, i) => {
+              const profit = inv.total_value - inv.total_invested;
+              const profitPct = inv.total_invested > 0 ? ((profit / inv.total_invested) * 100) : 0;
+              return (
+                <div key={inv.user_id} className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center text-white font-bold text-sm">
+                      {i + 1}
+                    </div>
+                    <div>
+                      <p className="font-medium">{inv.user_id.slice(0, 12)}...</p>
+                      <p className="text-xs text-muted-foreground">Invested: ${inv.total_invested.toLocaleString()}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold">${inv.total_value.toLocaleString()}</p>
+                    <p className={`text-xs font-bold ${profit >= 0 ? "text-profit" : "text-loss"}`}>
+                      {profit >= 0 ? "+" : ""}{profitPct.toFixed(1)}%
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+export default AdminDashboard;

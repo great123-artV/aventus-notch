@@ -4,8 +4,11 @@ import { ThemeProvider } from "next-themes";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { AIChatWidget } from "@/components/AIChatWidget";
+import { useVisitorLog } from "@/hooks/useVisitorLog";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Markets from "./pages/Markets";
@@ -15,9 +18,34 @@ import Retirement from "./pages/Retirement";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+
+function AppRoutes() {
+  useVisitorLog();
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/markets" element={<Markets />} />
+        <Route path="/asset/:id" element={<AssetDetail />} />
+        <Route path="/real-estate" element={<RealEstate />} />
+        <Route path="/retirement" element={<Retirement />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <BottomNav />
+      <AIChatWidget />
+    </>
+  );
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -26,20 +54,9 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Navbar />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/markets" element={<Markets />} />
-          <Route path="/asset/:id" element={<AssetDetail />} />
-          <Route path="/real-estate" element={<RealEstate />} />
-          <Route path="/retirement" element={<Retirement />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-          <BottomNav />
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
