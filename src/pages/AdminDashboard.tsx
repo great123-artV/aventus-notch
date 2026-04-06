@@ -3,9 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Check, X } from "lucide-react";
+import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Check, X, Lock, ShieldAlert } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface VisitorLog {
   id: string;
@@ -27,7 +31,8 @@ interface InvestmentSummary {
 const COLORS = ["hsl(217, 91%, 60%)", "hsl(160, 84%, 39%)", "hsl(270, 80%, 60%)", "hsl(45, 93%, 58%)", "hsl(340, 82%, 52%)"];
 
 const AdminDashboard = () => {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading, signIn } = useAuth();
+  const navigate = useNavigate();
   const [visitors, setVisitors] = useState<VisitorLog[]>([]);
   const [todayCount, setTodayCount] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
@@ -89,6 +94,27 @@ const AdminDashboard = () => {
     if (txData) setPendingTransactions(txData);
   };
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    setAuthLoading(true);
+    try {
+      await signIn(email, password);
+      toast.success("Authenticating admin...");
+    } catch (err: any) {
+      toast.error(err.message || "Login failed");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
   const handleTransaction = async (id: string, status: 'completed' | 'rejected') => {
     try {
       const { data, error } = await supabase.rpc("review_transaction", {
@@ -106,7 +132,95 @@ const AdminDashboard = () => {
   };
 
   if (loading) return <div className="pt-24 text-center text-muted-foreground">Loading...</div>;
-  if (!user || !isAdmin) return <Navigate to="/dashboard" replace />;
+
+  // Login View
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 relative pt-20">
+        <div className="absolute inset-0 gradient-hero opacity-50" />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="relative w-full max-w-md glass-strong p-8 rounded-3xl space-y-6 shadow-2xl border-primary/20"
+        >
+          <div className="text-center space-y-2">
+            <div className="w-16 h-16 rounded-2xl gradient-primary mx-auto flex items-center justify-center mb-4 shadow-glow">
+              <Lock className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold font-display">Admin Portal</h1>
+            <p className="text-sm text-muted-foreground">Authorized Personnel Only</p>
+          </div>
+
+          <form onSubmit={handleAdminLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Admin Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="admin@platform.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="bg-white/5 border-white/10"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Security Key</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="bg-white/5 border-white/10"
+              />
+            </div>
+            <Button
+              type="submit"
+              disabled={authLoading}
+              className="w-full gradient-primary border-0 text-white shadow-glow py-6 font-bold text-lg rounded-xl mt-4"
+            >
+              {authLoading ? "Verifying..." : "Access Dashboard"}
+            </Button>
+          </form>
+
+          <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground uppercase tracking-widest pt-4">
+            <Shield className="w-3 h-3" /> Encrypted Session
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Access Denied View
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 relative pt-20">
+        <div className="absolute inset-0 bg-loss/5" />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative w-full max-w-md glass p-8 rounded-3xl text-center space-y-6 border-loss/20"
+        >
+          <div className="w-20 h-20 rounded-full bg-loss/10 mx-auto flex items-center justify-center mb-2">
+            <ShieldAlert className="w-10 h-10 text-loss" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold font-display text-loss">Access Denied</h1>
+            <p className="text-muted-foreground mt-2">
+              Your account does not have administrative privileges. This incident has been logged.
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            onClick={() => navigate('/dashboard')}
+            className="w-full border-white/10 hover:bg-white/5 py-6 rounded-xl font-bold"
+          >
+            Return to Dashboard
+          </Button>
+        </motion.div>
+      </div>
+    );
+  }
 
   const totalInvested = investments.reduce((sum, i) => sum + i.total_invested, 0);
   const totalValue = investments.reduce((sum, i) => sum + i.total_value, 0);
