@@ -132,6 +132,8 @@ const Index = () => {
         </div>
       </section>
 
+      <TrustBadges />
+
       {/* Investment Categories */}
       <section className="py-32 px-4 relative">
         <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/5 blur-[100px]" />
