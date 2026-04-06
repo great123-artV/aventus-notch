@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   BarChart3, TrendingUp, Globe, Building2, PiggyBank, Shield, Users, ArrowRight,
-  Lock, Zap, ChevronRight, LineChart, Star
+  Lock, Zap, ChevronRight, LineChart, Star, ArrowUpRight
 } from "lucide-react";
 import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow";
 import { GlobalActivityTicker } from "@/components/premium/GlobalActivityTicker";
