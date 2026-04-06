@@ -12,6 +12,8 @@ import { Phone3D } from "@/components/Phone3D";
 import { DashboardMockup } from "@/components/DashboardMockup";
 import { Testimonials } from "@/components/Testimonials";
 import { ComparisonTable } from "@/components/ComparisonTable";
+import { PricingSection } from "@/components/PricingSection";
+import { FAQSection } from "@/components/FAQSection";
 import { useRef, useEffect, useState } from "react";
 
 function CountUp({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
@@ -341,6 +343,12 @@ const Index = () => {
 
         {/* Comparison Table */}
         <ComparisonTable />
+
+        {/* Pricing */}
+        <PricingSection />
+
+        {/* FAQ */}
+        <FAQSection />
 
         {/* CTA — Bold, simple like Robinhood */}
         <section className="py-24 px-4">
