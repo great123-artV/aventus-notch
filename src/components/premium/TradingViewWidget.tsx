@@ -10,12 +10,18 @@ interface TradingViewChartProps {
   symbol?: string;
   theme?: 'light' | 'dark';
   autosize?: boolean;
+  hideSideToolbar?: boolean;
+  allowSymbolChange?: boolean;
+  containerHeight?: string;
 }
 
 export const TradingViewChart: React.FC<TradingViewChartProps> = ({
   symbol = "BINANCE:BTCUSDT",
   theme = "dark",
-  autosize = true
+  autosize = true,
+  hideSideToolbar = false,
+  allowSymbolChange = true,
+  containerHeight = "400px"
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -35,9 +41,9 @@ export const TradingViewChart: React.FC<TradingViewChartProps> = ({
           locale: "en",
           toolbar_bg: "#f1f3f6",
           enable_publishing: false,
-          allow_symbol_change: true,
+          allow_symbol_change: allowSymbolChange,
           container_id: containerRef.current.id,
-          hide_side_toolbar: false,
+          hide_side_toolbar: hideSideToolbar,
           studies: ["MASimple@tv-basicstudies"],
         });
       }
@@ -54,7 +60,7 @@ export const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const chartId = useRef(`tradingview_${Math.random().toString(36).substring(7)}`);
 
   return (
-    <div className="w-full h-[400px] glass rounded-2xl overflow-hidden p-2">
+    <div className={`w-full glass rounded-2xl overflow-hidden p-2`} style={{ height: containerHeight }}>
       <div id={chartId.current} ref={containerRef} className="w-full h-full" />
     </div>
   );

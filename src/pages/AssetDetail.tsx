@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { ArrowLeft, TrendingUp, TrendingDown, BarChart3, Activity, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { TradingViewChart } from "@/components/premium/TradingViewWidget";
 import { mockStocks, mockForex, generateChartData } from "@/lib/mock-data";
 import { useCryptoPrices } from "@/hooks/use-crypto-prices";
 import { TransactionModal } from "@/components/wallet/TransactionModal";
@@ -102,37 +102,14 @@ const AssetDetail = () => {
       />
 
       {/* Chart */}
-      <div className="glass p-6 rounded-xl mb-6">
-        <div className="flex gap-1 mb-4">
-          {ranges.map((r) => (
-            <button
-              key={r.key}
-              onClick={() => setRange(r.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                range === r.key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {r.key}
-            </button>
-          ))}
-        </div>
-        <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={chartData}>
-            <defs>
-              <linearGradient id="assetGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={isPositive ? "hsl(160, 84%, 39%)" : "hsl(0, 84%, 60%)"} stopOpacity={0.3} />
-                <stop offset="100%" stopColor={isPositive ? "hsl(160, 84%, 39%)" : "hsl(0, 84%, 60%)"} stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 11 }} />
-            <YAxis hide domain={["auto", "auto"]} />
-            <Tooltip
-              contentStyle={{ background: "hsl(222, 41%, 8%)", border: "1px solid hsl(222, 20%, 18%)", borderRadius: "8px", color: "hsl(210, 40%, 96%)" }}
-              formatter={(v: number) => [`$${v.toLocaleString()}`, "Price"]}
-            />
-            <Area type="monotone" dataKey="price" stroke={isPositive ? "hsl(160, 84%, 39%)" : "hsl(0, 84%, 60%)"} strokeWidth={2} fill="url(#assetGrad)" />
-          </AreaChart>
-        </ResponsiveContainer>
+      <div className="mb-6 h-[500px]">
+        <TradingViewChart
+          symbol={asset.category === 'crypto' ? `BINANCE:${asset.symbol}USDT` :
+                 asset.category === 'stocks' ? `NASDAQ:${asset.symbol}` :
+                 asset.category === 'forex' ? `FX_IDC:${asset.symbol.replace('/', '')}` :
+                 `BINANCE:${asset.symbol}USDT`}
+          containerHeight="100%"
+        />
       </div>
 
       {/* Stats Grid */}

@@ -53,6 +53,7 @@ export interface Investor {
   countryName: string;
   countryFlag: string;
   amount: number;
+  earned: number;
 }
 
 export const generateMockInvestors = (count: number): Investor[] => {
@@ -62,13 +63,15 @@ export const generateMockInvestors = (count: number): Investor[] => {
     const lastInitial = lastInitials[Math.floor(Math.random() * lastInitials.length)];
     const country = countries[Math.floor(Math.random() * countries.length)];
     const amount = Math.floor(Math.random() * 50000) + 500; // $500 to $50,500
+    const earned = Math.floor(Math.random() * amount * 0.4) + (amount * 0.05); // 5% to 45% profit
 
     investors.push({
       id: i,
       name: `${firstName} ${lastInitial}.`,
       countryName: country.name,
       countryFlag: country.flag,
-      amount: amount
+      amount: amount,
+      earned: earned
     });
   }
   return investors;

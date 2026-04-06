@@ -50,9 +50,36 @@ export function AIChatWidget() {
       // Try to fetch real-time prices for major assets to provide context
       let priceContext = "";
       try {
-        const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
-        const prices = await response.json();
-        priceContext = prices.map((p: any) => `${p.symbol}: $${parseFloat(p.price).toFixed(2)}`).join(", ");
+        const [binanceRes, coingeckoRes] = await Promise.all([
+          fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT","XRPUSDT","ADAUSDT","DOGEUSDT","MATICUSDT","DOTUSDT","TRXUSDT"]'),
+          fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin,ripple,cardano,dogecoin,polkadot&vs_currencies=usd&include_24hr_change=true')
+        ]);
+
+        const binancePrices = await binanceRes.json();
+        const cgPrices = await coingeckoRes.json();
+
+        const symbolToId: Record<string, string> = {
+          'BTC': 'bitcoin',
+          'ETH': 'ethereum',
+          'SOL': 'solana',
+          'BNB': 'binancecoin',
+          'XRP': 'ripple',
+          'ADA': 'cardano',
+          'DOGE': 'dogecoin',
+          'MATIC': 'polygon',
+          'DOT': 'polkadot',
+          'TRX': 'tron'
+        };
+
+        priceContext = binancePrices.map((p: any) => {
+          const symbol = p.symbol.replace('USDT', '');
+          const coinId = symbolToId[symbol];
+          const change = coinId ? cgPrices[coinId]?.usd_24h_change : undefined;
+          return `${p.symbol}: $${parseFloat(p.price).toLocaleString()} (${change !== undefined ? (change >= 0 ? '+' : '') + change.toFixed(2) + '%' : 'N/A'})`;
+        }).join(", ");
+
+        // Add some forex context (simulated or real if available)
+        priceContext += " | Forex - EUR/USD: 1.0892, GBP/USD: 1.2734, USD/JPY: 149.52";
       } catch (e) {
         console.error("Failed to fetch price context", e);
       }

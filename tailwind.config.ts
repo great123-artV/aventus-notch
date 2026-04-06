@@ -145,6 +145,10 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-33.33%)" },
         },
+        "marquee-extra-slow": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-33.33%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -154,6 +158,7 @@ export default {
         "float-delayed": "float-delayed 8s ease-in-out infinite",
         "marquee": "marquee 30s linear infinite",
         "marquee-slow": "marquee-slow 300s linear infinite",
+        "marquee-extra-slow": "marquee-extra-slow 600s linear infinite",
         "spin-slow": "spin-slow 12s linear infinite",
       },
     },
