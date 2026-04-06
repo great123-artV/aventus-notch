@@ -10,9 +10,9 @@ export const InvestorTicker = () => {
 
   return (
     <div className="w-full bg-[#0a0f1d]/80 backdrop-blur-md border-b border-white/10 py-1.5 overflow-hidden flex items-center relative z-50">
-      <div className="flex gap-8 sm:gap-12 animate-marquee-slow whitespace-nowrap items-center">
+      <div className="flex gap-8 sm:gap-12 animate-marquee-extra-slow whitespace-nowrap items-center">
         {tickerItems.map((investor, i) => (
-          <div key={`${investor.id}-${i}`} className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs">
+          <div key={`${investor.id}-${i}`} className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs">
             <span className="font-bold text-white/90">{investor.name}</span>
             <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
               <span className="text-[12px] sm:text-[14px] leading-none">{investor.countryFlag}</span>
@@ -20,12 +20,20 @@ export const InvestorTicker = () => {
                 {investor.countryName}
               </span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="text-muted-foreground">Invested</span>
-              <span className="font-mono font-bold text-profit">
-                ${investor.amount.toLocaleString()}
-              </span>
-              <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-profit/60" />
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Invested</span>
+                <span className="font-mono font-bold text-white/70">
+                  ${investor.amount.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Earned</span>
+                <span className="font-mono font-bold text-profit">
+                  +${investor.earned.toLocaleString()}
+                </span>
+                <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-profit/60" />
+              </div>
             </div>
           </div>
         ))}
