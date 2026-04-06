@@ -105,6 +105,10 @@ export default {
           from: { transform: "rotate(0deg)" },
           to: { transform: "rotate(360deg)" },
         },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -114,6 +118,7 @@ export default {
         "float-delayed": "float-delayed 8s ease-in-out infinite",
         "marquee": "marquee 30s linear infinite",
         "spin-slow": "spin-slow 12s linear infinite",
+        "pulse-slow": "pulse-slow 2s ease-in-out infinite",
       },
       keyframes: {
         "accordion-down": {

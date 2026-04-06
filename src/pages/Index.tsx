@@ -120,7 +120,7 @@ const Index = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="hidden lg:flex justify-center"
+              className="flex justify-center mt-12 lg:mt-0"
             >
               <ThreeDPhone />
             </motion.div>

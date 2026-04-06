@@ -144,4 +144,9 @@
   .preserve-3d {
     transform-style: preserve-3d;
   }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
 }
