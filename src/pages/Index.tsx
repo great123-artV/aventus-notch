@@ -7,6 +7,9 @@ import {
 import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow";
 import { GlobalActivityTicker } from "@/components/premium/GlobalActivityTicker";
 import { MarketTicker } from "@/components/premium/TradingViewWidget";
+import { TrustBadges } from "@/components/TrustBadges";
+import { motion } from "framer-motion";
+import { MarketTicker } from "@/components/premium/TradingViewWidget";
 import { motion } from "framer-motion";
 
 const categories = [
