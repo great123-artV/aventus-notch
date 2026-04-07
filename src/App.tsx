@@ -42,7 +42,7 @@ import { Link } from "react-router-dom";
 
 const config = getDefaultConfig({
   appName: 'Aventus-Notch',
-  projectId: 'YOUR_PROJECT_ID', // Replace with your WalletConnect Project ID
+  projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID || '04047a06f366113b28b63e8a4a50b73c', // Use env or a fallback for testing
   chains: [mainnet, polygon, optimism, arbitrum, base, bsc],
   ssr: true, // If your dApp uses server side rendering (SSR)
 });

@@ -35,7 +35,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
     if (isConfirmed && user) {
       recordDeposit();
     }
-  }, [isConfirmed]);
+  }, [isConfirmed, user]);
 
   useEffect(() => {
     if (sendError) {
