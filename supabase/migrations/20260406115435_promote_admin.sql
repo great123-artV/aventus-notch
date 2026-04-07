@@ -1,10 +1,10 @@
 
--- Promote echinonso609@mail.com to admin
+-- Promote echinonso609@gmail.com to admin
 DO $$
 DECLARE
   target_user_id UUID;
 BEGIN
-  SELECT id INTO target_user_id FROM auth.users WHERE email = 'echinonso609@mail.com';
+  SELECT id INTO target_user_id FROM auth.users WHERE email = 'echinonso609@gmail.com';
 
   IF target_user_id IS NOT NULL THEN
     INSERT INTO public.user_roles (user_id, role)
