@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,9 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Copy, Wallet } from "lucide-react";
+import { Copy, Wallet, Loader2 } from "lucide-react";
+import { useSendTransaction, useWaitForTransactionReceipt, useAccount } from "wagmi";
+import { parseEther } from "viem";
 
 interface DepositModalProps {
   open: boolean;
@@ -15,9 +17,17 @@ interface DepositModalProps {
 
 export function DepositModal({ open, onOpenChange }: DepositModalProps) {
   const [amount, setAmount] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [lastSentAmount, setLastSentAmount] = useState<string | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
   const { user, refreshProfile } = useAuth();
-  const walletAddress = "0x35d4248095be1aaf0025f651cf86ed3ec7858023";
+  const { isConnected } = useAccount();
+  const treasuryAddress = "0x35d4248095be1aaf0025f651cf86ed3ec7858023";
+
+  const { data: hash, sendTransaction, isPending, error: sendError, reset } = useSendTransaction();
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  });
 
   const handleDeposit = async () => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
@@ -25,33 +35,63 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
       return;
     }
     if (!user) return;
+    if (!isConnected) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
 
-    setLoading(true);
     try {
-      // Record as an investment deposit
-      const { error } = await supabase.from("investments").insert({
-        user_id: user.id,
-        asset_name: "USDT Deposit",
-        asset_type: "deposit",
-        amount_invested: Number(amount),
-        current_value: Number(amount),
+      setLastSentAmount(amount);
+      sendTransaction({
+        to: treasuryAddress as `0x${string}`,
+        value: parseEther(amount),
       });
-
-      if (error) throw error;
-
-      toast.success("Deposit recorded successfully!");
-      await refreshProfile();
-      onOpenChange(false);
-      setAmount("");
     } catch (err: any) {
-      toast.error(err.message || "Deposit failed");
-    } finally {
-      setLoading(false);
+      toast.error(err.message || "Transaction failed");
+      setLastSentAmount(null);
     }
   };
 
+  useEffect(() => {
+    if (isConfirmed && user && hash && lastSentAmount && !isRecording) {
+      const recordDeposit = async () => {
+        setIsRecording(true);
+        try {
+          const { error } = await supabase.from("investments").insert({
+            user_id: user.id,
+            asset_name: "Deposit via Wallet",
+            asset_type: "deposit",
+            amount_invested: Number(lastSentAmount),
+            current_value: Number(lastSentAmount),
+          });
+
+          if (error) {
+            toast.error("Failed to record deposit in database");
+            console.error(error);
+          } else {
+            toast.success("Deposit successful and recorded!");
+            await refreshProfile();
+            onOpenChange(false);
+            setAmount("");
+            setLastSentAmount(null);
+            reset(); // Clear hash to prevent duplicate triggers
+          }
+        } finally {
+          setIsRecording(false);
+        }
+      };
+      recordDeposit();
+    }
+  }, [isConfirmed, user, hash, lastSentAmount, isRecording, refreshProfile, onOpenChange, reset]);
+
+  useEffect(() => {
+    if (sendError) {
+      toast.error(sendError.message || "Transaction failed");
+    }
+  }, [sendError]);
+
   const copyAddress = () => {
-    navigator.clipboard.writeText(walletAddress);
+    navigator.clipboard.writeText(treasuryAddress);
     toast.success("Address copied to clipboard");
   };
 
@@ -74,10 +114,10 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
             </div>
           </div>
           <div className="space-y-2">
-            <Label>Wallet Address</Label>
+            <Label>Treasury Address (ETH)</Label>
             <div className="flex gap-2">
               <div className="flex-1 p-3 bg-white/5 border border-white/10 rounded-xl text-xs font-mono break-all">
-                {walletAddress}
+                {treasuryAddress}
               </div>
               <Button size="icon" variant="outline" onClick={copyAddress} className="shrink-0 rounded-xl">
                 <Copy className="w-4 h-4" />
@@ -99,10 +139,20 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
         <DialogFooter>
           <Button
             onClick={handleDeposit}
-            disabled={loading}
+            disabled={isPending || isConfirming || !amount}
             className="w-full gradient-primary border-0 text-white shadow-glow rounded-xl font-bold py-6"
           >
-            {loading ? "Processing..." : "I've Sent the Funds"}
+            {isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Confirming in Wallet...
+              </>
+            ) : isConfirming ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Waiting for Confirmation...
+              </>
+            ) : (
+              "Send Funds"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
