@@ -92,8 +92,9 @@ const AdminDashboard = () => {
     setAuthLoading(true);
     try {
       await signIn(email, password);
-    } catch (err: any) {
-      toast.error(err.message || "Login failed");
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || "Login failed");
     } finally {
       setAuthLoading(false);
     }

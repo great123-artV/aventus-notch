@@ -22,8 +22,9 @@ const Login = () => {
     try {
       await signIn(email, password);
       navigate("/dashboard");
-    } catch (err: any) {
-      toast.error(err.message || "Login failed");
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -36,8 +37,9 @@ const Login = () => {
         options: { redirectTo: window.location.origin + "/dashboard" },
       });
       if (error) throw error;
-    } catch (err: any) {
-      toast.error(err.message || `${provider} login failed`);
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || `${provider} login failed`);
     }
   };
 

@@ -25,8 +25,9 @@ const Signup = () => {
     try {
       await signUp(email, password, firstName, lastName);
       navigate("/dashboard");
-    } catch (err: any) {
-      toast.error(err.message || "Signup failed");
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -39,8 +40,9 @@ const Signup = () => {
         options: { redirectTo: window.location.origin + "/dashboard" },
       });
       if (error) throw error;
-    } catch (err: any) {
-      toast.error(err.message || `${provider} login failed`);
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || `${provider} login failed`);
     }
   };
 

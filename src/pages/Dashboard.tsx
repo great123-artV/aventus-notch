@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, Bot, ChevronRight, PieChart as PieIcon, Activity, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
@@ -21,21 +21,22 @@ const Dashboard = () => {
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const [investments, setInvestments] = useState<any[]>([]);
 
+  const fetchInvestments = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("investments")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    if (data) setInvestments(data);
+  }, [user]);
+
   useEffect(() => {
     if (user) {
       fetchInvestments();
     }
-  }, [user]);
-
-  const fetchInvestments = async () => {
-    const { data } = await supabase
-      .from("investments")
-      .select("*")
-      .eq("user_id", user!.id)
-      .order("created_at", { ascending: false })
-      .limit(10);
-    if (data) setInvestments(data);
-  };
+  }, [user, fetchInvestments]);
 
   return (
     <div className="pt-24 pb-10 px-4 max-w-7xl mx-auto space-y-8 selection:bg-primary/30">

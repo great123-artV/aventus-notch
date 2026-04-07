@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,20 +31,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
     hash,
   });
 
-  useEffect(() => {
-    if (isConfirmed && user) {
-      recordDeposit();
-    }
-  }, [isConfirmed, user]);
-
-  useEffect(() => {
-    if (sendError) {
-      toast.error(sendError.message || "Transaction failed");
-      setIsProcessing(false);
-    }
-  }, [sendError]);
-
-  const recordDeposit = async () => {
+  const recordDeposit = useCallback(async () => {
     try {
       const { error } = await supabase.from("investments").insert({
         user_id: user?.id || "",
@@ -60,12 +47,26 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
       await refreshProfile();
       onOpenChange(false);
       setAmount("");
-    } catch (err: any) {
-      toast.error("Balance update failed: " + err.message);
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error("Balance update failed: " + error.message);
     } finally {
       setIsProcessing(false);
     }
-  };
+  }, [user, amount, refreshProfile, onOpenChange]);
+
+  useEffect(() => {
+    if (isConfirmed && user) {
+      recordDeposit();
+    }
+  }, [isConfirmed, user, recordDeposit]);
+
+  useEffect(() => {
+    if (sendError) {
+      toast.error(sendError.message || "Transaction failed");
+      setIsProcessing(false);
+    }
+  }, [sendError]);
 
   const handleDeposit = async () => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
@@ -84,8 +85,9 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
         to: treasuryAddress as `0x${string}`,
         value: parseEther(amount),
       });
-    } catch (err: any) {
-      toast.error(err.message || "Transaction failed");
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || "Transaction failed");
       setIsProcessing(false);
     }
   };

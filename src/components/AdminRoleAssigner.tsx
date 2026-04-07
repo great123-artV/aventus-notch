@@ -60,9 +60,10 @@ export function AdminRoleAssigner() {
       if (roleError) throw roleError;
 
       toast.success("Admin role assigned successfully!");
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.message || "Failed to assign admin role");
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error(error);
+      toast.error(error.message || "Failed to assign admin role");
     } finally {
       setLoading(false);
     }
