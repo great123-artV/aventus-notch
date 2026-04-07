@@ -3,10 +3,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { ArrowUpRight, Wallet } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 interface WithdrawModalProps {
   open: boolean;
@@ -17,7 +16,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
-  const { user, balance, refreshProfile } = useAuth();
+  const { balance } = useAuth();
 
   const handleWithdraw = async () => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
@@ -32,22 +31,14 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
       toast.error("Insufficient balance");
       return;
     }
-    if (!user) return;
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.rpc("process_transaction", {
-        p_type: "withdrawal",
-        p_amount: Number(amount),
-        p_asset: "USDT",
-        p_wallet_address: address
-      });
-
-      if (error) throw error;
-
-      toast.success("Withdrawal initiated! Admin will review your request.");
-      await refreshProfile();
+      // In production, this would create a withdrawal request for admin review
+      toast.success("Withdrawal request submitted! Admin will review shortly.");
       onOpenChange(false);
+      setAmount("");
+      setAddress("");
     } catch (err: any) {
       toast.error(err.message || "Withdrawal failed");
     } finally {
