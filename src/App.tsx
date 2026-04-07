@@ -22,6 +22,17 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import { Link } from "react-router-dom";
 
+import "@rainbow-me/rainbowkit/styles.css";
+import { getDefaultConfig, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
+import { WagmiProvider } from "wagmi";
+import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
+
+const config = getDefaultConfig({
+  appName: "Fintech App",
+  projectId: "YOUR_PROJECT_ID", // Replace with a real project ID if needed
+  chains: [mainnet, polygon, optimism, arbitrum, base],
+});
+
 const queryClient = new QueryClient();
 
 function AppRoutes() {
@@ -55,19 +66,23 @@ function AppRoutes() {
 }
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="dark" attribute="class">
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <AppRoutes />
-          </AuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+  <WagmiProvider config={config}>
+    <QueryClientProvider client={queryClient}>
+      <RainbowKitProvider theme={darkTheme()}>
+        <ThemeProvider defaultTheme="dark" attribute="class">
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AuthProvider>
+                <AppRoutes />
+              </AuthProvider>
+            </BrowserRouter>
+          </TooltipProvider>
+        </ThemeProvider>
+      </RainbowKitProvider>
+    </QueryClientProvider>
+  </WagmiProvider>
 );
 
 export default App;
