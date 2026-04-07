@@ -18,6 +18,7 @@ const Dashboard = () => {
   const { totalProfit, profitPercent, distribution } = portfolioData;
   const [isDepositOpen, setIsDepositOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const [isWalletOpen, setIsWalletOpen] = useState(false);
   const [investments, setInvestments] = useState<any[]>([]);
 
   useEffect(() => {
