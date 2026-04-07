@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AdminRoleAssigner } from "@/components/AdminRoleAssigner";
 
 interface VisitorLog {
   id: string;
@@ -102,7 +103,7 @@ const AdminDashboard = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 relative pt-20">
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 relative pt-20">
         <div className="absolute inset-0 gradient-hero opacity-50" />
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -133,13 +134,14 @@ const AdminDashboard = () => {
             <Shield className="w-3 h-3" /> Encrypted Session
           </div>
         </motion.div>
+        <AdminRoleAssigner />
       </div>
     );
   }
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 relative pt-20">
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 relative pt-20">
         <div className="absolute inset-0 bg-loss/5" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative w-full max-w-md glass p-8 rounded-3xl text-center space-y-6 border-loss/20">
           <div className="w-20 h-20 rounded-full bg-loss/10 mx-auto flex items-center justify-center mb-2">
@@ -153,6 +155,7 @@ const AdminDashboard = () => {
             Return to Dashboard
           </Button>
         </motion.div>
+        <AdminRoleAssigner />
       </div>
     );
   }
