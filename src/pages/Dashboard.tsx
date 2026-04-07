@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, Send, Bot, ChevronRight, PieChart as PieIcon, Activity } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, Bot, ChevronRight, PieChart as PieIcon, Activity, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 import { portfolioData, profitLossData } from "@/lib/mock-data";
@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { DepositModal } from "@/components/wallet/DepositModal";
 import { WithdrawModal } from "@/components/wallet/WithdrawModal";
+import { WalletConnectModal } from "@/components/wallet/WalletConnectModal";
 import { supabase } from "@/integrations/supabase/client";
 
 const Dashboard = () => {
@@ -17,21 +18,23 @@ const Dashboard = () => {
   const { totalProfit, profitPercent, distribution } = portfolioData;
   const [isDepositOpen, setIsDepositOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [isWalletOpen, setIsWalletOpen] = useState(false);
+  const [investments, setInvestments] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
-      fetchTransactions();
+      fetchInvestments();
     }
   }, [user]);
 
-  const fetchTransactions = async () => {
+  const fetchInvestments = async () => {
     const { data } = await supabase
-      .from("transactions")
+      .from("investments")
       .select("*")
+      .eq("user_id", user!.id)
       .order("created_at", { ascending: false })
       .limit(10);
-    if (data) setTransactions(data);
+    if (data) setInvestments(data);
   };
 
   return (
@@ -76,6 +79,9 @@ const Dashboard = () => {
                 <TrendingUp className="w-5 h-5 mr-2" /> Invest Now
               </Button>
             </Link>
+            <Button onClick={() => setIsWalletOpen(true)} size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
+              <Link2 className="w-5 h-5 mr-2" /> Connect Wallet
+            </Button>
           </div>
         </motion.div>
 
@@ -105,7 +111,6 @@ const Dashboard = () => {
 
       {/* Main Charts Section */}
       <div className="grid lg:grid-cols-5 gap-6">
-        {/* TradingView Live Chart */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -124,7 +129,6 @@ const Dashboard = () => {
           <TradingViewChart />
         </motion.div>
 
-        {/* Portfolio Mini Charts & Distribution */}
         <div className="lg:col-span-2 space-y-6">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -144,9 +148,7 @@ const Dashboard = () => {
                         <Cell key={i} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip
-                      contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }}
-                    />
+                    <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -191,7 +193,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Recent Transactions */}
+      {/* Recent Investments */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -200,36 +202,25 @@ const Dashboard = () => {
       >
         <div className="flex items-center justify-between mb-8">
           <h3 className="text-2xl font-bold font-display">Recent Activity</h3>
-          <Button variant="ghost" className="text-primary font-bold hover:bg-primary/10">View Detailed Statement</Button>
         </div>
         <div className="space-y-4">
-          {transactions.length === 0 ? (
-            <p className="text-center text-muted-foreground py-10">No recent activity found.</p>
+          {investments.length === 0 ? (
+            <p className="text-center text-muted-foreground py-10">No recent activity found. Start investing to see your portfolio here.</p>
           ) : (
-            transactions.map((tx) => (
-              <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group cursor-pointer">
+            investments.map((inv) => (
+              <div key={inv.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors group cursor-pointer">
                 <div className="flex items-center gap-5">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 ${
-                    tx.type === "deposit" ? "bg-profit/10 text-profit" :
-                    tx.type === "withdrawal" ? "bg-loss/10 text-loss" :
-                    "bg-primary/10 text-primary"
-                  }`}>
-                    {tx.type === "deposit" ? <Wallet className="w-6 h-6" /> :
-                     tx.type === "withdrawal" ? <ArrowUpRight className="w-6 h-6" /> :
-                     <Activity className="w-6 h-6" />}
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-primary/10 text-primary transition-transform group-hover:scale-110">
+                    <Wallet className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-lg font-bold capitalize">{tx.type} {tx.asset}</p>
-                    <p className="text-sm text-muted-foreground">{new Date(tx.created_at).toLocaleDateString()}</p>
+                    <p className="text-lg font-bold">{inv.asset_name}</p>
+                    <p className="text-sm text-muted-foreground">{new Date(inv.created_at).toLocaleDateString()}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-bold font-mono">${tx.amount.toLocaleString()}</p>
-                  <p className={`text-xs font-bold uppercase tracking-widest ${
-                    tx.status === "completed" ? "text-profit" :
-                    tx.status === "pending" ? "text-yellow-500" :
-                    "text-loss"
-                  }`}>{tx.status}</p>
+                  <p className="text-lg font-bold font-mono">${Number(inv.amount_invested).toLocaleString()}</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-profit">{inv.asset_type}</p>
                 </div>
               </div>
             ))
@@ -239,6 +230,7 @@ const Dashboard = () => {
 
       <DepositModal open={isDepositOpen} onOpenChange={setIsDepositOpen} />
       <WithdrawModal open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen} />
+      <WalletConnectModal open={isWalletOpen} onOpenChange={setIsWalletOpen} />
     </div>
   );
 };

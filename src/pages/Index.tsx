@@ -43,8 +43,23 @@ const Index = () => {
             className="absolute w-full h-full object-cover opacity-30"
             style={{ filter: 'brightness(0.6) contrast(1.2)' }}
           >
-            <source src="https://cdn.pixabay.com/video/2021/08/17/85333-588882570_large.mp4" type="video/mp4" />
+            <source src="https://cdn.pixabay.com/video/2024/02/14/200750-913069622_large.mp4" type="video/mp4" />
           </video>
+          {/* Animated BTC coin overlay */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <motion.div
+              animate={{ 
+                rotateY: [0, 360],
+                scale: [0.8, 1, 0.8],
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="w-40 h-40 sm:w-64 sm:h-64 rounded-full opacity-10"
+              style={{
+                background: 'radial-gradient(circle, #f7931a 0%, transparent 70%)',
+                boxShadow: '0 0 120px 40px rgba(247, 147, 26, 0.15)',
+              }}
+            />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-transparent to-[#020617]" />
         </div>

@@ -28,18 +28,21 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.rpc("process_transaction", {
-        p_type: "deposit",
-        p_amount: Number(amount),
-        p_asset: "USDT",
-        p_wallet_address: walletAddress
+      // Record as an investment deposit
+      const { error } = await supabase.from("investments").insert({
+        user_id: user.id,
+        asset_name: "USDT Deposit",
+        asset_type: "deposit",
+        amount_invested: Number(amount),
+        current_value: Number(amount),
       });
 
       if (error) throw error;
 
-      toast.success("Deposit initiated successfully! Funds added to your balance.");
+      toast.success("Deposit recorded successfully!");
       await refreshProfile();
       onOpenChange(false);
+      setAmount("");
     } catch (err: any) {
       toast.error(err.message || "Deposit failed");
     } finally {
@@ -60,7 +63,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
             <Wallet className="w-6 h-6 text-primary" /> Deposit USDT
           </DialogTitle>
           <DialogDescription>
-            Send USDT (ERC20) to the address below. Your balance will be updated immediately.
+            Send USDT (ERC20) to the address below. Your balance will be updated.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-6 py-4">

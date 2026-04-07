@@ -45,26 +45,27 @@ export function TransactionModal({ open, onOpenChange, asset, type }: Transactio
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.rpc("process_transaction", {
-        p_type: type === "buy" ? "withdrawal" : "deposit", // Using withdrawal to deduct balance on buy, and deposit to add on sell
-        p_amount: numAmount,
-        p_asset: asset.symbol,
-        p_wallet_address: "PLATFORM_INTERNAL"
-      });
-
-      if (error) throw error;
+      if (type === "buy") {
+        const { error } = await supabase.from("investments").insert({
+          user_id: user.id,
+          asset_name: asset.name,
+          asset_type: asset.category,
+          amount_invested: numAmount,
+          current_value: numAmount,
+        });
+        if (error) throw error;
+      }
 
       toast.success(`${type === "buy" ? "Bought" : "Sold"} ${asset.name} successfully!`);
       await refreshProfile();
       onOpenChange(false);
+      setAmount("");
     } catch (err: any) {
       toast.error(err.message || "Transaction failed");
     } finally {
       setLoading(false);
     }
   };
-
-  const totalValue = (Number(amount) || 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -109,7 +110,7 @@ export function TransactionModal({ open, onOpenChange, asset, type }: Transactio
               />
             </div>
             <p className="text-[10px] text-muted-foreground">
-              Roughly {(Number(amount) / asset.price).toFixed(6)} {asset.symbol}
+              Roughly {((Number(amount) || 0) / asset.price).toFixed(6)} {asset.symbol}
             </p>
           </div>
         </div>
