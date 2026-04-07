@@ -71,7 +71,7 @@ export function AIChatWidget() {
           'TRX': 'tron'
         };
 
-        priceContext = binancePrices.map((p: any) => {
+        priceContext = binancePrices.map((p: { symbol: string; price: string }) => {
           const symbol = p.symbol.replace('USDT', '');
           const coinId = symbolToId[symbol];
           const change = coinId ? cgPrices[coinId]?.usd_24h_change : undefined;

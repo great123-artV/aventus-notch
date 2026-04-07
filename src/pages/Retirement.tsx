@@ -10,7 +10,7 @@ const Retirement = () => {
   const [monthly, setMonthly] = useState(500);
   const [years, setYears] = useState(25);
   const [returnRate, setReturnRate] = useState(8);
-  const [selectedPlan, setSelectedPlan] = useState<any>(null);
+  const [selectedPlan, setSelectedPlan] = useState<{ name: string; risk: string; returnRate: number; description: string } | null>(null);
   const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
 
   const { futureValue, chartData } = useMemo(() => {

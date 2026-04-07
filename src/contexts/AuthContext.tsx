@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -25,12 +25,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [balance, setBalance] = useState(0);
 
-  const checkAdmin = async (userId: string) => {
+  const checkAdmin = useCallback(async (userId: string) => {
     const { data } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
     setIsAdmin(!!data);
-  };
+  }, []);
 
-  const refreshProfile = async () => {
+  const refreshProfile = useCallback(async () => {
     if (!user) return;
     // Compute balance from investments
     const { data } = await supabase
@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setBalance(total);
     }
     await checkAdmin(user.id);
-  };
+  }, [user, checkAdmin]);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -68,12 +68,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [checkAdmin]);
 
   // Refresh profile when user changes
   useEffect(() => {
-    if (user) refreshProfile();
-  }, [user?.id]);
+    if (user) {
+      refreshProfile();
+    }
+  }, [user, refreshProfile]);
 
   const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
     const { error } = await supabase.auth.signUp({

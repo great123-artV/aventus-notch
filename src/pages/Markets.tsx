@@ -101,7 +101,7 @@ const Markets = () => {
                 </div>
 
                 <p className="text-sm text-muted-foreground text-right hidden sm:block order-4">
-                  {"marketCap" in asset ? (asset as any).marketCap : asset.volume}
+                  {"marketCap" in asset ? (asset as { marketCap?: string }).marketCap : asset.volume}
                 </p>
               </Link>
             );

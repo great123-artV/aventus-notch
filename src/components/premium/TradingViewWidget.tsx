@@ -26,11 +26,12 @@ export const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const currentContainer = containerRef.current;
     const script = document.createElement("script");
     script.src = "https://s3.tradingview.com/tv.js";
     script.async = true;
     script.onload = () => {
-      if (containerRef.current && window.TradingView) {
+      if (currentContainer && window.TradingView) {
         new window.TradingView.widget({
           autosize: autosize,
           symbol: symbol,
@@ -42,7 +43,7 @@ export const TradingViewChart: React.FC<TradingViewChartProps> = ({
           toolbar_bg: "#f1f3f6",
           enable_publishing: false,
           allow_symbol_change: allowSymbolChange,
-          container_id: containerRef.current.id,
+          container_id: currentContainer.id,
           hide_side_toolbar: hideSideToolbar,
           studies: ["MASimple@tv-basicstudies"],
         });
@@ -55,7 +56,7 @@ export const TradingViewChart: React.FC<TradingViewChartProps> = ({
         script.parentNode.removeChild(script);
       }
     };
-  }, [symbol, theme, autosize]);
+  }, [symbol, theme, autosize, allowSymbolChange, hideSideToolbar]);
 
   const chartId = useRef(`tradingview_${Math.random().toString(36).substring(7)}`);
 

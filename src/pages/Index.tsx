@@ -40,10 +40,10 @@ const Index = () => {
             loop
             muted
             playsInline
-            className="absolute w-full h-full object-cover opacity-30"
-            style={{ filter: 'brightness(0.6) contrast(1.2)' }}
+            className="absolute w-full h-full object-cover opacity-50"
+            style={{ filter: 'brightness(0.7) contrast(1.1)' }}
           >
-            <source src="https://cdn.pixabay.com/video/2024/02/14/200750-913069622_large.mp4" type="video/mp4" />
+            <source src="https://datatime.kg/wp-content/uploads/2025/02/3D-Candlestick-Chart-Crypto.mp4" type="video/mp4" />
           </video>
           {/* Animated BTC coin overlay */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
