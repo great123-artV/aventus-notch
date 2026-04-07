@@ -230,6 +230,7 @@ const Dashboard = () => {
 
       <DepositModal open={isDepositOpen} onOpenChange={setIsDepositOpen} />
       <WithdrawModal open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen} />
+      <WalletConnectModal open={isWalletOpen} onOpenChange={setIsWalletOpen} />
     </div>
   );
 };
