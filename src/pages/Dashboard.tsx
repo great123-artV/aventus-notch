@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, Bot, ChevronRight, PieChart as PieIcon, Activity } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, Bot, ChevronRight, PieChart as PieIcon, Activity, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 import { portfolioData, profitLossData } from "@/lib/mock-data";
@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { DepositModal } from "@/components/wallet/DepositModal";
 import { WithdrawModal } from "@/components/wallet/WithdrawModal";
+import { WalletConnectModal } from "@/components/wallet/WalletConnectModal";
 import { supabase } from "@/integrations/supabase/client";
 
 const Dashboard = () => {
