@@ -39,8 +39,9 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
       onOpenChange(false);
       setAmount("");
       setAddress("");
-    } catch (err: any) {
-      toast.error(err.message || "Withdrawal failed");
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || "Withdrawal failed");
     } finally {
       setLoading(false);
     }

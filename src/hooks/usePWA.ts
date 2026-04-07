@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export const usePWA = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   // Force isInstallable to true for testing if we are in a dev/test environment
   const [isInstallable, setIsInstallable] = useState(false);
@@ -11,6 +12,7 @@ export const usePWA = () => {
       setIsInstallable(true);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);

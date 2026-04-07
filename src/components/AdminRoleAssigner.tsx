@@ -41,7 +41,7 @@ export function AdminRoleAssigner() {
            });
            if (signInError) throw signInError;
            userId = signInData.user.id;
-         } catch (e: any) {
+         } catch (e: unknown) {
            throw new Error("Could not retrieve user ID. Make sure the account exists and password is correct.");
          }
       }

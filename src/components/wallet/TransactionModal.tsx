@@ -60,8 +60,9 @@ export function TransactionModal({ open, onOpenChange, asset, type }: Transactio
       await refreshProfile();
       onOpenChange(false);
       setAmount("");
-    } catch (err: any) {
-      toast.error(err.message || "Transaction failed");
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || "Transaction failed");
     } finally {
       setLoading(false);
     }

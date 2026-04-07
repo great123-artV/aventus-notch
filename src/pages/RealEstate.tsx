@@ -9,12 +9,12 @@ const filters = ["All", "Residential", "Commercial", "Hospitality"];
 
 const RealEstate = () => {
   const [filter, setFilter] = useState("All");
-  const [selectedProperty, setSelectedProperty] = useState<any>(null);
+  const [selectedProperty, setSelectedProperty] = useState<{ id: string; name: string; minInvestment: number; symbol: string } | null>(null);
   const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
 
   const properties = filter === "All" ? mockRealEstate : mockRealEstate.filter((p) => p.type === filter);
 
-  const handleInvest = (prop: any) => {
+  const handleInvest = (prop: { id: string; name: string; minInvestment: number }) => {
     setSelectedProperty({
       ...prop,
       symbol: "REIT-" + prop.id.toUpperCase(),
