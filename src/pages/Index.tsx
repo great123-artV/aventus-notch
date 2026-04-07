@@ -40,10 +40,10 @@ const Index = () => {
             loop
             muted
             playsInline
-            className="absolute w-full h-full object-cover opacity-30"
-            style={{ filter: 'brightness(0.6) contrast(1.2)' }}
+            className="absolute w-full h-full object-cover opacity-40"
+            style={{ filter: 'brightness(0.7) contrast(1.1)' }}
           >
-            <source src="https://cdn.pixabay.com/video/2024/02/14/200750-913069622_large.mp4" type="video/mp4" />
+            <source src="https://datatime.kg/wp-content/uploads/2025/02/3D-Candlestick-Chart-Crypto.mp4" type="video/mp4" />
           </video>
           {/* Animated BTC coin overlay */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -67,43 +67,6 @@ const Index = () => {
         <div className="absolute inset-0 gradient-hero opacity-30 pointer-events-none" />
         <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse-glow pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
-
-        {/* Floating Interactive Crypto Coins */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-          <Link to="/asset/bitcoin">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1, y: [0, -20, 0], rotate: [0, 15, 0] }}
-              whileHover={{ scale: 1.1, rotate: 360 }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-[15%] left-[10%] crypto-coin bg-crypto-btc crypto-glow-btc hidden lg:flex pointer-events-auto cursor-pointer"
-            >
-              BTC
-            </motion.div>
-          </Link>
-          <Link to="/asset/ethereum">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1, y: [0, 25, 0], rotate: [0, -15, 0] }}
-              whileHover={{ scale: 1.1, rotate: -360 }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute top-[25%] right-[15%] crypto-coin bg-crypto-eth crypto-glow-eth hidden lg:flex pointer-events-auto cursor-pointer"
-            >
-              ETH
-            </motion.div>
-          </Link>
-          <Link to="/asset/solana">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1, y: [0, -15, 0], rotate: [0, 20, 0] }}
-              whileHover={{ scale: 1.1, rotate: 360 }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-              className="absolute bottom-[20%] left-[15%] crypto-coin bg-crypto-sol crypto-glow-sol hidden lg:flex pointer-events-auto cursor-pointer"
-            >
-              SOL
-            </motion.div>
-          </Link>
-        </div>
 
         <div className="relative max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 pt-10">
