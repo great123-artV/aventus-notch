@@ -20,10 +20,12 @@ const Dashboard = () => {
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const [investments, setInvestments] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
       fetchInvestments();
+      fetchTransactions();
     }
   }, [user]);
 
@@ -35,6 +37,16 @@ const Dashboard = () => {
       .order("created_at", { ascending: false })
       .limit(10);
     if (data) setInvestments(data);
+  };
+
+  const fetchTransactions = async () => {
+    const { data } = await supabase
+      .from("transactions")
+      .select("*")
+      .eq("user_id", user!.id)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    if (data) setTransactions(data);
   };
 
   return (
