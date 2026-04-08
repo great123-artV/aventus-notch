@@ -42,8 +42,16 @@ const Index = () => {
             playsInline
             className="absolute w-full h-full object-cover opacity-40"
             style={{ filter: 'brightness(0.7) contrast(1.1)' }}
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (target.dataset.fallback !== 'true') {
+                target.dataset.fallback = 'true';
+                target.src = 'https://cdn.pixabay.com/video/2021/04/03/69579-532128942_large.mp4';
+              }
+            }}
           >
-            <source src="https://datatime.kg/wp-content/uploads/2025/02/3D-Candlestick-Chart-Crypto.mp4" type="video/mp4" />
+            <source src="https://cdn.pixabay.com/video/2024/02/14/200750-913069622_large.mp4" type="video/mp4" />
+            <source src="https://cdn.pixabay.com/video/2021/04/03/69579-532128942_large.mp4" type="video/mp4" />
           </video>
           {/* Animated BTC coin overlay */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

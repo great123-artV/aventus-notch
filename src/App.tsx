@@ -28,8 +28,8 @@ import { WagmiProvider } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 
 const config = getDefaultConfig({
-  appName: "Fintech App",
-  projectId: "YOUR_PROJECT_ID", // Replace with a real project ID if needed
+  appName: "Aventus-Notch",
+  projectId: "21fef48091f12692cad574a6f7753643",
   chains: [mainnet, polygon, optimism, arbitrum, base],
 });
 
