@@ -86,7 +86,7 @@ const AdminDashboard = () => {
     if (txData) setPendingTx(txData);
   };
 
-  const updateTxStatus = async (txId: string, status: string) => {
+  const updateTxStatus = async (txId: string, status: "completed" | "failed" | "pending" | "rejected") => {
     const { error } = await supabase.from("transactions").update({ status }).eq("id", txId);
     if (error) {
       toast.error("Failed to update transaction");
