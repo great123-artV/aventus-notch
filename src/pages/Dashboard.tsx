@@ -20,10 +20,12 @@ const Dashboard = () => {
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [isWalletOpen, setIsWalletOpen] = useState(false);
   const [investments, setInvestments] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
       fetchInvestments();
+      fetchTransactions();
     }
   }, [user]);
 
@@ -35,6 +37,16 @@ const Dashboard = () => {
       .order("created_at", { ascending: false })
       .limit(10);
     if (data) setInvestments(data);
+  };
+
+  const fetchTransactions = async () => {
+    const { data } = await supabase
+      .from("transactions")
+      .select("*")
+      .eq("user_id", user!.id)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    if (data) setTransactions(data);
   };
 
   return (
@@ -193,6 +205,36 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Transactions */}
+      {transactions.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="glass p-8 rounded-3xl">
+          <h3 className="text-2xl font-bold font-display mb-6">Transactions</h3>
+          <div className="space-y-3">
+            {transactions.map((tx) => (
+              <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                <div className="flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${tx.type === 'deposit' ? 'bg-profit/10 text-profit' : 'bg-loss/10 text-loss'}`}>
+                    {tx.type === 'deposit' ? <ArrowDownRight className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
+                  </div>
+                  <div>
+                    <p className="font-bold capitalize">{tx.type} · {tx.method === 'bank_transfer' ? 'Bank' : 'Wallet'}</p>
+                    <p className="text-xs text-muted-foreground">{new Date(tx.created_at).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className={`font-bold font-mono ${tx.type === 'deposit' ? 'text-profit' : 'text-loss'}`}>
+                    {tx.type === 'deposit' ? '+' : '-'}${Number(tx.amount).toLocaleString()}
+                  </p>
+                  <p className={`text-[10px] font-bold uppercase tracking-widest ${
+                    tx.status === 'completed' ? 'text-profit' : tx.status === 'pending' ? 'text-yellow-500' : 'text-loss'
+                  }`}>{tx.status}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
       {/* Recent Investments */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -228,8 +270,8 @@ const Dashboard = () => {
         </div>
       </motion.div>
 
-      <DepositModal open={isDepositOpen} onOpenChange={setIsDepositOpen} />
-      <WithdrawModal open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen} />
+      <DepositModal open={isDepositOpen} onOpenChange={(v) => { setIsDepositOpen(v); if (!v) { fetchTransactions(); fetchInvestments(); } }} />
+      <WithdrawModal open={isWithdrawOpen} onOpenChange={(v) => { setIsWithdrawOpen(v); if (!v) fetchTransactions(); }} />
       <WalletConnectModal open={isWalletOpen} onOpenChange={setIsWalletOpen} />
     </div>
   );

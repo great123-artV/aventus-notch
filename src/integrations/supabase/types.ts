@@ -80,6 +80,57 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          account_number: string | null
+          amount: number
+          bank_name: string | null
+          created_at: string
+          id: string
+          method: Database["public"]["Enums"]["transaction_method"]
+          notes: string | null
+          routing_number: string | null
+          status: Database["public"]["Enums"]["transaction_status"]
+          tx_hash: string | null
+          type: Database["public"]["Enums"]["transaction_type"]
+          updated_at: string
+          user_id: string
+          wallet_address: string | null
+        }
+        Insert: {
+          account_number?: string | null
+          amount?: number
+          bank_name?: string | null
+          created_at?: string
+          id?: string
+          method: Database["public"]["Enums"]["transaction_method"]
+          notes?: string | null
+          routing_number?: string | null
+          status?: Database["public"]["Enums"]["transaction_status"]
+          tx_hash?: string | null
+          type: Database["public"]["Enums"]["transaction_type"]
+          updated_at?: string
+          user_id: string
+          wallet_address?: string | null
+        }
+        Update: {
+          account_number?: string | null
+          amount?: number
+          bank_name?: string | null
+          created_at?: string
+          id?: string
+          method?: Database["public"]["Enums"]["transaction_method"]
+          notes?: string | null
+          routing_number?: string | null
+          status?: Database["public"]["Enums"]["transaction_status"]
+          tx_hash?: string | null
+          type?: Database["public"]["Enums"]["transaction_type"]
+          updated_at?: string
+          user_id?: string
+          wallet_address?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -146,6 +197,9 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "investor" | "user"
+      transaction_method: "wallet" | "bank_transfer"
+      transaction_status: "pending" | "completed" | "failed" | "rejected"
+      transaction_type: "deposit" | "withdrawal"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -274,6 +328,9 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "investor", "user"],
+      transaction_method: ["wallet", "bank_transfer"],
+      transaction_status: ["pending", "completed", "failed", "rejected"],
+      transaction_type: ["deposit", "withdrawal"],
     },
   },
 } as const
