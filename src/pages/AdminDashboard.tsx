@@ -34,6 +34,7 @@ const AdminDashboard = () => {
   const [totalUsers, setTotalUsers] = useState(0);
   const [investments, setInvestments] = useState<InvestmentSummary[]>([]);
   const [pageStats, setPageStats] = useState<{ name: string; visits: number }[]>([]);
+  const [pendingTx, setPendingTx] = useState<any[]>([]);
 
   useEffect(() => {
     if (!isAdmin) return;
