@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Lock, ShieldAlert } from "lucide-react";
+import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Lock, ShieldAlert, ArrowUpDown, CheckCircle, XCircle } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -313,6 +313,58 @@ const AdminDashboard = () => {
                     </tr>
                   );
                 })}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Transaction Management */}
+      {pendingTx.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="glass p-6 rounded-2xl">
+          <h3 className="font-bold font-display text-xl flex items-center gap-2 mb-6">
+            <ArrowUpDown className="w-5 h-5 text-primary" /> Transactions ({pendingTx.filter(t => t.status === 'pending').length} pending)
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10 text-muted-foreground text-xs uppercase tracking-wider">
+                  <th className="text-left py-3 px-4">Type</th>
+                  <th className="text-left py-3 px-4">Method</th>
+                  <th className="text-right py-3 px-4">Amount</th>
+                  <th className="text-left py-3 px-4">Status</th>
+                  <th className="text-left py-3 px-4">Date</th>
+                  <th className="text-right py-3 px-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingTx.map(tx => (
+                  <tr key={tx.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+                    <td className="py-3 px-4 font-bold capitalize">{tx.type}</td>
+                    <td className="py-3 px-4 text-muted-foreground capitalize">{tx.method?.replace('_', ' ')}</td>
+                    <td className="py-3 px-4 text-right font-bold font-mono">${Number(tx.amount).toLocaleString()}</td>
+                    <td className="py-3 px-4">
+                      <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
+                        tx.status === 'completed' ? 'bg-profit/20 text-profit' :
+                        tx.status === 'pending' ? 'bg-yellow-500/20 text-yellow-500' :
+                        'bg-loss/20 text-loss'
+                      }`}>{tx.status}</span>
+                    </td>
+                    <td className="py-3 px-4 text-muted-foreground text-xs">{new Date(tx.created_at).toLocaleDateString()}</td>
+                    <td className="py-3 px-4 text-right">
+                      {tx.status === 'pending' && (
+                        <div className="flex gap-2 justify-end">
+                          <Button size="sm" variant="ghost" onClick={() => updateTxStatus(tx.id, 'completed')} className="text-profit hover:bg-profit/10 h-8 px-2">
+                            <CheckCircle className="w-4 h-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => updateTxStatus(tx.id, 'rejected')} className="text-loss hover:bg-loss/10 h-8 px-2">
+                            <XCircle className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
