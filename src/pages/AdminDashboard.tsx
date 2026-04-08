@@ -77,6 +77,23 @@ const AdminDashboard = () => {
       setInvestments(Object.values(grouped));
       setTotalUsers(Object.keys(grouped).length);
     }
+
+    const { data: txData } = await supabase
+      .from("transactions")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (txData) setPendingTx(txData);
+  };
+
+  const updateTxStatus = async (txId: string, status: string) => {
+    const { error } = await supabase.from("transactions").update({ status }).eq("id", txId);
+    if (error) {
+      toast.error("Failed to update transaction");
+    } else {
+      toast.success(`Transaction ${status}`);
+      fetchData();
+    }
   };
 
   const [email, setEmail] = useState("");
