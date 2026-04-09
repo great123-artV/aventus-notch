@@ -1,9 +1,16 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download } from "lucide-react";
+import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePWA } from "@/hooks/usePWA";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navItems = [
   { label: "Dashboard", path: "/dashboard" },
@@ -15,7 +22,6 @@ const navItems = [
 export function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const isLanding = location.pathname === "/";
   const { user, isAdmin, signOut } = useAuth();
   const { isInstallable, installApp } = usePWA();
 
@@ -44,41 +50,20 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
-            {isAdmin && (
-              <Link
-                to="/admin"
-                className={`px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
-                  location.pathname === "/admin"
-                    ? "bg-primary/15 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                }`}
-              >
-                <span className="flex items-center gap-1.5"><Shield className="w-4 h-4" /> Admin</span>
-              </Link>
-            )}
           </div>
 
           <div className="hidden md:flex items-center gap-3">
             {isInstallable && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={installApp}
-                className="bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary group"
-              >
+              <Button variant="outline" size="sm" onClick={installApp} className="bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary group">
                 <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
                 Download App
               </Button>
             )}
             {!user ? (
               <>
-                <Link to="/login">
-                  <Button variant="ghost" size="sm">Log In</Button>
-                </Link>
+                <Link to="/login"><Button variant="ghost" size="sm">Log In</Button></Link>
                 <Link to="/signup">
-                  <Button size="sm" className="gradient-primary border-0 text-foreground shadow-glow">
-                    Get Started
-                  </Button>
+                  <Button size="sm" className="gradient-primary border-0 text-foreground shadow-glow">Get Started</Button>
                 </Link>
               </>
             ) : (
@@ -87,12 +72,32 @@ export function Navbar() {
                   <Bell className="w-5 h-5 text-muted-foreground" />
                   <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
                 </button>
-                <Link to="/profile" className="p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-                  <User className="w-5 h-5 text-muted-foreground" />
-                </Link>
-                <button onClick={signOut} className="p-2 rounded-lg hover:bg-secondary/50 transition-colors" title="Sign out">
-                  <LogOut className="w-5 h-5 text-muted-foreground" />
-                </button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-1.5 p-2 rounded-lg hover:bg-secondary/50 transition-colors">
+                      <User className="w-5 h-5 text-muted-foreground" />
+                      <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48 glass-strong border-white/10">
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
+                        <User className="w-4 h-4" /> Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    {isAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
+                          <Shield className="w-4 h-4" /> Admin Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator className="bg-white/10" />
+                    <DropdownMenuItem onClick={signOut} className="flex items-center gap-2 cursor-pointer text-red-400">
+                      <LogOut className="w-4 h-4" /> Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             )}
           </div>
@@ -119,8 +124,8 @@ export function Navbar() {
               </Link>
             ))}
             {isAdmin && (
-              <Link to="/admin" onClick={() => setMobileOpen(false)} className="block px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground">
-                🛡️ Admin Dashboard
+              <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground">
+                <Shield className="w-4 h-4" /> Admin Dashboard
               </Link>
             )}
             {isInstallable && (
@@ -128,8 +133,7 @@ export function Navbar() {
                 onClick={() => { installApp(); setMobileOpen(false); }}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-primary bg-primary/10 mb-2"
               >
-                <Download className="w-5 h-5" />
-                Download Aventus App
+                <Download className="w-5 h-5" /> Download App
               </button>
             )}
             <div className="pt-2 flex gap-2">
