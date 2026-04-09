@@ -22,7 +22,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="pt-24 pb-24 px-4 max-w-2xl mx-auto space-y-8">
+    <div className="pt-24 pb-24 px-4 max-w-2xl mx-auto space-y-8 theme-profile relative">
       <div className="flex flex-col items-center text-center">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}

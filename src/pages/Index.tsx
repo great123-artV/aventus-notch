@@ -28,7 +28,7 @@ const stats = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-[#020617] selection:bg-primary/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#020617] selection:bg-primary/30 overflow-x-hidden theme-home relative">
       <InvestorTicker />
 
       {/* Hero */}

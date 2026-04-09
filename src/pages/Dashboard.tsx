@@ -50,7 +50,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="pt-24 pb-10 px-4 max-w-7xl mx-auto space-y-8 selection:bg-primary/30">
+    <div className="pt-24 pb-10 px-4 max-w-7xl mx-auto space-y-8 selection:bg-primary/30 theme-dashboard relative">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl sm:text-4xl font-bold font-display tracking-tight">Welcome back, {user?.user_metadata?.first_name || 'Investor'}</h1>

@@ -30,7 +30,7 @@ const Markets = () => {
   ];
 
   return (
-    <div className="pt-20 pb-10 px-4 max-w-7xl mx-auto">
+    <div className="pt-20 pb-10 px-4 max-w-7xl mx-auto theme-markets relative">
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold font-display">Markets</h1>
         <p className="text-muted-foreground mt-1">Explore global investment opportunities</p>
