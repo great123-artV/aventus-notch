@@ -1,42 +1,93 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Professional Page-Specific Theming */
+
+.theme-home {
+  --page-accent: #3b82f6;
+  --page-glow: rgba(59, 130, 246, 0.15);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.theme-dashboard {
+  --page-accent: #8b5cf6;
+  --page-glow: rgba(139, 92, 246, 0.1);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.theme-markets {
+  --page-accent: #10b981;
+  --page-glow: rgba(16, 185, 129, 0.1);
+}
+
+.theme-realestate {
+  --page-accent: #f59e0b;
+  --page-glow: rgba(245, 158, 11, 0.1);
+}
+
+.theme-retirement {
+  --page-accent: #ec4899;
+  --page-glow: rgba(236, 72, 153, 0.1);
+}
+
+.theme-profile {
+  --page-accent: #6366f1;
+  --page-glow: rgba(99, 102, 241, 0.1);
+}
+
+/* Background Gradients */
+[class*="theme-"]::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 600px;
+  background: radial-gradient(circle at 50% 0%, var(--page-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Glass improvements */
+.glass-strong {
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #fff, var(--page-accent, #3b82f6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.shadow-glow {
+  box-shadow: 0 0 20px var(--page-glow);
+}
+
+.neon-glow-primary {
+  box-shadow: 0 0 30px -5px var(--page-accent);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 640px) {
+  .font-display {
+    letter-spacing: -0.02em;
   }
-  to {
-    transform: rotate(360deg);
+
+  .glass {
+    backdrop-filter: blur(12px);
+  }
+
+  input, button {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
+  }
+
+  /* Ensure bottom nav doesn't overlap content */
+  .pb-24 {
+    padding-bottom: 120px !important;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

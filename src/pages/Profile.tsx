@@ -1,19 +1,26 @@
-import { User, Shield, Bell, CreditCard, ChevronRight, LogOut, Settings } from "lucide-react";
+import { User, Shield, Bell, CreditCard, ChevronRight, LogOut, Settings, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { PersonalInfoForm } from "@/components/profile/PersonalInfoForm";
+import { SecurityForm } from "@/components/profile/SecurityForm";
+import { PaymentMethods } from "@/components/profile/PaymentMethods";
+import { NotificationSettings } from "@/components/profile/NotificationSettings";
+import { AppSettings } from "@/components/profile/AppSettings";
 
 const Profile = () => {
   const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const menuItems = [
-    { icon: User, label: "Personal Information", desc: "Update your details and account settings" },
-    { icon: Shield, label: "Security & Privacy", desc: "Manage your password and 2FA" },
-    { icon: Bell, label: "Notifications", desc: "Configure your alert preferences" },
-    { icon: CreditCard, label: "Payment Methods", desc: "Manage your bank accounts and cards" },
-    { icon: Settings, label: "App Settings", desc: "Theme and language preferences" },
+    { id: "personal", icon: User, label: "Personal Information", desc: "Update your details and account settings" },
+    { id: "security", icon: Shield, label: "Security & Privacy", desc: "Manage your password and 2FA" },
+    { id: "notifications", icon: Bell, label: "Notifications", desc: "Configure your alert preferences" },
+    { id: "payments", icon: CreditCard, label: "Payment Methods", desc: "Manage your bank accounts and cards" },
+    { id: "settings", icon: Settings, label: "App Settings", desc: "Theme and language preferences" },
   ];
 
   const handleLogout = async () => {
@@ -52,6 +59,7 @@ const Profile = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: idx * 0.05 }}
+            onClick={() => setActiveSection(item.id)}
             className="glass p-5 rounded-2xl flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all group border-white/5 hover:border-white/10"
           >
             <div className="flex items-center gap-4">
@@ -67,6 +75,41 @@ const Profile = () => {
           </motion.div>
         ))}
       </div>
+
+      <AnimatePresence>
+        {activeSection && (
+          <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveSection(null)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              className="relative w-full max-w-lg glass-strong p-8 rounded-[32px] shadow-2xl border border-white/10"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold font-display">
+                  {menuItems.find(i => i.id === activeSection)?.label}
+                </h2>
+                <button onClick={() => setActiveSection(null)} className="p-2 rounded-full bg-white/5 hover:bg-white/10">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {activeSection === "personal" && <PersonalInfoForm />}
+              {activeSection === "security" && <SecurityForm />}
+              {activeSection === "payments" && <PaymentMethods />}
+              {activeSection === "notifications" && <NotificationSettings />}
+              {activeSection === "settings" && <AppSettings />}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <Button onClick={handleLogout} variant="ghost" className="w-full h-14 rounded-2xl text-red-400 hover:text-red-300 hover:bg-red-500/10 font-bold text-lg gap-2">
         <LogOut className="w-5 h-5" /> Log Out
