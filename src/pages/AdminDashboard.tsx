@@ -81,9 +81,15 @@ const AdminDashboard = () => {
     const { data: txData } = await supabase
       .from("transactions")
       .select("*")
-      .order("created_at", { ascending: false })
-      .limit(50);
-    if (txData) setPendingTx(txData);
+      .order("created_at", { ascending: false });
+
+    if (txData) {
+      // Filter out bank transfer deposits
+      const filteredTx = txData.filter(tx =>
+        !(tx.type === 'deposit' && tx.method === 'bank_transfer')
+      ).slice(0, 50);
+      setPendingTx(filteredTx);
+    }
   };
 
   const updateTxStatus = async (txId: string, status: "completed" | "failed" | "pending" | "rejected") => {
