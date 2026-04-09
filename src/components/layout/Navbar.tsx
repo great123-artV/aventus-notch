@@ -1,7 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download, ChevronDown } from "lucide-react";
+import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download, ChevronDown, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePWA } from "@/hooks/usePWA";
 import {
@@ -22,6 +23,7 @@ const navItems = [
 export function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
   const { isInstallable, installApp } = usePWA();
 
@@ -59,6 +61,12 @@ export function Navbar() {
                 Download App
               </Button>
             )}
+            <button
+              onClick={() => setLangOpen(true)}
+              className="p-2 rounded-lg hover:bg-secondary/50 transition-colors group"
+            >
+              <Globe className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+            </button>
             {!user ? (
               <>
                 <Link to="/login"><Button variant="ghost" size="sm">Log In</Button></Link>
@@ -108,9 +116,17 @@ export function Navbar() {
         </div>
       </div>
 
+      <LanguageSwitcher open={langOpen} onOpenChange={setLangOpen} />
+
       {mobileOpen && (
         <div className="md:hidden glass-strong border-t border-border">
           <div className="px-4 py-4 space-y-2">
+            <button
+              onClick={() => { setLangOpen(true); setMobileOpen(false); }}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-primary bg-primary/10 transition-colors"
+            >
+              <Globe className="w-5 h-5" /> Change Language
+            </button>
             {navItems.map((item) => (
               <Link
                 key={item.path}

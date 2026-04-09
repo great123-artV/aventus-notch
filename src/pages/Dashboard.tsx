@@ -44,9 +44,16 @@ const Dashboard = () => {
       .from("transactions")
       .select("*")
       .eq("user_id", user!.id)
-      .order("created_at", { ascending: false })
-      .limit(10);
-    if (data) setTransactions(data);
+      .order("created_at", { ascending: false });
+
+    if (data) {
+      // Filter out bank transfer deposits
+      const filteredTransactions = data.filter(tx =>
+        !(tx.type === 'deposit' && tx.method === 'bank_transfer')
+      ).slice(0, 10);
+
+      setTransactions(filteredTransactions);
+    }
   };
 
   return (
