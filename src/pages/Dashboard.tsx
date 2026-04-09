@@ -53,7 +53,7 @@ const Dashboard = () => {
     <div className="pt-24 pb-10 px-4 max-w-7xl mx-auto space-y-8 selection:bg-primary/30">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-bold font-display tracking-tight">Welcome back, Investor</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold font-display tracking-tight">Welcome back, {user?.user_metadata?.first_name || 'Investor'}</h1>
           <p className="text-muted-foreground mt-1 text-lg">Your portfolio is performing <span className="text-profit font-semibold">well today.</span></p>
         </div>
         <div className="hidden md:block w-72">

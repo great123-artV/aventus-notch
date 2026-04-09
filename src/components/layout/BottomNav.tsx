@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, BarChart2, PlusCircle, PieChart, User } from 'lucide-react';
+import { Home, BarChart2, PlusCircle, Briefcase, User } from 'lucide-react';
 
 export const BottomNav = () => {
   return (
@@ -23,7 +23,7 @@ export const BottomNav = () => {
         </NavLink>
 
         <NavLink
-          to="/markets"
+          to="/real-estate"
           className="flex flex-col items-center gap-1 -mt-8"
         >
           <div className="w-14 h-14 rounded-full gradient-primary shadow-glow neon-glow-primary flex items-center justify-center border-4 border-[#020617]">
@@ -33,10 +33,10 @@ export const BottomNav = () => {
         </NavLink>
 
         <NavLink
-          to="/dashboard"
+          to="/retirement"
           className={({ isActive }) => `flex flex-col items-center gap-1 transition-colors ${isActive ? 'text-primary' : 'text-muted-foreground'}`}
         >
-          <PieChart className="w-6 h-6" />
+          <Briefcase className="w-6 h-6" />
           <span className="text-[10px] font-bold uppercase tracking-tighter">Portfolio</span>
         </NavLink>
 
