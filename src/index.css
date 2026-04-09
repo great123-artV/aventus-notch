@@ -133,6 +133,52 @@
     box-shadow: 0 8px 32px hsl(217 91% 60% / 0.25);
   }
 
+  /* Page-specific theme accents */
+  .theme-dashboard {
+    --page-accent: 217 91% 60%;
+    --page-glow: radial-gradient(ellipse at 10% 20%, hsl(217 91% 60% / 0.08) 0%, transparent 50%),
+                 radial-gradient(ellipse at 90% 80%, hsl(160 84% 39% / 0.06) 0%, transparent 50%);
+  }
+  .theme-markets {
+    --page-accent: 270 80% 60%;
+    --page-glow: radial-gradient(ellipse at 50% 0%, hsl(270 80% 60% / 0.1) 0%, transparent 50%),
+                 radial-gradient(ellipse at 20% 80%, hsl(217 91% 60% / 0.06) 0%, transparent 50%);
+  }
+  .theme-realestate {
+    --page-accent: 160 84% 39%;
+    --page-glow: radial-gradient(ellipse at 30% 10%, hsl(160 84% 39% / 0.1) 0%, transparent 50%),
+                 radial-gradient(ellipse at 80% 60%, hsl(45 90% 55% / 0.05) 0%, transparent 50%);
+  }
+  .theme-profile {
+    --page-accent: 45 90% 55%;
+    --page-glow: radial-gradient(ellipse at 50% 20%, hsl(45 90% 55% / 0.08) 0%, transparent 50%),
+                 radial-gradient(ellipse at 20% 80%, hsl(270 80% 60% / 0.05) 0%, transparent 50%);
+  }
+  .theme-auth {
+    --page-accent: 217 91% 60%;
+    --page-glow: radial-gradient(ellipse at 50% 50%, hsl(217 91% 60% / 0.12) 0%, transparent 60%);
+  }
+  .theme-home {
+    --page-accent: 217 91% 60%;
+    --page-glow: radial-gradient(ellipse at 20% 30%, hsl(217 91% 60% / 0.12) 0%, transparent 50%),
+                 radial-gradient(ellipse at 80% 20%, hsl(270 80% 60% / 0.08) 0%, transparent 50%),
+                 radial-gradient(ellipse at 50% 90%, hsl(160 84% 39% / 0.06) 0%, transparent 50%);
+  }
+  .theme-retirement {
+    --page-accent: 340 70% 55%;
+    --page-glow: radial-gradient(ellipse at 40% 10%, hsl(340 70% 55% / 0.08) 0%, transparent 50%),
+                 radial-gradient(ellipse at 70% 70%, hsl(45 90% 55% / 0.06) 0%, transparent 50%);
+  }
+
+  [class*="theme-"]::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: var(--page-glow);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .card-hover {
     @apply hover:-translate-y-1 transition-transform duration-300 ease-out;
   }
