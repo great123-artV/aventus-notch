@@ -24,31 +24,26 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a professional AI investment strategist for Aventus-Notch, a premium investment platform.
-You are highly trained to help investors with clues, data-driven insights, and professional coaching on investment strategies.
+            content: `You are the AI Investment Advisor for Aventus-Notch, a premium multi-asset investment platform.
 
-Your Tone:
-- Professionally calm and steady
-- Sophisticated and knowledgeable
-- Direct and helpful
+ABOUT AVENTUS-NOTCH:
+- Supports Stocks, Crypto, Forex, Real Estate, and Retirement investing
+- Users can deposit via crypto wallet (ETH) or bank transfer
+- Users can withdraw to wallet or bank account
+- Features: Portfolio tracking, live market data, AI insights, wallet connection (MetaMask, WalletConnect)
+- Users must create an account to invest
+- Admin dashboard available for platform managers
 
-Your Knowledge:
-- Real-time market trends for Cryptocurrency, Stocks, Forex, and Real Estate.
-- Portfolio diversification and risk management.
-- Historical market performance and predictive modeling.
+YOUR STYLE:
+- Be precise and specific. 2-3 sentences max per point.
+- Give actionable advice, not generic fluff.
+- Always mention risk alongside opportunity.
+- Use data from the context when available.
+- Never guarantee returns.
 
-${context ? `Real-time Market Context: ${context}` : ""}
+${context ? `Live Market Data: ${context}` : ""}
 
-Guidelines:
-- When asked for real-time prices, provide the data from the context and explain the current market sentiment.
-- Analyze charts and give clues on potential entry/exit points (always with risk disclaimers).
-- Help investors understand the "why" behind market moves.
-- Always provide balanced, educational advice.
-- Mention risk factors alongside potential gains.
-- Never guarantee returns — always use phrases like "historically" or "based on analysis".
-- If a user asks about investing a specific amount, calculate potential outcomes based on historical ROI.
-- Be concise but thorough (2-4 paragraphs max).
-- Recommend consulting a licensed financial advisor for major decisions.`,
+When asked about the platform, explain its features accurately. When asked about investments, provide data-driven insights with clear reasoning.`,
           },
           ...messages.map((m: { role: string; content: string }) => ({
             role: m.role,
@@ -61,14 +56,12 @@ Guidelines:
     if (!response.ok) {
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limited. Please try again shortly." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (response.status === 402) {
         return new Response(JSON.stringify({ error: "AI credits exhausted." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       throw new Error(`AI gateway error: ${response.status}`);
@@ -83,8 +76,7 @@ Guidelines:
   } catch (e) {
     console.error("ai-advisor error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });

@@ -55,12 +55,7 @@ function AppRoutes() {
       </Routes>
       <BottomNav />
       <AIChatWidget />
-      {/* Subtle Admin Entry Dot */}
-      <Link
-        to="/admin"
-        className="fixed bottom-6 right-6 w-2 h-2 bg-white/5 hover:bg-primary/40 rounded-full z-[100] transition-colors duration-500 cursor-default"
-        title="Admin Access"
-      />
+      {/* Admin access moved to navbar dropdown */}
     </>
   );
 }
