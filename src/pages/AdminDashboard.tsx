@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Lock, ShieldAlert, ArrowUpDown, CheckCircle, XCircle } from "lucide-react";
+import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Lock, ShieldAlert, ArrowUpDown, CheckCircle, XCircle, Layout, Map as MapIcon } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CMSManager } from "@/components/admin/CMSManager";
+import { VisitorTracker } from "@/components/admin/VisitorTracker";
 
 interface VisitorLog {
   id: string;
@@ -30,6 +32,7 @@ const AdminDashboard = () => {
   const { user, isAdmin, loading, signIn } = useAuth();
   const navigate = useNavigate();
   const [visitors, setVisitors] = useState<VisitorLog[]>([]);
+  const [activeTab, setActiveTab] = useState<"overview" | "cms" | "visitors" | "transactions">("overview");
   const [todayCount, setTodayCount] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
   const [investments, setInvestments] = useState<InvestmentSummary[]>([]);
@@ -194,19 +197,43 @@ const AdminDashboard = () => {
   })();
 
   return (
-    <div className="pt-24 pb-10 px-4 max-w-7xl mx-auto space-y-8">
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center shadow-glow">
-          <Shield className="w-6 h-6 text-white" />
+    <div className="pt-24 pb-24 px-4 max-w-7xl mx-auto space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center shadow-glow">
+            <Shield className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold font-display">Admin Panel</h1>
+            <p className="text-muted-foreground">System control & monitoring</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-3xl font-bold font-display">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Full platform overview</p>
+
+        <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 overflow-x-auto no-scrollbar">
+          {[
+            { id: "overview", label: "Overview", icon: Activity },
+            { id: "cms", label: "CMS", icon: Layout },
+            { id: "visitors", label: "Locations", icon: MapIcon },
+            { id: "transactions", label: "Payments", icon: ArrowUpDown },
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${
+                activeTab === tab.id ? "bg-primary text-white shadow-glow" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {activeTab === "overview" && (
+        <div className="space-y-8">
+          {/* Stat Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {[
           { icon: Eye, label: "Today's Visits", value: todayCount, color: "text-primary" },
           { icon: Users, label: "Total Investors", value: totalUsers, color: "text-profit" },
@@ -325,11 +352,25 @@ const AdminDashboard = () => {
         </motion.div>
       )}
 
-      {/* Transaction Management */}
-      {pendingTx.length > 0 && (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="glass p-6 rounded-2xl">
+        </div>
+      )}
+
+      {activeTab === "cms" && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <CMSManager />
+        </motion.div>
+      )}
+
+      {activeTab === "visitors" && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <VisitorTracker />
+        </motion.div>
+      )}
+
+      {activeTab === "transactions" && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass p-6 rounded-2xl">
           <h3 className="font-bold font-display text-xl flex items-center gap-2 mb-6">
-            <ArrowUpDown className="w-5 h-5 text-primary" /> Transactions ({pendingTx.filter(t => t.status === 'pending').length} pending)
+            <ArrowUpDown className="w-5 h-5 text-primary" /> All Transactions
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

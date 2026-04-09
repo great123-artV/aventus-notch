@@ -39,9 +39,7 @@ export function AIChatWidget() {
       setInput(transcript);
       setIsListening(false);
       // Auto-send after voice input
-      setTimeout(() => {
-        sendMessageWithText(transcript);
-      }, 300);
+      sendMessageWithText(transcript);
     };
 
     recognition.onerror = () => setIsListening(false);
@@ -66,6 +64,12 @@ export function AIChatWidget() {
     setIsLoading(true);
 
     try {
+      let siteContext = "You are the Aventus-Notch Professional AI Investment Strategist. ";
+      siteContext += "The site offers Stocks, Crypto, Forex, Real Estate fractional ownership, and Retirement plans. ";
+      siteContext += "Current treasury address: 0x35d4248095be1aaf0025f651cf86ed3ec7858023. ";
+      siteContext += "Investment icons in footer: Home, Markets (Live data), Invest (Real Estate & Retirement), Portfolio (User dashboard), Profile (Settings). ";
+      siteContext += "Be precise, specific, and professional. Do not over-explain. Answer in under 3 sentences unless asked for details. ";
+
       let priceContext = "";
       try {
         const binanceRes = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT","XRPUSDT"]');
@@ -74,12 +78,15 @@ export function AIChatWidget() {
       } catch {}
 
       const { data, error } = await supabase.functions.invoke("ai-advisor", {
-        body: { messages: newMessages, context: priceContext ? `Live prices: ${priceContext}` : undefined },
+        body: {
+          messages: newMessages,
+          context: siteContext + (priceContext ? "Live prices: " + priceContext : "")
+        },
       });
 
       if (error) throw error;
       setMessages(prev => [...prev, { role: "assistant", content: data.reply || "Please try again." }]);
-    } catch {
+    } catch (err) {
       setMessages(prev => [...prev, { role: "assistant", content: "Connection issue. Please try again." }]);
     } finally {
       setIsLoading(false);
@@ -98,20 +105,25 @@ export function AIChatWidget() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-24 right-6 z-50 w-16 h-16 rounded-full flex items-center justify-center overflow-hidden"
+            className="fixed bottom-24 right-6 z-50 flex items-center gap-2 group"
           >
-            <motion.div
-              animate={{ scale: [1, 1.1, 1], rotate: 360 }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0 bg-gradient-to-tr from-primary via-purple-500 to-accent opacity-80 blur-sm"
-            />
-            <motion.div
-              animate={{ scale: [1.2, 1, 1.2] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-2 bg-gradient-to-bl from-accent via-primary to-purple-600 rounded-full mix-blend-screen"
-            />
-            <div className="absolute inset-0 border border-white/20 rounded-full shadow-[0_0_30px_rgba(59,130,246,0.5)]" />
-            <Sparkles className="w-7 h-7 text-white relative z-10 animate-pulse" />
+            <div className="absolute -top-8 right-0 bg-primary/20 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+              <span className="text-[10px] font-bold text-white uppercase tracking-tighter">Aventus AI Bot</span>
+            </div>
+            <div className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden relative">
+              <motion.div
+                animate={{ scale: [1, 1.1, 1], rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 bg-gradient-to-tr from-primary via-purple-500 to-accent opacity-80 blur-sm"
+              />
+              <motion.div
+                animate={{ scale: [1.2, 1, 1.2] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-2 bg-gradient-to-bl from-accent via-primary to-purple-600 rounded-full mix-blend-screen"
+              />
+              <div className="absolute inset-0 border border-white/20 rounded-full shadow-[0_0_30px_rgba(59,130,246,0.5)]" />
+              <Sparkles className="w-7 h-7 text-white relative z-10 animate-pulse" />
+            </div>
           </motion.button>
         )}
       </AnimatePresence>
@@ -130,7 +142,10 @@ export function AIChatWidget() {
               <div className="flex items-center gap-2">
                 <Bot className="w-5 h-5 text-white" />
                 <span className="font-bold text-white text-sm">AI Advisor</span>
-                <span className="px-1.5 py-0.5 bg-white/20 rounded text-[9px] font-bold text-white uppercase tracking-wider">AI</span>
+                <div className="flex items-center gap-1">
+                  <span className="px-1.5 py-0.5 bg-white/20 rounded text-[9px] font-bold text-white uppercase tracking-wider">AI</span>
+                  <span className="px-1.5 py-0.5 bg-profit/40 rounded text-[9px] font-bold text-white uppercase tracking-wider border border-white/10">AVENTUS BOT</span>
+                </div>
               </div>
               <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white">
                 <X className="w-5 h-5" />

@@ -10,6 +10,7 @@ import { MarketTicker } from "@/components/premium/TradingViewWidget";
 import { TrustBadges } from "@/components/TrustBadges";
 import { ThreeDPhone } from "@/components/premium/ThreeDPhone";
 import { motion } from "framer-motion";
+import { useSiteConfigs } from "@/hooks/use-site-config";
 
 const categories = [
   { icon: TrendingUp, title: "Stocks & Shares", desc: "Invest in top-performing companies worldwide with real-time market data.", color: "from-blue-500/20 to-blue-600/5" },
@@ -27,6 +28,8 @@ const stats = [
 ];
 
 const Index = () => {
+  const { data: configs } = useSiteConfigs();
+
   return (
     <div className="min-h-screen bg-[#020617] selection:bg-primary/30 overflow-x-hidden theme-home relative">
       <InvestorTicker />
@@ -36,6 +39,7 @@ const Index = () => {
         {/* Background Video Layer */}
         <div className="absolute inset-0 z-0">
           <video
+            key={configs?.homepage_video_url}
             autoPlay
             loop
             muted
@@ -50,7 +54,7 @@ const Index = () => {
               }
             }}
           >
-            <source src="https://cdn.pixabay.com/video/2024/02/14/200750-913069622_large.mp4" type="video/mp4" />
+            <source src={configs?.homepage_video_url || "https://cdn.pixabay.com/video/2024/02/14/200750-913069622_large.mp4"} type="video/mp4" />
             <source src="https://cdn.pixabay.com/video/2021/04/03/69579-532128942_large.mp4" type="video/mp4" />
           </video>
           {/* Animated BTC coin overlay */}
@@ -95,9 +99,18 @@ const Index = () => {
                 transition={{ delay: 0.1 }}
                 className="text-5xl sm:text-6xl lg:text-8xl font-bold font-display leading-[1.1] mb-8 tracking-tight"
               >
-                Invest Smarter.
-                <br />
-                <span className="text-gradient">Grow Without Limits.</span>
+                {configs?.hero_title?.split('.').map((part, i, arr) => (
+                  <span key={i}>
+                    {part}{i < arr.length - 1 ? '.' : ''}
+                    {i === 0 && <br />}
+                  </span>
+                )) || (
+                  <>
+                    Invest Smarter.
+                    <br />
+                    <span className="text-gradient">Grow Without Limits.</span>
+                  </>
+                )}
               </motion.h1>
 
               <motion.p
@@ -106,8 +119,7 @@ const Index = () => {
                 transition={{ delay: 0.2 }}
                 className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed"
               >
-                One platform for stocks, crypto, forex, real estate, and retirement.
-                Build wealth with institutional-grade tools designed for everyone.
+                {configs?.hero_subtitle || "One platform for stocks, crypto, forex, real estate, and retirement. Build wealth with institutional-grade tools designed for everyone."}
               </motion.p>
 
               <motion.div

@@ -31,6 +31,7 @@ const config = getDefaultConfig({
   appName: "Aventus-Notch",
   projectId: "21fef48091f12692cad574a6f7753643",
   chains: [mainnet, polygon, optimism, arbitrum, base],
+  ssr: true,
 });
 
 const queryClient = new QueryClient();
@@ -55,7 +56,6 @@ function AppRoutes() {
       </Routes>
       <BottomNav />
       <AIChatWidget />
-      {/* Admin access moved to navbar dropdown */}
     </>
   );
 }
@@ -63,7 +63,15 @@ function AppRoutes() {
 const App = () => (
   <WagmiProvider config={config}>
     <QueryClientProvider client={queryClient}>
-      <RainbowKitProvider theme={darkTheme()}>
+      <RainbowKitProvider
+        theme={darkTheme({
+          accentColor: '#3b82f6',
+          accentColorForeground: 'white',
+          borderRadius: 'large',
+          overlayBlur: 'small',
+        })}
+        modalSize="compact"
+      >
         <ThemeProvider defaultTheme="dark" attribute="class">
           <TooltipProvider>
             <Toaster />

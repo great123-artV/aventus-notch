@@ -25,6 +25,7 @@ export function TransactionModal({ open, onOpenChange, asset, type }: Transactio
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const { user, balance, refreshProfile } = useAuth();
+  const navigate = useNavigate();
 
   const handleTransaction = async () => {
     const numAmount = Number(amount);
@@ -39,7 +40,9 @@ export function TransactionModal({ open, onOpenChange, asset, type }: Transactio
     }
 
     if (!user) {
-      toast.error("Please log in to trade");
+      toast.error("Please create an account to start investing");
+      navigate("/signup");
+      onOpenChange(false);
       return;
     }
 
