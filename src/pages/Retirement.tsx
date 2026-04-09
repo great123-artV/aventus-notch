@@ -33,7 +33,7 @@ const Retirement = () => {
   }, [monthly, years, returnRate]);
 
   return (
-    <div className="pt-20 pb-10 px-4 max-w-5xl mx-auto">
+    <div className="pt-20 pb-10 px-4 max-w-5xl mx-auto theme-retirement relative">
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold font-display">Retirement Planner</h1>
         <p className="text-muted-foreground mt-1">Project your financial future with interactive tools</p>

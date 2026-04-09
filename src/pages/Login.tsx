@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative">
+    <div className="min-h-screen flex items-center justify-center px-4 relative theme-auth">
       <div className="absolute inset-0 gradient-hero" />
       <div className="relative w-full max-w-md">
         <div className="text-center mb-8">

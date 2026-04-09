@@ -23,7 +23,7 @@ const RealEstate = () => {
   };
 
   return (
-    <div className="pt-20 pb-10 px-4 max-w-7xl mx-auto">
+    <div className="pt-20 pb-10 px-4 max-w-7xl mx-auto theme-realestate relative">
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold font-display">Real Estate</h1>
         <p className="text-muted-foreground mt-1">Fractional ownership in premium properties</p>
