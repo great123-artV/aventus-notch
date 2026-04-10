@@ -80,6 +80,24 @@ export type Database = {
         }
         Relationships: []
       }
+      site_configs: {
+        Row: {
+          id: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          id: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          id?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           account_number: string | null
