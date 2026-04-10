@@ -9,6 +9,7 @@ import { InvestorTicker } from "@/components/premium/InvestorTicker";
 import { MarketTicker } from "@/components/premium/TradingViewWidget";
 import { TrustBadges } from "@/components/TrustBadges";
 import { ThreeDPhone } from "@/components/premium/ThreeDPhone";
+import { InvestmentPlans } from "@/components/InvestmentPlans";
 import { motion } from "framer-motion";
 import { useSiteConfigs } from "@/hooks/use-site-config";
 
@@ -198,6 +199,9 @@ const Index = () => {
       </section>
 
       <TrustBadges />
+
+      {/* Investment Plans */}
+      <InvestmentPlans />
 
       {/* Investment Categories */}
       <section className="py-32 px-4 relative">

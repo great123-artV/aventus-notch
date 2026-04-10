@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { TrendingUp, TrendingDown, DollarSign } from "lucide-react";
-
 interface TransactionModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -26,6 +26,7 @@ export function TransactionModal({ open, onOpenChange, asset, type }: Transactio
   const [loading, setLoading] = useState(false);
   const { user, balance, refreshProfile } = useAuth();
   const navigate = useNavigate();
+
 
   const handleTransaction = async () => {
     const numAmount = Number(amount);

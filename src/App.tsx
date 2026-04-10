@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { AIChatWidget } from "@/components/AIChatWidget";
@@ -78,7 +79,9 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <AuthProvider>
-                <AppRoutes />
+                <LanguageProvider>
+                  <AppRoutes />
+                </LanguageProvider>
               </AuthProvider>
             </BrowserRouter>
           </TooltipProvider>
