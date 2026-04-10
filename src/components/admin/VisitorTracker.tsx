@@ -12,8 +12,7 @@ interface Visitor {
   visited_at: string;
   country: string | null;
   city: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  ip_address: string | null;
 }
 
 export function VisitorTracker() {
@@ -112,9 +111,9 @@ export function VisitorTracker() {
                 </span>
               </div>
 
-              {visitor.latitude && visitor.longitude && (
+              {visitor.ip_address && (
                 <p className="text-[9px] text-muted-foreground/50 font-mono text-center">
-                  COORD: {visitor.latitude.toFixed(4)}, {visitor.longitude.toFixed(4)}
+                  IP: {visitor.ip_address}
                 </p>
               )}
             </div>
