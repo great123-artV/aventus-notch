@@ -3,6 +3,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import { Globe, MapPin, Navigation, User, Clock, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+// Fix for default marker icons in Leaflet with React
+// @ts-ignore
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+});
 
 interface Visitor {
   id: string;
@@ -13,6 +25,8 @@ interface Visitor {
   country: string | null;
   city: string | null;
   ip_address: string | null;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 export function VisitorTracker() {
@@ -51,8 +65,43 @@ export function VisitorTracker() {
     (v.page_path?.toLowerCase().includes(search.toLowerCase()))
   );
 
+  const locations = filteredVisitors
+    .filter(v => v.latitude && v.longitude)
+    .map(v => ({
+      id: v.id,
+      position: [Number(v.latitude), Number(v.longitude)] as [number, number],
+      city: v.city,
+      country: v.country,
+      user: v.user_id ? `User ${v.user_id.slice(0, 8)}` : "Guest"
+    }));
+
   return (
     <div className="space-y-6">
+      {/* Map View */}
+      <div className="h-[400px] w-full rounded-3xl overflow-hidden glass border border-white/10 relative z-0">
+        <MapContainer
+          center={[20, 0]}
+          zoom={2}
+          style={{ height: "100%", width: "100%" }}
+          className="admin-map"
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {locations.map((loc, i) => (
+            <Marker key={loc.id + i} position={loc.position}>
+              <Popup>
+                <div className="text-black">
+                  <p className="font-bold">{loc.user}</p>
+                  <p className="text-xs">{loc.city}, {loc.country}</p>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </div>
+
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <h3 className="text-xl font-bold font-display flex items-center gap-2">
           <Globe className="w-6 h-6 text-profit" /> Real-time Global Activity

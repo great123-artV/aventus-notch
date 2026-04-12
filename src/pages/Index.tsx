@@ -12,6 +12,7 @@ import { ThreeDPhone } from "@/components/premium/ThreeDPhone";
 import { InvestmentPlans } from "@/components/InvestmentPlans";
 import { motion } from "framer-motion";
 import { useSiteConfigs } from "@/hooks/use-site-config";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const categories = [
   { icon: TrendingUp, title: "Stocks & Shares", desc: "Invest in top-performing companies worldwide with real-time market data.", color: "from-blue-500/20 to-blue-600/5" },
@@ -30,6 +31,7 @@ const stats = [
 
 const Index = () => {
   const { data: configs } = useSiteConfigs();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-[#020617] selection:bg-primary/30 overflow-x-hidden theme-home relative">
@@ -45,8 +47,8 @@ const Index = () => {
             loop
             muted
             playsInline
-            className="absolute w-full h-full object-cover opacity-40"
-            style={{ filter: 'brightness(0.7) contrast(1.1)' }}
+            className="absolute w-full h-full object-cover opacity-70"
+            style={{ filter: 'brightness(0.8) contrast(1.1)' }}
             onError={(e) => {
               const target = e.currentTarget;
               if (target.dataset.fallback !== 'true') {
@@ -73,13 +75,11 @@ const Index = () => {
               }}
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-transparent to-[#020617]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#020617]/80" />
         </div>
 
-        <div className="absolute inset-0 gradient-hero opacity-30 pointer-events-none" />
-        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse-glow pointer-events-none" />
-        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
+        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
 
         <div className="relative max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 pt-10">
@@ -90,7 +90,7 @@ const Index = () => {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-muted-foreground mb-8 border-white/10"
               >
                 <Zap className="w-4 h-4 text-primary" />
-                <span className="font-medium">Now with AI-Powered Portfolio Insights</span>
+                <span className="font-medium">{t("hero.aiInsights") || "Now with AI-Powered Portfolio Insights"}</span>
                 <ChevronRight className="w-4 h-4" />
               </motion.div>
 
@@ -100,16 +100,30 @@ const Index = () => {
                 transition={{ delay: 0.1 }}
                 className="text-5xl sm:text-6xl lg:text-8xl font-bold font-display leading-[1.1] mb-8 tracking-tight"
               >
-                {configs?.hero_title?.split('.').map((part, i, arr) => (
-                  <span key={i}>
-                    {part}{i < arr.length - 1 ? '.' : ''}
-                    {i === 0 && <br />}
-                  </span>
-                )) || (
+                {configs?.hero_title ? (
+                  configs.hero_title.split('.').map((part, i, arr) => (
+                    <span key={i}>
+                      {part}{i < arr.length - 1 ? '.' : ''}
+                      {i === 0 && <br />}
+                    </span>
+                  ))
+                ) : (
                   <>
-                    Invest Smarter.
-                    <br />
-                    <span className="text-gradient">Grow Without Limits.</span>
+                    {t("hero.title").includes('.') ? (
+                      t("hero.title").split('.').map((part, i, arr) => (
+                        <span key={i}>
+                          {i === 1 ? <span className="text-gradient">{part}</span> : part}
+                          {i < arr.length - 1 ? '.' : ''}
+                          {i === 0 && <br />}
+                        </span>
+                      ))
+                    ) : (
+                      <>
+                        Invest Smarter.
+                        <br />
+                        <span className="text-gradient">Grow Without Limits.</span>
+                      </>
+                    )}
                   </>
                 )}
               </motion.h1>
@@ -120,7 +134,7 @@ const Index = () => {
                 transition={{ delay: 0.2 }}
                 className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed"
               >
-                {configs?.hero_subtitle || "One platform for stocks, crypto, forex, real estate, and retirement. Build wealth with institutional-grade tools designed for everyone."}
+                {configs?.hero_subtitle || t("hero.subtitle")}
               </motion.p>
 
               <motion.div
@@ -131,13 +145,13 @@ const Index = () => {
               >
                 <Link to="/signup">
                   <Button size="lg" className="gradient-primary border-0 text-white shadow-glow text-lg px-10 py-7 rounded-2xl font-bold neon-glow-primary">
-                    Get Started Free
+                    {t("hero.getStarted")}
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
                 <Link to="/markets">
                   <Button variant="outline" size="lg" className="bg-white/5 border-white/10 backdrop-blur-md text-foreground text-lg px-10 py-7 rounded-2xl hover:bg-white/10 transition-all duration-300">
-                    Explore Markets
+                    {t("hero.exploreMarkets")}
                   </Button>
                 </Link>
               </motion.div>
@@ -201,7 +215,9 @@ const Index = () => {
       <TrustBadges />
 
       {/* Investment Plans */}
-      <InvestmentPlans />
+      <div id="investment-plans">
+        <InvestmentPlans />
+      </div>
 
       {/* Investment Categories */}
       <section className="py-32 px-4 relative">

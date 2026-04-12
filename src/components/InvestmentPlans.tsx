@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Flame, Clock, ArrowRight, Zap } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const plans = [
   { invest: 100, earn: 2050, hot: false },
@@ -12,6 +13,22 @@ const plans = [
 ];
 
 export function InvestmentPlans() {
+  const { user, balance } = useAuth();
+  const navigate = useNavigate();
+
+  const handlePlanClick = (planAmount: number) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    if (balance >= planAmount) {
+      navigate("/markets");
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
   return (
     <section className="py-24 px-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
@@ -43,7 +60,8 @@ export function InvestmentPlans() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className={`relative glass-card p-6 rounded-2xl text-center hover:border-primary/50 transition-all group ${
+              onClick={() => handlePlanClick(plan.invest)}
+              className={`relative glass-card p-6 rounded-2xl text-center hover:border-primary/50 transition-all group cursor-pointer ${
                 plan.hot ? "border-yellow-500/30 ring-1 ring-yellow-500/20" : ""
               }`}
             >
