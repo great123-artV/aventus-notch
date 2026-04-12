@@ -87,7 +87,7 @@ export function InvestmentPlans() {
           className="text-center mt-10"
         >
           <Link to="/signup">
-            <Button size="lg" className="gradient-primary border-0 text-white shadow-glow rounded-2xl font-bold px-10 py-6 text-lg">
+            <Button size="lg" className="gradient-primary border-0 text-[#050505] shadow-glow rounded-2xl font-bold px-10 py-6 text-lg">
               Start Investing Now <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>

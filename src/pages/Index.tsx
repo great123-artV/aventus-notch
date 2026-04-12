@@ -180,7 +180,7 @@ const Index = () => {
               >
                 <Link to="/signup">
                   <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }}>
-                    <Button size="lg" className="gradient-primary border-0 text-white shadow-glow text-lg px-10 py-7 rounded-2xl font-extrabold neon-glow-primary w-full sm:w-auto">
+                    <Button size="lg" className="gradient-primary border-0 text-[#050505] shadow-glow text-lg px-10 py-7 rounded-2xl font-extrabold neon-glow-primary w-full sm:w-auto">
                       {t("hero.getStarted")}
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
@@ -319,7 +319,7 @@ const Index = () => {
             Join 500,000+ investors already growing their portfolios with institutional-grade tools and real-time market insights.
           </p>
           <Link to="/signup">
-            <Button size="lg" className="gradient-primary border-0 text-white shadow-glow text-xl px-12 py-8 rounded-2xl font-bold neon-glow-primary">
+            <Button size="lg" className="gradient-primary border-0 text-[#050505] shadow-glow text-xl px-12 py-8 rounded-2xl font-bold neon-glow-primary">
               Create Your Free Account
               <ArrowRight className="w-6 h-6 ml-2" />
             </Button>
@@ -334,7 +334,7 @@ const Index = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center shadow-glow">
-                  <BarChart3 className="w-5 h-5 text-white" />
+                  <BarChart3 className="w-5 h-5 text-[#050505]" />
                 </div>
                 <span className="font-bold font-display">Aventus-Notch</span>
               </div>
