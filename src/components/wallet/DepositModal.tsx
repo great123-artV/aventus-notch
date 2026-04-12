@@ -138,7 +138,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
           <Button
             onClick={handleWalletDeposit}
             disabled={isPending || isConfirming || !amount}
-            className="w-full gradient-primary border-0 text-white shadow-glow rounded-xl font-bold py-6"
+            className="w-full gradient-primary border-0 text-[#050505] shadow-glow rounded-xl font-bold py-6"
           >
             {isPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Confirming in Wallet...</> :
               isConfirming ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Waiting for Confirmation...</> :

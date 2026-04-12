@@ -138,7 +138,7 @@ const AdminDashboard = () => {
         >
           <div className="text-center space-y-2">
             <div className="w-16 h-16 rounded-2xl gradient-primary mx-auto flex items-center justify-center mb-4 shadow-glow">
-              <Lock className="w-8 h-8 text-white" />
+              <Lock className="w-8 h-8 text-[#050505]" />
             </div>
             <h1 className="text-2xl font-bold font-display">Admin Portal</h1>
             <p className="text-sm text-muted-foreground">Authorized Personnel Only</p>
@@ -152,7 +152,7 @@ const AdminDashboard = () => {
               <Label htmlFor="password">Security Key</Label>
               <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} className="bg-white/5 border-white/10" />
             </div>
-            <Button type="submit" disabled={authLoading} className="w-full gradient-primary border-0 text-white shadow-glow py-6 font-bold text-lg rounded-xl mt-4">
+            <Button type="submit" disabled={authLoading} className="w-full gradient-primary border-0 text-[#050505] shadow-glow py-6 font-bold text-lg rounded-xl mt-4">
               {authLoading ? "Verifying..." : "Access Dashboard"}
             </Button>
           </form>
@@ -201,7 +201,7 @@ const AdminDashboard = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center shadow-glow">
-            <Shield className="w-6 h-6 text-white" />
+            <Shield className="w-6 h-6 text-[#050505]" />
           </div>
           <div>
             <h1 className="text-3xl font-bold font-display">Admin Panel</h1>
@@ -220,7 +220,7 @@ const AdminDashboard = () => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${
-                activeTab === tab.id ? "bg-primary text-white shadow-glow" : "text-muted-foreground hover:text-foreground"
+                activeTab === tab.id ? "bg-primary text-[#050505] shadow-glow" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <tab.icon className="w-4 h-4" />

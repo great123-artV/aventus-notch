@@ -192,14 +192,14 @@ export function AIChatWidget() {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden">
-                    <Bot className="w-6 h-6 text-white" />
+                    <Bot className="w-6 h-6 text-[#050505]" />
                   </div>
                   <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0f172a] animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
                 </div>
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-white text-sm">Aventus AI Advisor</span>
-                    <span className="px-1.5 py-0.5 bg-white/20 rounded text-[8px] font-black text-white uppercase tracking-tighter">Live</span>
+                    <span className="font-bold text-[#050505] text-sm">Aventus AI Advisor</span>
+                    <span className="px-1.5 py-0.5 bg-[#050505]/20 rounded text-[8px] font-black text-[#050505] uppercase tracking-tighter">Live</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
@@ -207,7 +207,7 @@ export function AIChatWidget() {
                   </div>
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white p-1 hover:bg-white/10 rounded-lg transition-colors">
+              <button onClick={() => setOpen(false)} className="text-[#050505]/70 hover:text-[#050505] p-1 hover:bg-black/10 rounded-lg transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -223,7 +223,7 @@ export function AIChatWidget() {
                   )}
                   <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
                     msg.role === "user"
-                      ? "gradient-primary text-white rounded-br-sm font-medium"
+                      ? "gradient-primary text-[#050505] rounded-br-sm font-bold"
                       : "bg-white/5 border border-white/10 text-foreground rounded-bl-sm"
                   }`}>
                     {msg.role === "assistant" && i === messages.length - 1 ? (
@@ -284,7 +284,7 @@ export function AIChatWidget() {
                   onClick={sendMessage}
                   disabled={!input.trim() || isLoading}
                   size="icon"
-                  className="gradient-primary border-0 rounded-xl flex-shrink-0"
+                  className="gradient-primary border-0 rounded-xl flex-shrink-0 text-[#050505]"
                 >
                   <Send className="w-4 h-4" />
                 </Button>

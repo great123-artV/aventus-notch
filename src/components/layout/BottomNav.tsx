@@ -46,7 +46,7 @@ export const BottomNav = () => {
             }`}
           >
             <div className="w-14 h-14 rounded-full gradient-primary shadow-glow neon-glow-primary flex items-center justify-center border-4 border-[#020617]">
-              <PlusCircle className="w-8 h-8 text-white" />
+              <PlusCircle className="w-8 h-8 text-[#050505]" />
             </div>
             <span className="text-[10px] font-bold uppercase tracking-tighter text-primary mt-1">Invest</span>
           </button>
