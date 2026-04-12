@@ -10,6 +10,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { AIChatWidget } from "@/components/AIChatWidget";
 import { useVisitorLog } from "@/hooks/useVisitorLog";
+import { useAuth } from "@/contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Markets from "./pages/Markets";
@@ -37,6 +39,15 @@ const config = getDefaultConfig({
 
 const queryClient = new QueryClient();
 
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+  if (!user) return <Navigate to="/login" replace />;
+
+  return <>{children}</>;
+};
+
 function AppRoutes() {
   useVisitorLog();
   return (
@@ -44,15 +55,18 @@ function AppRoutes() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/markets" element={<Markets />} />
-        <Route path="/asset/:id" element={<AssetDetail />} />
-        <Route path="/real-estate" element={<RealEstate />} />
-        <Route path="/retirement" element={<Retirement />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/markets" element={<ProtectedRoute><Markets /></ProtectedRoute>} />
+        <Route path="/asset/:id" element={<ProtectedRoute><AssetDetail /></ProtectedRoute>} />
+        <Route path="/real-estate" element={<ProtectedRoute><RealEstate /></ProtectedRoute>} />
+        <Route path="/retirement" element={<ProtectedRoute><Retirement /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
@@ -73,7 +87,7 @@ const App = () => (
         })}
         modalSize="compact"
       >
-        <ThemeProvider defaultTheme="dark" attribute="class">
+        <ThemeProvider defaultTheme="system" enableSystem attribute="class">
           <TooltipProvider>
             <Toaster />
             <Sonner />

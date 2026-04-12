@@ -23,6 +23,8 @@ export function AppSettings() {
             <SelectItem value="es">Español</SelectItem>
             <SelectItem value="fr">Français</SelectItem>
             <SelectItem value="de">Deutsch</SelectItem>
+            <SelectItem value="it">Italiano</SelectItem>
+            <SelectItem value="pt">Português</SelectItem>
           </SelectContent>
         </Select>
       </div>
