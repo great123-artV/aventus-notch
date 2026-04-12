@@ -80,8 +80,8 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <RainbowKitProvider
         theme={darkTheme({
-          accentColor: '#3b82f6',
-          accentColorForeground: 'white',
+          accentColor: '#FDB931',
+          accentColorForeground: '#050505',
           borderRadius: 'large',
           overlayBlur: 'small',
         })}

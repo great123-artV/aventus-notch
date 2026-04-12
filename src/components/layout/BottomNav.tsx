@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Home, BarChart2, PlusCircle, Briefcase, User } from 'lucide-react';
 import { InvestMenu } from './InvestMenu';
 
 export const BottomNav = () => {
   const [isInvestMenuOpen, setIsInvestMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -28,12 +29,16 @@ export const BottomNav = () => {
           </NavLink>
 
           <button
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
-              if (location.pathname === '/') {
-                document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
+              if (location.pathname !== '/') {
+                await navigate('/');
+                // Wait for navigation and then scroll
+                setTimeout(() => {
+                  document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
               } else {
-                setIsInvestMenuOpen(true);
+                document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
               }
             }}
             className={`flex flex-col items-center gap-1 -mt-8 transition-transform active:scale-95 ${

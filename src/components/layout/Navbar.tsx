@@ -1,5 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download, ChevronDown, Globe } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download, ChevronDown, Globe, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -16,12 +16,14 @@ import {
 const navItems = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Markets", path: "/markets" },
+  { label: "Invest", path: "/#investment-plans", isScroll: true },
   { label: "Real Estate", path: "/real-estate" },
   { label: "Retirement", path: "/retirement" },
 ];
 
 export function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
@@ -40,17 +42,36 @@ export function Navbar() {
 
           <div className="hidden md:flex items-center gap-2">
             {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
-                  location.pathname === item.path
-                    ? "bg-primary/15 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                }`}
-              >
-                {item.label}
-              </Link>
+              item.isScroll ? (
+                <button
+                  key={item.path}
+                  onClick={async () => {
+                    if (location.pathname !== '/') {
+                      await navigate('/');
+                      setTimeout(() => {
+                        document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    } else {
+                      document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all text-muted-foreground hover:text-foreground hover:bg-white/5"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
+                    location.pathname === item.path
+                      ? "bg-primary/15 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
           </div>
 

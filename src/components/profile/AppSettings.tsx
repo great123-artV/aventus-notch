@@ -1,12 +1,37 @@
 import { useTheme } from "next-themes";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Globe, Moon, Sun, Monitor } from "lucide-react";
+import { Globe, Moon, Sun, Monitor, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState } from "react";
+import { LanguageSwitcher } from "../layout/LanguageSwitcher";
 
 export function AppSettings() {
   const { theme, setTheme } = useTheme();
-  const { lang, setLang, t } = useLanguage();
+  const { lang, t } = useLanguage();
+  const [langOpen, setLangOpen] = useState(false);
+
+  // Map codes to names (simplified for display)
+  const langNames: Record<string, string> = {
+    en: "English",
+    es: "Spanish",
+    fr: "French",
+    de: "German",
+    it: "Italian",
+    pt: "Portuguese",
+    "zh-CN": "Chinese",
+    ja: "Japanese",
+    ko: "Korean",
+    ru: "Russian",
+    ar: "Arabic",
+    hi: "Hindi",
+    tr: "Turkish",
+    nl: "Dutch",
+    pl: "Polish",
+    sv: "Swedish",
+    vi: "Vietnamese",
+    id: "Indonesian",
+    uk: "Ukrainian",
+  };
 
   return (
     <div className="space-y-6">
@@ -14,19 +39,23 @@ export function AppSettings() {
         <Label className="flex items-center gap-2 text-sm font-bold">
           <Globe className="w-4 h-4 text-primary" /> {t("settings.language")}
         </Label>
-        <Select value={lang} onValueChange={setLang}>
-          <SelectTrigger className="bg-white/5 border-white/10 rounded-xl h-12">
-            <SelectValue placeholder="Select Language" />
-          </SelectTrigger>
-          <SelectContent className="glass-strong border-white/10">
-            <SelectItem value="en">English (US)</SelectItem>
-            <SelectItem value="es">Español</SelectItem>
-            <SelectItem value="fr">Français</SelectItem>
-            <SelectItem value="de">Deutsch</SelectItem>
-            <SelectItem value="it">Italiano</SelectItem>
-            <SelectItem value="pt">Português</SelectItem>
-          </SelectContent>
-        </Select>
+
+        <button
+          onClick={() => setLangOpen(true)}
+          className="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Globe className="w-4 h-4 text-primary" />
+            </div>
+            <span className="font-medium text-sm">
+              {langNames[lang] || "Select Language"}
+            </span>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+        </button>
+
+        <LanguageSwitcher open={langOpen} onOpenChange={setLangOpen} />
       </div>
 
       <div className="space-y-3">
