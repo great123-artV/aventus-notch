@@ -9,6 +9,32 @@ interface Message {
   content: string;
 }
 
+function TypewriterContent({ text, onStart, onComplete }: { text: string; onStart?: () => void; onComplete?: () => void }) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    onStart?.();
+    return () => {
+      onComplete?.();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (index < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(prev => prev + text[index]);
+        setIndex(prev => prev + 1);
+      }, 25);
+      return () => clearTimeout(timeout);
+    } else {
+      onComplete?.();
+    }
+  }, [index, text, onComplete]);
+
+  return <span>{displayedText}</span>;
+}
+
 export function AIChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -16,6 +42,30 @@ export function AIChatWidget() {
     { role: "assistant", content: "Welcome to Aventus-Notch. I'm your AI investment advisor. Ask me about markets, portfolio strategies, or how to get started investing." }
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const typingAudio = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Standard typing sound
+    typingAudio.current = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_7314781440.mp3");
+    if (typingAudio.current) {
+      typingAudio.current.volume = 0.2;
+      typingAudio.current.loop = true;
+    }
+  }, []);
+
+  const playTypingSound = () => {
+    if (typingAudio.current) {
+      typingAudio.current.play().catch(e => console.log("Audio play blocked", e));
+    }
+  };
+
+  const stopTypingSound = () => {
+    if (typingAudio.current) {
+      typingAudio.current.pause();
+      typingAudio.current.currentTime = 0;
+    }
+  };
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -139,34 +189,58 @@ export function AIChatWidget() {
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-white/10 gradient-primary">
-              <div className="flex items-center gap-2">
-                <Bot className="w-5 h-5 text-white" />
-                <span className="font-bold text-white text-sm">AI Advisor</span>
-                <div className="flex items-center gap-1">
-                  <span className="px-1.5 py-0.5 bg-white/20 rounded text-[9px] font-bold text-white uppercase tracking-wider">AI</span>
-                  <span className="px-1.5 py-0.5 bg-profit/40 rounded text-[9px] font-bold text-white uppercase tracking-wider border border-white/10">AVENTUS BOT</span>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 overflow-hidden">
+                    <Bot className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0f172a] animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-white text-sm">Aventus AI Advisor</span>
+                    <span className="px-1.5 py-0.5 bg-white/20 rounded text-[8px] font-black text-white uppercase tracking-tighter">Live</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-[10px] text-green-400 font-bold uppercase tracking-widest">Always Online</span>
+                  </div>
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white">
+              <button onClick={() => setOpen(false)} className="text-white/70 hover:text-white p-1 hover:bg-white/10 rounded-lg transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-4 scrollbar-thin scrollbar-thumb-white/10">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   {msg.role === "assistant" && (
-                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
-                      <Bot className="w-3.5 h-3.5 text-primary" />
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-2 mt-1 flex-shrink-0 border border-primary/10">
+                      <Bot className="w-4 h-4 text-primary" />
                     </div>
                   )}
-                  <div className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-relaxed ${
+                  <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
                     msg.role === "user"
-                      ? "gradient-primary text-white rounded-br-sm"
-                      : "bg-white/5 text-foreground rounded-bl-sm"
+                      ? "gradient-primary text-white rounded-br-sm font-medium"
+                      : "bg-white/5 border border-white/10 text-foreground rounded-bl-sm"
                   }`}>
-                    {msg.content}
+                    {msg.role === "assistant" && i === messages.length - 1 ? (
+                      <TypewriterContent
+                        text={msg.content}
+                        onStart={() => {
+                          setIsTyping(true);
+                          playTypingSound();
+                        }}
+                        onComplete={() => {
+                          setIsTyping(false);
+                          stopTypingSound();
+                        }}
+                      />
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                 </div>
               ))}
