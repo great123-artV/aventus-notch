@@ -28,7 +28,8 @@ export const BottomNav = () => {
           </NavLink>
 
           <button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               if (location.pathname === '/') {
                 document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
               } else {
