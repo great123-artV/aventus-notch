@@ -40,15 +40,15 @@ const Index = () => {
       {/* Hero */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden min-h-[90vh] flex items-center">
         {/* Background Video Layer */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 overflow-hidden">
           <video
             key={configs?.homepage_video_url}
             autoPlay
             loop
             muted
             playsInline
-            className="absolute w-full h-full object-cover opacity-70"
-            style={{ filter: 'brightness(0.8) contrast(1.1)' }}
+            className="absolute min-w-full min-h-full w-auto h-auto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover opacity-70"
+            style={{ filter: 'brightness(0.7) contrast(1.2) saturate(1.1)' }}
             onError={(e) => {
               const target = e.currentTarget;
               if (target.dataset.fallback !== 'true') {
@@ -85,9 +85,10 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 pt-10">
             <div className="text-left">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-muted-foreground mb-8 border-white/10"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.05 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-primary font-bold mb-8 border-primary/20 shadow-glow cursor-pointer"
               >
                 <Zap className="w-4 h-4 text-primary" />
                 <span className="font-medium">{t("hero.aiInsights") || "Now with AI-Powered Portfolio Insights"}</span>
@@ -98,7 +99,7 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-5xl sm:text-6xl lg:text-8xl font-bold font-display leading-[1.1] mb-8 tracking-tight"
+                className="text-5xl sm:text-6xl lg:text-8xl font-extrabold font-display leading-[1.05] mb-8 tracking-tighter text-white drop-shadow-2xl"
               >
                 {configs?.hero_title ? (
                   configs.hero_title.split('.').map((part, i, arr) => (
@@ -132,7 +133,7 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed"
+                className="text-lg sm:text-xl text-white/90 font-medium max-w-2xl mb-12 leading-relaxed drop-shadow-lg"
               >
                 {configs?.hero_subtitle || t("hero.subtitle")}
               </motion.p>
@@ -144,10 +145,12 @@ const Index = () => {
                 className="flex flex-col sm:flex-row items-center gap-6"
               >
                 <Link to="/signup">
-                  <Button size="lg" className="gradient-primary border-0 text-white shadow-glow text-lg px-10 py-7 rounded-2xl font-bold neon-glow-primary">
-                    {t("hero.getStarted")}
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
+                  <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }}>
+                    <Button size="lg" className="gradient-primary border-0 text-white shadow-glow text-lg px-10 py-7 rounded-2xl font-extrabold neon-glow-primary w-full sm:w-auto">
+                      {t("hero.getStarted")}
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </motion.div>
                 </Link>
                 <Link to="/markets">
                   <Button variant="outline" size="lg" className="bg-white/5 border-white/10 backdrop-blur-md text-foreground text-lg px-10 py-7 rounded-2xl hover:bg-white/10 transition-all duration-300">
@@ -221,13 +224,14 @@ const Index = () => {
 
       {/* Investment Categories */}
       <section className="py-32 px-4 relative">
-        <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/5 blur-[100px]" />
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/10 blur-[120px]" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/5 blur-[150px]" />
         <div className="max-w-7xl mx-auto relative">
           <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold font-display mb-6">
-              Every Asset Class. <span className="text-gradient">One Platform.</span>
+            <h2 className="text-4xl sm:text-6xl font-extrabold font-display mb-6 tracking-tighter">
+              Every Asset Class. <br /> <span className="text-gradient">One Platform.</span>
             </h2>
-            <p className="text-muted-foreground text-xl max-w-2xl mx-auto">
+            <p className="text-foreground/70 font-medium text-xl max-w-2xl mx-auto leading-relaxed">
               Diversify across the world's most profitable markets from a single, high-performance dashboard.
             </p>
           </div>

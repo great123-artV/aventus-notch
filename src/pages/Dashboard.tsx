@@ -12,9 +12,11 @@ import { DepositModal } from "@/components/wallet/DepositModal";
 import { WithdrawModal } from "@/components/wallet/WithdrawModal";
 import { WalletConnectModal } from "@/components/wallet/WalletConnectModal";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Dashboard = () => {
   const { balance, user } = useAuth();
+  const { t } = useLanguage();
   const { totalProfit, profitPercent, distribution } = portfolioData;
   const [isDepositOpen, setIsDepositOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
