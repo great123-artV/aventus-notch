@@ -64,19 +64,42 @@
         }, 'google_translate_element');
 
         // Check for saved language and apply it once Google Translate is ready
-        const savedLang = localStorage.getItem("app-lang");
-        if (savedLang && savedLang !== 'en') {
-          const checkInterval = setInterval(() => {
+        const applySavedLang = () => {
+          const savedLang = localStorage.getItem("app-lang");
+          if (savedLang && savedLang !== 'en') {
             const combo = document.querySelector('.goog-te-combo');
             if (combo) {
               combo.value = savedLang;
               combo.dispatchEvent(new Event('change'));
-              clearInterval(checkInterval);
+              return true;
             }
-          }, 500);
-          // Stop checking after 10 seconds to avoid infinite loop
-          setTimeout(() => clearInterval(checkInterval), 10000);
-        }
+          }
+          return false;
+        };
+
+        const checkInterval = setInterval(() => {
+          if (applySavedLang()) {
+            clearInterval(checkInterval);
+          }
+        }, 500);
+        // Stop checking after 10 seconds to avoid infinite loop
+        setTimeout(() => clearInterval(checkInterval), 10000);
+
+        // Add a mutation observer to re-apply translation when content changes
+        // and ensure the combo box is handled correctly
+        const observer = new MutationObserver((mutations) => {
+          const combo = document.querySelector('.goog-te-combo');
+          const savedLang = localStorage.getItem("app-lang");
+          if (combo && savedLang && savedLang !== 'en' && combo.value !== savedLang) {
+            combo.value = savedLang;
+            combo.dispatchEvent(new Event('change'));
+          }
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
       }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

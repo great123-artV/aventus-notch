@@ -191,11 +191,26 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLangState(newLang);
     localStorage.setItem("app-lang", newLang);
 
-    // Attempt to update Google Translate if it's already on the page
-    const googleTranslateDropdown = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-    if (googleTranslateDropdown && googleTranslateDropdown.value !== newLang) {
-      googleTranslateDropdown.value = newLang;
-      googleTranslateDropdown.dispatchEvent(new Event("change"));
+    // Force Google Translate to update
+    const updateGoogleTranslate = () => {
+      const googleTranslateDropdown = document.querySelector(".goog-te-combo") as HTMLSelectElement;
+      if (googleTranslateDropdown) {
+        googleTranslateDropdown.value = newLang;
+        googleTranslateDropdown.dispatchEvent(new Event("change"));
+        return true;
+      }
+      return false;
+    };
+
+    if (!updateGoogleTranslate()) {
+      // If not found, try again a few times
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        if (updateGoogleTranslate() || attempts > 10) {
+          clearInterval(interval);
+        }
+      }, 500);
     }
   };
 
