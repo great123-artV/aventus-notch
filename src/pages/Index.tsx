@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   BarChart3, TrendingUp, Globe, Building2, PiggyBank, Shield, Users, ArrowRight,
-  Lock, Zap, ChevronRight, LineChart, Star, ArrowUpRight
+  Lock, Zap, ChevronRight, LineChart, Star, ArrowUpRight, Coins, Wallet, Cpu
 } from "lucide-react";
 import { SocialProofSlideshow } from "@/components/premium/SocialProofSlideshow";
 import { InvestorTicker } from "@/components/premium/InvestorTicker";
@@ -40,14 +40,14 @@ const Index = () => {
       {/* Hero */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden min-h-[90vh] flex items-center">
         {/* Background Video Layer */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 z-0 overflow-hidden bg-[#020617]">
           <video
             key={configs?.homepage_video_url}
             autoPlay
             loop
             muted
             playsInline
-            className="absolute min-w-full min-h-full w-auto h-auto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover opacity-70"
+            className="absolute w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-contain opacity-70"
             style={{ filter: 'brightness(0.7) contrast(1.2) saturate(1.1)' }}
             onError={(e) => {
               const target = e.currentTarget;
@@ -75,11 +75,45 @@ const Index = () => {
               }}
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#020617]/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80" />
         </div>
 
-        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow pointer-events-none" />
-        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
+        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse-glow pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
+
+        {/* Floating Crypto Icons Animation */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden hidden sm:block">
+          <motion.div
+            animate={{
+              y: [0, -20, 0],
+              rotate: [0, 10, 0]
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/4 left-10 opacity-20"
+          >
+            <Coins className="w-12 h-12 text-primary" />
+          </motion.div>
+          <motion.div
+            animate={{
+              y: [0, 20, 0],
+              rotate: [0, -15, 0]
+            }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-1/4 left-20 opacity-15"
+          >
+            <Wallet className="w-16 h-16 text-primary" />
+          </motion.div>
+          <motion.div
+            animate={{
+              y: [0, -30, 0],
+              rotate: [0, 20, 0]
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            className="absolute top-1/3 right-10 opacity-20"
+          >
+            <Cpu className="w-14 h-14 text-primary" />
+          </motion.div>
+        </div>
 
         <div className="relative max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 pt-10">
@@ -99,7 +133,7 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-5xl sm:text-6xl lg:text-8xl font-extrabold font-display leading-[1.05] mb-8 tracking-tighter text-white drop-shadow-2xl"
+                className="text-5xl sm:text-6xl lg:text-8xl font-extrabold font-display leading-[1.05] mb-8 tracking-tighter text-white drop-shadow-2xl selection:bg-primary/30"
               >
                 {configs?.hero_title ? (
                   configs.hero_title.split('.').map((part, i, arr) => (
@@ -218,7 +252,7 @@ const Index = () => {
       <TrustBadges />
 
       {/* Investment Plans */}
-      <div id="investment-plans">
+      <div id="investment-plans" className="scroll-mt-24">
         <InvestmentPlans />
       </div>
 
@@ -249,8 +283,8 @@ const Index = () => {
                 <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   <ArrowUpRight className="w-6 h-6 text-primary" />
                 </div>
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${cat.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500`}>
-                  <cat.icon className="w-8 h-8 text-foreground" />
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${cat.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-glow`}>
+                  <cat.icon className="w-8 h-8 text-primary" />
                 </div>
                 <h3 className="text-2xl font-bold font-display mb-4">{cat.title}</h3>
                 <p className="text-muted-foreground leading-relaxed text-lg">{cat.desc}</p>
@@ -294,13 +328,13 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-12 px-4">
+      <footer className="border-t border-white/5 py-12 px-4 bg-black">
         <div className="max-w-6xl mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-                  <BarChart3 className="w-5 h-5 text-foreground" />
+                <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center shadow-glow">
+                  <BarChart3 className="w-5 h-5 text-white" />
                 </div>
                 <span className="font-bold font-display">Aventus-Notch</span>
               </div>

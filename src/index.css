@@ -41,48 +41,48 @@
   }
 
   .dark {
-    --background: 222 47% 5%;
-    --foreground: 210 40% 96%;
+    --background: 0 0% 2%;
+    --foreground: 0 0% 98%;
 
-    --card: 222 41% 8%;
-    --card-foreground: 210 40% 96%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 222 41% 8%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 5%;
+    --primary: 43 96% 58%;
+    --primary-foreground: 0 0% 2%;
 
-    --secondary: 222 30% 14%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 222 30% 14%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 63%;
 
-    --accent: 160 84% 39%;
-    --accent-foreground: 222 47% 5%;
+    --accent: 43 96% 58%;
+    --accent-foreground: 0 0% 2%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 222 20% 18%;
-    --input: 222 20% 18%;
-    --ring: 217 91% 60%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 43 96% 58%;
 
-    --sidebar-background: 222 41% 6%;
-    --sidebar-foreground: 210 40% 80%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 30% 12%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 222 20% 15%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 80%;
+    --sidebar-primary: 43 96% 58%;
+    --sidebar-primary-foreground: 0 0% 2%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 43 96% 58%;
 
     --profit: 160 84% 39%;
     --loss: 0 84% 60%;
-    --neon: 217 91% 60%;
-    --glass: 222 30% 12%;
-    --glass-border: 222 20% 22%;
+    --neon: 43 96% 58%;
+    --glass: 0 0% 10%;
+    --glass-border: 0 0% 18%;
   }
 }
 
@@ -119,7 +119,7 @@
   }
 
   .neon-glow-primary {
-    box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.5);
+    box-shadow: 0 0 25px -5px hsl(var(--primary) / 0.6);
   }
 
   .neon-glow-profit {
@@ -127,7 +127,7 @@
   }
 
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(217 91% 60%), hsl(270 80% 60%));
+    background: linear-gradient(135deg, hsl(43 96% 58%), hsl(35 92% 45%));
   }
 
   .gradient-profit {
@@ -135,15 +135,15 @@
   }
 
   .gradient-hero {
-    background: radial-gradient(ellipse at 20% 50%, hsl(217 91% 60% / 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, hsl(270 80% 60% / 0.1) 0%, transparent 50%),
+    background: radial-gradient(ellipse at 20% 50%, hsl(43 96% 58% / 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, hsl(35 92% 45% / 0.1) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 100%, hsl(160 84% 39% / 0.05) 0%, transparent 50%);
   }
 
   .text-gradient {
     @apply bg-clip-text text-transparent font-extrabold;
-    background-image: linear-gradient(135deg, hsl(217 91% 70%), hsl(270 80% 70%), hsl(160 84% 70%));
-    filter: drop-shadow(0 0 8px hsl(217 91% 60% / 0.3));
+    background-image: linear-gradient(135deg, #FFD700, #FDB931, #E5B80B);
+    filter: drop-shadow(0 0 8px rgba(253, 185, 49, 0.3));
   }
 
   .crypto-coin {
@@ -169,39 +169,39 @@
 
   /* Page-specific theme accents */
   .theme-dashboard {
-    --page-accent: 217 91% 60%;
-    --page-glow: radial-gradient(ellipse at 10% 20%, hsl(217 91% 60% / 0.08) 0%, transparent 50%),
+    --page-accent: 43 96% 58%;
+    --page-glow: radial-gradient(ellipse at 10% 20%, hsl(43 96% 58% / 0.08) 0%, transparent 50%),
                  radial-gradient(ellipse at 90% 80%, hsl(160 84% 39% / 0.06) 0%, transparent 50%);
   }
   .theme-markets {
-    --page-accent: 270 80% 60%;
-    --page-glow: radial-gradient(ellipse at 50% 0%, hsl(270 80% 60% / 0.1) 0%, transparent 50%),
-                 radial-gradient(ellipse at 20% 80%, hsl(217 91% 60% / 0.06) 0%, transparent 50%);
+    --page-accent: 43 96% 58%;
+    --page-glow: radial-gradient(ellipse at 50% 0%, hsl(43 96% 58% / 0.1) 0%, transparent 50%),
+                 radial-gradient(ellipse at 20% 80%, hsl(35 92% 45% / 0.06) 0%, transparent 50%);
   }
   .theme-realestate {
     --page-accent: 160 84% 39%;
     --page-glow: radial-gradient(ellipse at 30% 10%, hsl(160 84% 39% / 0.1) 0%, transparent 50%),
-                 radial-gradient(ellipse at 80% 60%, hsl(45 90% 55% / 0.05) 0%, transparent 50%);
+                 radial-gradient(ellipse at 80% 60%, hsl(43 96% 58% / 0.05) 0%, transparent 50%);
   }
   .theme-profile {
-    --page-accent: 45 90% 55%;
-    --page-glow: radial-gradient(ellipse at 50% 20%, hsl(45 90% 55% / 0.08) 0%, transparent 50%),
-                 radial-gradient(ellipse at 20% 80%, hsl(270 80% 60% / 0.05) 0%, transparent 50%);
+    --page-accent: 43 96% 58%;
+    --page-glow: radial-gradient(ellipse at 50% 20%, hsl(43 96% 58% / 0.08) 0%, transparent 50%),
+                 radial-gradient(ellipse at 20% 80%, hsl(35 92% 45% / 0.05) 0%, transparent 50%);
   }
   .theme-auth {
-    --page-accent: 217 91% 60%;
-    --page-glow: radial-gradient(ellipse at 50% 50%, hsl(217 91% 60% / 0.12) 0%, transparent 60%);
+    --page-accent: 43 96% 58%;
+    --page-glow: radial-gradient(ellipse at 50% 50%, hsl(43 96% 58% / 0.12) 0%, transparent 60%);
   }
   .theme-home {
-    --page-accent: 217 91% 60%;
-    --page-glow: radial-gradient(ellipse at 20% 30%, hsl(217 91% 60% / 0.12) 0%, transparent 50%),
-                 radial-gradient(ellipse at 80% 20%, hsl(270 80% 60% / 0.08) 0%, transparent 50%),
+    --page-accent: 43 96% 58%;
+    --page-glow: radial-gradient(ellipse at 20% 30%, hsl(43 96% 58% / 0.12) 0%, transparent 50%),
+                 radial-gradient(ellipse at 80% 20%, hsl(35 92% 45% / 0.08) 0%, transparent 50%),
                  radial-gradient(ellipse at 50% 90%, hsl(160 84% 39% / 0.06) 0%, transparent 50%);
   }
   .theme-retirement {
     --page-accent: 340 70% 55%;
     --page-glow: radial-gradient(ellipse at 40% 10%, hsl(340 70% 55% / 0.08) 0%, transparent 50%),
-                 radial-gradient(ellipse at 70% 70%, hsl(45 90% 55% / 0.06) 0%, transparent 50%);
+                 radial-gradient(ellipse at 70% 70%, hsl(43 96% 58% / 0.06) 0%, transparent 50%);
   }
 
   [class*="theme-"]::before {

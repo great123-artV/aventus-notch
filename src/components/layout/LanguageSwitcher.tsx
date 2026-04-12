@@ -9,6 +9,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Language {
   name: string;
@@ -76,19 +78,32 @@ interface LanguageSwitcherProps {
 
 export function LanguageSwitcher({ open, onOpenChange }: LanguageSwitcherProps) {
   const [search, setSearch] = useState("");
-  const [currentLang, setCurrentLang] = useState("English");
+  const { lang: currentLangCode, setLang } = useLanguage();
 
   const filteredLanguages = languages.filter((lang) =>
     lang.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleLanguageSelect = (lang: Language) => {
+  const handleLanguageSelect = (selectedLang: Language) => {
+    // 1. Update our internal context (changes some UI strings immediately)
+    setLang(selectedLang.code);
+
+    // 2. Trigger Google Translate
     const googleTranslateDropdown = document.querySelector(".goog-te-combo") as HTMLSelectElement;
     if (googleTranslateDropdown) {
-      googleTranslateDropdown.value = lang.code;
+      googleTranslateDropdown.value = selectedLang.code;
       googleTranslateDropdown.dispatchEvent(new Event("change"));
-      setCurrentLang(lang.name);
+
+      toast.success(`Language changed to ${selectedLang.name}`);
       onOpenChange(false);
+    } else {
+      // Fallback if Google Translate hasn't loaded yet
+      toast.error("Translation engine is still loading. Please try again in a moment.");
+
+      // Try to re-initiate if it's missing but we really want it
+      if (window.location.host.includes('localhost') || window.location.host.includes('lovable')) {
+         console.warn("Google Translate not found in development/preview");
+      }
     }
   };
 
@@ -126,7 +141,7 @@ export function LanguageSwitcher({ open, onOpenChange }: LanguageSwitcherProps) 
                   <span className="text-2xl">{lang.flag}</span>
                   <div>
                     <p className="font-bold text-sm">{lang.name}</p>
-                    {currentLang === lang.name && (
+                    {currentLangCode === lang.code && (
                       <p className="text-[10px] text-primary font-bold uppercase tracking-widest">Active</p>
                     )}
                   </div>

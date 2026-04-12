@@ -190,6 +190,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setLang = (newLang: string) => {
     setLangState(newLang);
     localStorage.setItem("app-lang", newLang);
+
+    // Attempt to update Google Translate if it's already on the page
+    const googleTranslateDropdown = document.querySelector(".goog-te-combo") as HTMLSelectElement;
+    if (googleTranslateDropdown && googleTranslateDropdown.value !== newLang) {
+      googleTranslateDropdown.value = newLang;
+      googleTranslateDropdown.dispatchEvent(new Event("change"));
+    }
   };
 
   const t = (key: string) => translations[lang]?.[key] || translations.en?.[key] || key;
