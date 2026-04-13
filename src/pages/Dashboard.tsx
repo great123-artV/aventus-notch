@@ -91,7 +91,7 @@ const Dashboard = () => {
             </span>
           </div>
           <div className="flex flex-wrap gap-4 relative z-10">
-            <Button onClick={() => setIsDepositOpen(true)} size="lg" className="gradient-primary border-0 text-white shadow-glow px-8 rounded-2xl font-bold neon-glow-primary transition-all hover:scale-105 active:scale-95">
+            <Button onClick={() => setIsDepositOpen(true)} size="lg" className="gradient-primary border-0 text-[#050505] shadow-glow px-8 rounded-2xl font-bold neon-glow-primary transition-all hover:scale-105 active:scale-95">
               <Wallet className="w-5 h-5 mr-2" /> {t("dashboard.deposit")}
             </Button>
             <Button onClick={() => setIsWithdrawOpen(true)} size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
@@ -118,7 +118,7 @@ const Dashboard = () => {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center shadow-glow neon-glow-primary">
-                <Bot className="w-6 h-6 text-white" />
+                <Bot className="w-6 h-6 text-[#050505]" />
               </div>
               <span className="font-bold text-xl font-display">{t("dashboard.aiInsights")}</span>
             </div>

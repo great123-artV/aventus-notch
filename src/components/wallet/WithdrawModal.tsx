@@ -115,7 +115,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                   <span className="font-medium">{method === "wallet" ? "1-24 hours" : "3-5 business days"}</span>
                 </div>
               </div>
-              <Button onClick={handleClose} className="w-full gradient-primary border-0 text-white rounded-xl font-bold py-6">Done</Button>
+              <Button onClick={handleClose} className="w-full gradient-primary border-0 text-[#050505] rounded-xl font-bold py-6">Done</Button>
             </div>
           </motion.div>
         </DialogContent>
@@ -203,7 +203,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
           )}
         </AnimatePresence>
 
-        <Button onClick={handleWithdraw} disabled={loading || !amount} className="w-full gradient-primary border-0 text-white shadow-glow rounded-xl font-bold py-6">
+        <Button onClick={handleWithdraw} disabled={loading || !amount} className="w-full gradient-primary border-0 text-[#050505] shadow-glow rounded-xl font-bold py-6">
           {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</> : "Confirm Withdrawal"}
         </Button>
 

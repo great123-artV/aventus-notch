@@ -37,7 +37,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-glow neon-glow-primary group-hover:scale-110 transition-transform">
-              <BarChart3 className="w-6 h-6 text-white" />
+              <BarChart3 className="w-6 h-6 text-[#050505]" />
             </div>
             <span className="text-xl font-bold font-display tracking-tight">Aventus-Notch</span>
           </Link>
@@ -95,7 +95,7 @@ export function Navbar() {
               <>
                 <Link to="/login"><Button variant="ghost" size="sm">{t("auth.login")}</Button></Link>
                 <Link to="/signup">
-                  <Button size="sm" className="gradient-primary border-0 text-foreground shadow-glow">{t("hero.getStarted")}</Button>
+                  <Button size="sm" className="gradient-primary border-0 text-[#050505] shadow-glow">{t("hero.getStarted")}</Button>
                 </Link>
               </>
             ) : (
@@ -182,7 +182,7 @@ export function Navbar() {
                     <Button variant="outline" className="w-full">{t("auth.login")}</Button>
                   </Link>
                   <Link to="/signup" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button className="w-full gradient-primary border-0">{t("hero.getStarted")}</Button>
+                    <Button className="w-full gradient-primary border-0 text-[#050505]">{t("hero.getStarted")}</Button>
                   </Link>
                 </>
               ) : (
