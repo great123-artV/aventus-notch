@@ -59,14 +59,30 @@
       function googleTranslateElementInit() {
         new google.translate.TranslateElement({
           pageLanguage: 'en',
+          includedLanguages: 'en,es,fr,de,it,pt,zh-CN,ja,ko,ru,ar,hi,tr,nl,pl,sv,vi,id,uk,el,sv,no,da,fi,th,iw,bn,cs,hu,ro,sk,ms,tl,af,am,az,be,bg,ca,hr,eo,et,ka,gu,ht,ga,kn,la,lv,lt,mk',
           layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
           autoDisplay: false
         }, 'google_translate_element');
+
+        // Function to set the Google Translate cookie
+        function setGoogleTranslateCookie(lang) {
+          const domain = window.location.hostname;
+          const cookieValue = `/en/${lang}`;
+          document.cookie = `googtrans=${cookieValue}; path=/`;
+          document.cookie = `googtrans=${cookieValue}; domain=.${domain}; path=/`;
+          // Handle cases like localhost or subdomains
+          const domainParts = domain.split('.');
+          if (domainParts.length > 2) {
+            const rootDomain = domainParts.slice(-2).join('.');
+            document.cookie = `googtrans=${cookieValue}; domain=.${rootDomain}; path=/`;
+          }
+        }
 
         // Check for saved language and apply it once Google Translate is ready
         const applySavedLang = () => {
           const savedLang = localStorage.getItem("app-lang");
           if (savedLang && savedLang !== 'en') {
+            setGoogleTranslateCookie(savedLang);
             const combo = document.querySelector('.goog-te-combo');
             if (combo) {
               combo.value = savedLang;
@@ -82,11 +98,10 @@
             clearInterval(checkInterval);
           }
         }, 500);
-        // Stop checking after 10 seconds to avoid infinite loop
-        setTimeout(() => clearInterval(checkInterval), 10000);
+        // Stop checking after 20 seconds to avoid infinite loop
+        setTimeout(() => clearInterval(checkInterval), 20000);
 
-        // Add a mutation observer to re-apply translation when content changes
-        // and ensure the combo box is handled correctly
+        // Add a mutation observer to ensure the combo box is handled correctly
         const observer = new MutationObserver((mutations) => {
           const combo = document.querySelector('.goog-te-combo');
           const savedLang = localStorage.getItem("app-lang");
@@ -102,7 +117,7 @@
         });
       }
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

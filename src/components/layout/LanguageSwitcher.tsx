@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Search, Globe, ChevronRight } from "lucide-react";
+import React, { useState } from "react";
+import { Search, Globe, ChevronRight, Check } from "lucide-react";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
 
 interface Language {
   name: string;
@@ -72,86 +71,91 @@ const languages: Language[] = [
 ];
 
 interface LanguageSwitcherProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  children?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function LanguageSwitcher({ open, onOpenChange }: LanguageSwitcherProps) {
+export function LanguageSwitcher({ children, open, onOpenChange }: LanguageSwitcherProps) {
   const [search, setSearch] = useState("");
   const { lang: currentLangCode, setLang } = useLanguage();
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const isControlled = open !== undefined && onOpenChange !== undefined;
+  const isOpen = isControlled ? open : internalOpen;
+  const setOpen = isControlled ? onOpenChange : setInternalOpen;
 
   const filteredLanguages = languages.filter((lang) =>
     lang.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleLanguageSelect = (selectedLang: Language) => {
-    // 1. Update our internal context (changes some UI strings immediately)
     setLang(selectedLang.code);
 
-    // 2. Trigger Google Translate
     const googleTranslateDropdown = document.querySelector(".goog-te-combo") as HTMLSelectElement;
     if (googleTranslateDropdown) {
       googleTranslateDropdown.value = selectedLang.code;
       googleTranslateDropdown.dispatchEvent(new Event("change"));
 
       toast.success(`Language changed to ${selectedLang.name}`);
-      onOpenChange(false);
+      setOpen(false);
     } else {
-      // Fallback if Google Translate hasn't loaded yet
       toast.error("Translation engine is still loading. Please try again in a moment.");
-
-      // Try to re-initiate if it's missing but we really want it
-      if (window.location.host.includes('localhost') || window.location.host.includes('lovable')) {
-         console.warn("Google Translate not found in development/preview");
-      }
     }
   };
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="glass-strong border-white/10 sm:max-w-md p-0 overflow-hidden">
-        <DialogHeader className="p-6 pb-2">
-          <DialogTitle className="text-2xl font-bold font-display flex items-center gap-2">
-            <Globe className="w-6 h-6 text-primary" /> Select Language
-          </DialogTitle>
-          <p className="text-muted-foreground text-sm">Choose your preferred language for the ecosystem.</p>
-        </DialogHeader>
+  const currentLang = languages.find(l => l.code === currentLangCode) || languages[0];
 
-        <div className="px-6 pb-4">
+  return (
+    <Popover open={isOpen} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        {children || (
+          <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+            <Globe className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium">{currentLang.name}</span>
+          </button>
+        )}
+      </PopoverTrigger>
+      <PopoverContent className="w-[300px] p-0 glass-strong border-white/10" align="end" sideOffset={8}>
+        <div className="p-4 border-b border-white/5">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search languages..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 bg-white/5 border-white/10 rounded-xl"
+              className="pl-9 h-9 bg-white/5 border-white/10 rounded-lg text-sm"
             />
           </div>
         </div>
 
-        <ScrollArea className="h-[400px] px-2 pb-6">
-          <div className="grid grid-cols-1 gap-1 px-4">
+        <ScrollArea className="h-[350px]">
+          <div className="p-2">
             {filteredLanguages.map((lang) => (
               <button
                 key={lang.code}
                 onClick={() => handleLanguageSelect(lang)}
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-colors group text-left w-full"
+                className={cn(
+                  "flex items-center justify-between w-full p-2.5 rounded-lg transition-colors group",
+                  currentLangCode === lang.code
+                    ? "bg-primary/10 text-primary"
+                    : "hover:bg-white/5 text-foreground"
+                )}
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{lang.flag}</span>
-                  <div>
-                    <p className="font-bold text-sm">{lang.name}</p>
-                    {currentLangCode === lang.code && (
-                      <p className="text-[10px] text-primary font-bold uppercase tracking-widest">Active</p>
-                    )}
-                  </div>
+                  <span className="text-xl">{lang.flag}</span>
+                  <span className="font-bold text-sm">{lang.name}</span>
                 </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                {currentLangCode === lang.code ? (
+                  <Check className="w-4 h-4 text-primary" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                )}
               </button>
             ))}
           </div>
         </ScrollArea>
-      </DialogContent>
-    </Dialog>
+      </PopoverContent>
+    </Popover>
   );
 }

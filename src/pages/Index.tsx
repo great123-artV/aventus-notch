@@ -146,18 +146,13 @@ const Index = () => {
                   <>
                     {t("hero.title").includes('.') ? (
                       t("hero.title").split('.').map((part, i, arr) => (
-                        <span key={i}>
-                          {i === 1 ? <span className="text-gradient">{part}</span> : part}
-                          {i < arr.length - 1 ? '.' : ''}
+                        <span key={i} className={i === 1 ? "text-gradient" : ""}>
+                          {part}{i < arr.length - 1 ? '.' : ''}
                           {i === 0 && <br />}
                         </span>
                       ))
                     ) : (
-                      <>
-                        Invest Smarter.
-                        <br />
-                        <span className="text-gradient">Grow Without Limits.</span>
-                      </>
+                      t("hero.title")
                     )}
                   </>
                 )}
@@ -339,13 +334,13 @@ const Index = () => {
                 <span className="font-bold font-display">Aventus-Notch</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                The all-in-one investment ecosystem for modern investors.
+                {t("footer.tagline") || "The all-in-one investment ecosystem for modern investors."}
               </p>
             </div>
             {[
-              { title: "Products", links: ["Stocks", "Crypto", "Forex", "Real Estate", "Retirement"] },
-              { title: "Company", links: ["About", "Careers", "Press", "Blog"] },
-              { title: "Legal", links: ["Privacy", "Terms", "Security", "Compliance"] },
+              { title: t("footer.products"), links: [t("nav.stocks"), t("nav.crypto"), t("nav.forex"), t("nav.realestate"), t("nav.retirement")] },
+              { title: t("footer.company"), links: [t("footer.about"), t("footer.careers"), t("footer.press"), t("footer.blog")] },
+              { title: t("footer.legal"), links: [t("footer.privacy"), t("footer.terms"), t("footer.security"), t("footer.compliance")] },
             ].map((section) => (
               <div key={section.title}>
                 <h4 className="font-semibold text-sm mb-4">{section.title}</h4>
@@ -360,7 +355,7 @@ const Index = () => {
             ))}
           </div>
           <div className="border-t border-border pt-6 text-center text-sm text-muted-foreground">
-            © 2026 Aventus-Notch. All rights reserved.
+            © 2026 Aventus-Notch. {t("footer.rights")}
           </div>
         </div>
       </footer>

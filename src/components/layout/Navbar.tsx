@@ -5,6 +5,7 @@ import { useState } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePWA } from "@/hooks/usePWA";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,21 +14,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const navItems = [
-  { label: "Dashboard", path: "/dashboard" },
-  { label: "Markets", path: "/markets" },
-  { label: "Invest", path: "/#investment-plans", isScroll: true },
-  { label: "Real Estate", path: "/real-estate" },
-  { label: "Retirement", path: "/retirement" },
-];
-
 export function Navbar() {
+  const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
   const { isInstallable, installApp } = usePWA();
+
+  const navItems = [
+    { label: t("nav.dashboard") || "Dashboard", path: "/dashboard" },
+    { label: t("nav.markets"), path: "/markets" },
+    { label: t("nav.invest"), path: "/#investment-plans", isScroll: true },
+    { label: t("nav.realestate") || "Real Estate", path: "/real-estate" },
+    { label: t("nav.retirement") || "Retirement", path: "/retirement" },
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/5">
@@ -79,20 +81,21 @@ export function Navbar() {
             {isInstallable && (
               <Button variant="outline" size="sm" onClick={installApp} className="bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary group">
                 <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
-                Download App
+                {t("nav.downloadApp") || "Download App"}
               </Button>
             )}
-            <button
-              onClick={() => setLangOpen(true)}
-              className="p-2 rounded-lg hover:bg-secondary/50 transition-colors group"
-            >
-              <Globe className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-            </button>
+            <LanguageSwitcher open={langOpen} onOpenChange={setLangOpen}>
+              <button
+                className="p-2 rounded-lg hover:bg-secondary/50 transition-colors group"
+              >
+                <Globe className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </button>
+            </LanguageSwitcher>
             {!user ? (
               <>
-                <Link to="/login"><Button variant="ghost" size="sm">Log In</Button></Link>
+                <Link to="/login"><Button variant="ghost" size="sm">{t("auth.login")}</Button></Link>
                 <Link to="/signup">
-                  <Button size="sm" className="gradient-primary border-0 text-foreground shadow-glow">Get Started</Button>
+                  <Button size="sm" className="gradient-primary border-0 text-foreground shadow-glow">{t("hero.getStarted")}</Button>
                 </Link>
               </>
             ) : (
@@ -111,19 +114,19 @@ export function Navbar() {
                   <DropdownMenuContent align="end" className="w-48 glass-strong border-white/10">
                     <DropdownMenuItem asChild>
                       <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
-                        <User className="w-4 h-4" /> Profile
+                        <User className="w-4 h-4" /> {t("nav.profile")}
                       </Link>
                     </DropdownMenuItem>
                     {isAdmin && (
                       <DropdownMenuItem asChild>
                         <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
-                          <Shield className="w-4 h-4" /> Admin Dashboard
+                          <Shield className="w-4 h-4" /> {t("nav.adminDashboard") || "Admin Dashboard"}
                         </Link>
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator className="bg-white/10" />
                     <DropdownMenuItem onClick={signOut} className="flex items-center gap-2 cursor-pointer text-red-400">
-                      <LogOut className="w-4 h-4" /> Sign Out
+                      <LogOut className="w-4 h-4" /> {t("profile.logout")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -137,17 +140,16 @@ export function Navbar() {
         </div>
       </div>
 
-      <LanguageSwitcher open={langOpen} onOpenChange={setLangOpen} />
-
       {mobileOpen && (
         <div className="md:hidden glass-strong border-t border-border">
           <div className="px-4 py-4 space-y-2">
-            <button
-              onClick={() => { setLangOpen(true); setMobileOpen(false); }}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-primary bg-primary/10 transition-colors"
-            >
-              <Globe className="w-5 h-5" /> Change Language
-            </button>
+            <LanguageSwitcher>
+              <button
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-primary bg-primary/10 transition-colors"
+              >
+                <Globe className="w-5 h-5" /> {t("settings.language")}
+              </button>
+            </LanguageSwitcher>
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -162,7 +164,7 @@ export function Navbar() {
             ))}
             {isAdmin && (
               <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground">
-                <Shield className="w-4 h-4" /> Admin Dashboard
+                <Shield className="w-4 h-4" /> {t("nav.adminDashboard") || "Admin Dashboard"}
               </Link>
             )}
             {isInstallable && (
@@ -170,22 +172,22 @@ export function Navbar() {
                 onClick={() => { installApp(); setMobileOpen(false); }}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-primary bg-primary/10 mb-2"
               >
-                <Download className="w-5 h-5" /> Download App
+                <Download className="w-5 h-5" /> {t("nav.downloadApp") || "Download App"}
               </button>
             )}
             <div className="pt-2 flex gap-2">
               {!user ? (
                 <>
                   <Link to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button variant="outline" className="w-full">Log In</Button>
+                    <Button variant="outline" className="w-full">{t("auth.login")}</Button>
                   </Link>
                   <Link to="/signup" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button className="w-full gradient-primary border-0">Get Started</Button>
+                    <Button className="w-full gradient-primary border-0">{t("hero.getStarted")}</Button>
                   </Link>
                 </>
               ) : (
                 <Button variant="outline" className="w-full" onClick={() => { signOut(); setMobileOpen(false); }}>
-                  <LogOut className="w-4 h-4 mr-2" /> Sign Out
+                  <LogOut className="w-4 h-4 mr-2" /> {t("profile.logout")}
                 </Button>
               )}
             </div>

@@ -2,13 +2,11 @@ import { useTheme } from "next-themes";
 import { Label } from "@/components/ui/label";
 import { Globe, Moon, Sun, Monitor, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useState } from "react";
 import { LanguageSwitcher } from "../layout/LanguageSwitcher";
 
 export function AppSettings() {
   const { theme, setTheme } = useTheme();
   const { lang, t } = useLanguage();
-  const [langOpen, setLangOpen] = useState(false);
 
   // Map codes to names (simplified for display)
   const langNames: Record<string, string> = {
@@ -40,22 +38,21 @@ export function AppSettings() {
           <Globe className="w-4 h-4 text-primary" /> {t("settings.language")}
         </Label>
 
-        <button
-          onClick={() => setLangOpen(true)}
-          className="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Globe className="w-4 h-4 text-primary" />
+        <LanguageSwitcher>
+          <button
+            className="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Globe className="w-4 h-4 text-primary" />
+              </div>
+              <span className="font-medium text-sm">
+                {langNames[lang] || "Select Language"}
+              </span>
             </div>
-            <span className="font-medium text-sm">
-              {langNames[lang] || "Select Language"}
-            </span>
-          </div>
-          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-        </button>
-
-        <LanguageSwitcher open={langOpen} onOpenChange={setLangOpen} />
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          </button>
+        </LanguageSwitcher>
       </div>
 
       <div className="space-y-3">

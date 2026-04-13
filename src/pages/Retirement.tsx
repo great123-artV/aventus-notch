@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Slider } from "@/components/ui/slider";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { retirementPlans } from "@/lib/mock-data";
@@ -7,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { TransactionModal } from "@/components/wallet/TransactionModal";
 
 const Retirement = () => {
+  const { t } = useLanguage();
   const [monthly, setMonthly] = useState(500);
   const [years, setYears] = useState(25);
   const [returnRate, setReturnRate] = useState(8);
@@ -35,8 +37,8 @@ const Retirement = () => {
   return (
     <div className="pt-20 pb-10 px-4 max-w-5xl mx-auto theme-retirement relative">
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold font-display">Retirement Planner</h1>
-        <p className="text-muted-foreground mt-1">Project your financial future with interactive tools</p>
+        <h1 className="text-2xl sm:text-3xl font-bold font-display">{t("retirement.title")}</h1>
+        <p className="text-muted-foreground mt-1">{t("retirement.estimate")}</p>
       </div>
 
       <div className="grid lg:grid-cols-5 gap-6">
@@ -44,38 +46,38 @@ const Retirement = () => {
         <div className="lg:col-span-2 glass p-6 rounded-xl space-y-8">
           <div>
             <div className="flex justify-between mb-3">
-              <label className="text-sm font-medium">Monthly Contribution</label>
+              <label className="text-sm font-medium">{t("retirement.monthlySavings")}</label>
               <span className="text-sm font-bold text-primary">${monthly.toLocaleString()}</span>
             </div>
             <Slider value={[monthly]} onValueChange={(v) => setMonthly(v[0])} min={100} max={10000} step={100} />
           </div>
           <div>
             <div className="flex justify-between mb-3">
-              <label className="text-sm font-medium">Investment Period</label>
-              <span className="text-sm font-bold text-primary">{years} years</span>
+              <label className="text-sm font-medium">{t("retirement.yearsToRetirement")}</label>
+              <span className="text-sm font-bold text-primary">{years} {t("retirement.years")}</span>
             </div>
             <Slider value={[years]} onValueChange={(v) => setYears(v[0])} min={5} max={40} step={1} />
           </div>
           <div>
             <div className="flex justify-between mb-3">
-              <label className="text-sm font-medium">Expected Annual Return</label>
+              <label className="text-sm font-medium">{t("retirement.expectedReturn")}</label>
               <span className="text-sm font-bold text-primary">{returnRate}%</span>
             </div>
             <Slider value={[returnRate]} onValueChange={(v) => setReturnRate(v[0])} min={3} max={15} step={0.5} />
           </div>
 
           <div className="glass-strong p-5 rounded-xl text-center">
-            <p className="text-sm text-muted-foreground mb-1">Projected Future Value</p>
+            <p className="text-sm text-muted-foreground mb-1">{t("retirement.projectedValue")}</p>
             <p className="text-3xl font-bold font-display text-gradient">${Math.round(futureValue).toLocaleString()}</p>
             <p className="text-xs text-muted-foreground mt-1">
-              Total contributed: ${(monthly * years * 12).toLocaleString()}
+              {t("retirement.totalContributed")}: ${(monthly * years * 12).toLocaleString()}
             </p>
           </div>
         </div>
 
         {/* Chart */}
         <div className="lg:col-span-3 glass p-6 rounded-xl">
-          <h3 className="font-semibold font-display mb-4">Growth Projection</h3>
+          <h3 className="font-semibold font-display mb-4">{t("retirement.growthProjection")}</h3>
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={chartData}>
               <defs>
@@ -103,7 +105,7 @@ const Retirement = () => {
 
       {/* Plans */}
       <div className="mt-8">
-        <h3 className="text-xl font-bold font-display mb-5">Suggested Plans</h3>
+        <h3 className="text-xl font-bold font-display mb-5">{t("retirement.suggestedPlans")}</h3>
         <div className="grid sm:grid-cols-3 gap-5">
           {retirementPlans.map((plan) => (
             <div key={plan.name} className="glass p-6 rounded-xl hover:border-primary/30 transition-all">
@@ -132,7 +134,7 @@ const Retirement = () => {
                 className="w-full bg-secondary/30 border-glass-border hover:bg-primary/10 transition-colors font-bold"
                 size="sm"
               >
-                Select Plan
+                {t("retirement.selectPlan")}
               </Button>
             </div>
           ))}

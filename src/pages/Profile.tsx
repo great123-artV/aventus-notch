@@ -15,12 +15,13 @@ const Profile = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
+  const { t } = useLanguage();
   const menuItems = [
-    { id: "personal", icon: User, label: "Personal Information", desc: "Update your details and account settings" },
-    { id: "security", icon: Shield, label: "Security & Privacy", desc: "Manage your password and 2FA" },
-    { id: "notifications", icon: Bell, label: "Notifications", desc: "Configure your alert preferences" },
-    { id: "payments", icon: CreditCard, label: "Payment Methods", desc: "Manage your bank accounts and cards" },
-    { id: "settings", icon: Settings, label: "App Settings", desc: "Theme and language preferences" },
+    { id: "personal", icon: User, label: t("profile.personal"), desc: t("profile.personalDesc") },
+    { id: "security", icon: Shield, label: t("profile.security"), desc: t("profile.securityDesc") },
+    { id: "notifications", icon: Bell, label: t("profile.notifications"), desc: t("profile.notificationsDesc") },
+    { id: "payments", icon: CreditCard, label: t("profile.payments"), desc: t("profile.paymentsDesc") },
+    { id: "settings", icon: Settings, label: t("profile.settings"), desc: t("profile.settingsDesc") },
   ];
 
   const handleLogout = async () => {
@@ -43,12 +44,12 @@ const Profile = () => {
         <h1 className="text-3xl font-bold font-display">
           {user?.user_metadata?.first_name
             ? `${user.user_metadata.first_name} ${user.user_metadata.last_name || ""}`
-            : "Investor Profile"
+            : t("profile.investorProfile")
           }
         </h1>
-        <p className="text-muted-foreground mt-1">{user?.email || "Not signed in"}</p>
+        <p className="text-muted-foreground mt-1">{user?.email || t("profile.notSignedIn")}</p>
         <div className="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-white/10 text-xs font-bold uppercase tracking-widest text-profit">
-          <Shield className="w-3 h-3" /> {isAdmin ? "Admin" : "Verified Investor"}
+          <Shield className="w-3 h-3" /> {isAdmin ? "Admin" : t("profile.verifiedInvestor")}
         </div>
       </div>
 
@@ -112,7 +113,7 @@ const Profile = () => {
       </AnimatePresence>
 
       <Button onClick={handleLogout} variant="ghost" className="w-full h-14 rounded-2xl text-red-400 hover:text-red-300 hover:bg-red-500/10 font-bold text-lg gap-2">
-        <LogOut className="w-5 h-5" /> Log Out
+        <LogOut className="w-5 h-5" /> {t("profile.logout")}
       </Button>
     </div>
   );
