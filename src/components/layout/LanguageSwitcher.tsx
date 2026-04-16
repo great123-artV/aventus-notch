@@ -12,13 +12,13 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-interface Language {
+export interface Language {
   name: string;
   code: string;
   flag: string;
 }
 
-const languages: Language[] = [
+export const languages: Language[] = [
   { name: "English", code: "en", flag: "🇺🇸" },
   { name: "Spanish", code: "es", flag: "🇪🇸" },
   { name: "French", code: "fr", flag: "🇫🇷" },

@@ -263,10 +263,16 @@ const Index = () => {
         <div className="max-w-7xl mx-auto relative">
           <div className="text-center mb-20">
             <h2 className="text-4xl sm:text-6xl font-extrabold font-display mb-6 tracking-tighter">
-              Every Asset Class. <br /> <span className="text-gradient">One Platform.</span>
+              {t("categories.title").split('.').map((part, i, arr) => (
+                <span key={i}>
+                  {i === 1 ? <span className="text-gradient">{part}</span> : part}
+                  {i < arr.length - 1 ? '.' : ''}
+                  {i === 0 && <br />}
+                </span>
+              ))}
             </h2>
             <p className="text-foreground/70 font-medium text-xl max-w-2xl mx-auto leading-relaxed">
-              Diversify across the world's most profitable markets from a single, high-performance dashboard.
+              {t("categories.subtitle")}
             </p>
           </div>
 
@@ -313,14 +319,18 @@ const Index = () => {
         <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
         <div className="max-w-5xl mx-auto text-center relative">
           <h2 className="text-4xl sm:text-6xl font-bold font-display mb-8">
-            Ready to Build Your <span className="text-gradient">Wealth?</span>
+            {t("cta.title").split(' ').map((word, i, arr) => (
+              <span key={i}>
+                {i === arr.length - 1 ? <span className="text-gradient">{word}</span> : word}{' '}
+              </span>
+            ))}
           </h2>
           <p className="text-muted-foreground text-xl mb-12 max-w-2xl mx-auto">
             Join 500,000+ investors already growing their portfolios with institutional-grade tools and real-time market insights.
           </p>
           <Link to="/signup">
             <Button size="lg" className="gradient-primary border-0 text-[#050505] shadow-glow text-xl px-12 py-8 rounded-2xl font-bold neon-glow-primary">
-              Create Your Free Account
+              {t("cta.button")}
               <ArrowRight className="w-6 h-6 ml-2" />
             </Button>
           </Link>
