@@ -4,10 +4,12 @@ import { Search, TrendingUp, TrendingDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useCryptoPrices } from "@/hooks/use-crypto-prices";
 import { mockStocks, mockForex } from "@/lib/mock-data";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type TabKey = "all" | "stocks" | "crypto" | "forex";
 
 const Markets = () => {
+  const { t } = useLanguage();
   const [tab, setTab] = useState<TabKey>("all");
   const [search, setSearch] = useState("");
   const { data: cryptoData } = useCryptoPrices();
@@ -23,17 +25,17 @@ const Markets = () => {
   }, [tab, search, cryptoData]);
 
   const tabs: { key: TabKey; label: string }[] = [
-    { key: "all", label: "All" },
-    { key: "stocks", label: "Stocks" },
-    { key: "crypto", label: "Crypto" },
-    { key: "forex", label: "Forex" },
+    { key: "all", label: t("markets.all") },
+    { key: "stocks", label: t("markets.stocks") },
+    { key: "crypto", label: t("markets.crypto") },
+    { key: "forex", label: t("markets.forex") },
   ];
 
   return (
     <div className="pt-20 pb-10 px-4 max-w-7xl mx-auto theme-markets relative">
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold font-display">Markets</h1>
-        <p className="text-muted-foreground mt-1">Explore global investment opportunities</p>
+        <h1 className="text-2xl sm:text-3xl font-bold font-display">{t("markets.title")}</h1>
+        <p className="text-muted-foreground mt-1">{t("markets.subtitle")}</p>
       </div>
 
       {/* Tabs + Search */}
@@ -54,7 +56,7 @@ const Markets = () => {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search assets..."
+            placeholder={t("markets.search")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9 bg-secondary/30 border-glass-border"
@@ -65,10 +67,10 @@ const Markets = () => {
       {/* Asset Table */}
       <div className="glass rounded-xl overflow-hidden">
         <div className="hidden sm:grid grid-cols-[2fr_1fr_1fr_1fr] gap-4 px-6 py-3 border-b border-border text-xs text-muted-foreground font-medium uppercase tracking-wider">
-          <span>Asset</span>
-          <span className="text-right">Price</span>
-          <span className="text-right">24h Change</span>
-          <span className="text-right">Market Cap / Volume</span>
+          <span>{t("markets.asset")}</span>
+          <span className="text-right">{t("markets.price")}</span>
+          <span className="text-right">{t("markets.change")}</span>
+          <span className="text-right">{t("markets.marketCap")}</span>
         </div>
         <div className="divide-y divide-border">
           {allAssets.map((asset) => {

@@ -1,36 +1,25 @@
 import { useTheme } from "next-themes";
 import { Label } from "@/components/ui/label";
-import { Globe, Moon, Sun, Monitor, ChevronRight } from "lucide-react";
+import { Globe, Moon, Sun, Monitor } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useState } from "react";
-import { LanguageSwitcher } from "../layout/LanguageSwitcher";
+import { languages } from "../layout/LanguageSwitcher";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
 
 export function AppSettings() {
   const { theme, setTheme } = useTheme();
-  const { lang, t } = useLanguage();
-  const [langOpen, setLangOpen] = useState(false);
+  const { lang, setLang, t } = useLanguage();
 
-  // Map codes to names (simplified for display)
-  const langNames: Record<string, string> = {
-    en: "English",
-    es: "Spanish",
-    fr: "French",
-    de: "German",
-    it: "Italian",
-    pt: "Portuguese",
-    "zh-CN": "Chinese",
-    ja: "Japanese",
-    ko: "Korean",
-    ru: "Russian",
-    ar: "Arabic",
-    hi: "Hindi",
-    tr: "Turkish",
-    nl: "Dutch",
-    pl: "Polish",
-    sv: "Swedish",
-    vi: "Vietnamese",
-    id: "Indonesian",
-    uk: "Ukrainian",
+  const handleLanguageChange = (newLang: string) => {
+    setLang(newLang);
+    const langName = languages.find(l => l.code === newLang)?.name || newLang;
+    toast.success(`Language changed to ${langName}`);
   };
 
   return (
@@ -40,22 +29,27 @@ export function AppSettings() {
           <Globe className="w-4 h-4 text-primary" /> {t("settings.language")}
         </Label>
 
-        <button
-          onClick={() => setLangOpen(true)}
-          className="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Globe className="w-4 h-4 text-primary" />
+        <Select value={lang} onValueChange={handleLanguageChange}>
+          <SelectTrigger className="w-full h-14 bg-white/5 border-white/10 rounded-xl focus:ring-primary/20">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Globe className="w-4 h-4 text-primary" />
+              </div>
+              <SelectValue placeholder="Select Language" />
             </div>
-            <span className="font-medium text-sm">
-              {langNames[lang] || "Select Language"}
-            </span>
-          </div>
-          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-        </button>
-
-        <LanguageSwitcher open={langOpen} onOpenChange={setLangOpen} />
+          </SelectTrigger>
+          <SelectContent className="glass-strong border-white/10 max-h-[300px]">
+            {languages.map((l) => (
+              <SelectItem
+                key={l.code}
+                value={l.code}
+                className="hover:bg-white/10 focus:bg-white/10 cursor-pointer py-3"
+              >
+                <span className="mr-2">{l.flag}</span> {l.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-3">

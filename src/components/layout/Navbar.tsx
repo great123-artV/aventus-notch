@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download, ChevronDown, Globe, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { LanguageSwitcher } from "./LanguageSwitcher";
+import { LanguageSwitcher, languages } from "./LanguageSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePWA } from "@/hooks/usePWA";
 import {
@@ -13,20 +13,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const navItems = [
-  { label: "Dashboard", path: "/dashboard" },
-  { label: "Markets", path: "/markets" },
-  { label: "Invest", path: "/#investment-plans", isScroll: true },
-  { label: "Real Estate", path: "/real-estate" },
-  { label: "Retirement", path: "/retirement" },
-];
-
 export function Navbar() {
+  const { t, setLang } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
+
+  const navItems = [
+    { label: t("nav.dashboard"), path: "/dashboard" },
+    { label: t("nav.markets"), path: "/markets" },
+    { label: t("nav.invest"), path: "/#investment-plans", isScroll: true },
+    { label: t("nav.realEstate"), path: "/real-estate" },
+    { label: t("nav.retirement"), path: "/retirement" },
+  ];
   const { isInstallable, installApp } = usePWA();
 
   return (
@@ -79,20 +80,36 @@ export function Navbar() {
             {isInstallable && (
               <Button variant="outline" size="sm" onClick={installApp} className="bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary group">
                 <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
-                Download App
+                {t("nav.downloadApp")}
               </Button>
             )}
-            <button
-              onClick={() => setLangOpen(true)}
-              className="p-2 rounded-lg hover:bg-secondary/50 transition-colors group"
-            >
-              <Globe className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="p-2 rounded-lg hover:bg-secondary/50 transition-colors group"
+                >
+                  <Globe className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48 glass-strong border-white/10 max-h-[300px] overflow-y-auto">
+                {languages.map((l) => (
+                  <DropdownMenuItem
+                    key={l.code}
+                    onClick={() => {
+                      setLang(l.code);
+                    }}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <span className="text-lg">{l.flag}</span> {l.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             {!user ? (
               <>
-                <Link to="/login"><Button variant="ghost" size="sm">Log In</Button></Link>
+                <Link to="/login"><Button variant="ghost" size="sm">{t("auth.login")}</Button></Link>
                 <Link to="/signup">
-                  <Button size="sm" className="gradient-primary border-0 text-[#050505] shadow-glow">Get Started</Button>
+                  <Button size="sm" className="gradient-primary border-0 text-[#050505] shadow-glow">{t("auth.getStarted")}</Button>
                 </Link>
               </>
             ) : (
@@ -146,7 +163,7 @@ export function Navbar() {
               onClick={() => { setLangOpen(true); setMobileOpen(false); }}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-primary bg-primary/10 transition-colors"
             >
-              <Globe className="w-5 h-5" /> Change Language
+              <Globe className="w-5 h-5" /> {t("nav.changeLanguage")}
             </button>
             {navItems.map((item) => (
               <Link
@@ -170,17 +187,17 @@ export function Navbar() {
                 onClick={() => { installApp(); setMobileOpen(false); }}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-primary bg-primary/10 mb-2"
               >
-                <Download className="w-5 h-5" /> Download App
+                <Download className="w-5 h-5" /> {t("nav.downloadApp")}
               </button>
             )}
             <div className="pt-2 flex gap-2">
               {!user ? (
                 <>
                   <Link to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button variant="outline" className="w-full">Log In</Button>
+                    <Button variant="outline" className="w-full">{t("auth.login")}</Button>
                   </Link>
                   <Link to="/signup" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button className="w-full gradient-primary border-0 text-[#050505]">Get Started</Button>
+                    <Button className="w-full gradient-primary border-0 text-[#050505]">{t("auth.getStarted")}</Button>
                   </Link>
                 </>
               ) : (

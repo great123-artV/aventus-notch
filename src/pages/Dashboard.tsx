@@ -82,7 +82,7 @@ const Dashboard = () => {
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
             <Activity className="w-32 h-32" />
           </div>
-          <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">Total Portfolio Value</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">{t("dashboard.totalPortfolioValue")}</p>
           <div className="flex items-baseline gap-4 mb-8">
             <span className="text-4xl sm:text-6xl font-bold font-display">${balance.toLocaleString()}</span>
             <span className={`flex items-center gap-1 text-lg font-bold ${totalProfit >= 0 ? "text-profit" : "text-loss"}`}>
@@ -92,18 +92,18 @@ const Dashboard = () => {
           </div>
           <div className="flex flex-wrap gap-4 relative z-10">
             <Button onClick={() => setIsDepositOpen(true)} size="lg" className="gradient-primary border-0 text-[#050505] shadow-glow px-8 rounded-2xl font-bold neon-glow-primary transition-all hover:scale-105 active:scale-95">
-              <Wallet className="w-5 h-5 mr-2" /> Deposit
+              <Wallet className="w-5 h-5 mr-2" /> {t("dashboard.deposit")}
             </Button>
             <Button onClick={() => setIsWithdrawOpen(true)} size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
-              <ArrowUpRight className="w-5 h-5 mr-2" /> Withdraw
+              <ArrowUpRight className="w-5 h-5 mr-2" /> {t("dashboard.withdraw")}
             </Button>
             <Link to="/markets">
               <Button size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
-                <TrendingUp className="w-5 h-5 mr-2" /> Invest Now
+                <TrendingUp className="w-5 h-5 mr-2" /> {t("dashboard.investNow")}
               </Button>
             </Link>
             <Button onClick={() => setIsWalletOpen(true)} size="lg" variant="outline" className="bg-white/5 border-white/10 backdrop-blur-md px-8 rounded-2xl font-bold hover:bg-white/10 transition-all active:scale-95">
-              <Link2 className="w-5 h-5 mr-2" /> Connect Wallet
+              <Link2 className="w-5 h-5 mr-2" /> {t("dashboard.connectWallet")}
             </Button>
           </div>
         </motion.div>
@@ -120,7 +120,7 @@ const Dashboard = () => {
               <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center shadow-glow neon-glow-primary">
                 <Bot className="w-6 h-6 text-[#050505]" />
               </div>
-              <span className="font-bold text-xl font-display">AI Insights</span>
+              <span className="font-bold text-xl font-display">{t("dashboard.aiInsights")}</span>
             </div>
             <p className="text-muted-foreground mb-6 leading-relaxed text-lg">
               "Your portfolio is heavily weighted in stocks. Consider diversifying into crypto or real estate for better risk-adjusted returns."
@@ -142,7 +142,7 @@ const Dashboard = () => {
         >
           <div className="flex items-center justify-between px-2">
             <h3 className="font-bold font-display text-xl flex items-center gap-2">
-              <Activity className="w-5 h-5 text-primary" /> Live Market Analysis
+              <Activity className="w-5 h-5 text-primary" /> {t("dashboard.liveMarket")}
             </h3>
             <div className="flex gap-2">
               <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase tracking-widest text-muted-foreground">BTC/USDT</span>
@@ -160,7 +160,7 @@ const Dashboard = () => {
             className="glass p-6 rounded-3xl"
           >
             <h3 className="font-bold font-display mb-4 flex items-center gap-2">
-              <PieIcon className="w-5 h-5 text-primary" /> Asset Allocation
+              <PieIcon className="w-5 h-5 text-primary" /> {t("dashboard.assetAllocation")}
             </h3>
             <div className="flex items-center justify-between">
               <div className="flex-1 h-[180px]">
@@ -197,7 +197,7 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold font-display flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-profit" /> Profit History
+                <TrendingUp className="w-5 h-5 text-profit" /> {t("dashboard.profitHistory")}
               </h3>
               <span className="text-xs font-bold text-profit">+12.4% THIS MONTH</span>
             </div>
@@ -219,7 +219,7 @@ const Dashboard = () => {
       {/* Transactions */}
       {transactions.length > 0 && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="glass p-8 rounded-3xl">
-          <h3 className="text-2xl font-bold font-display mb-6">Transactions</h3>
+          <h3 className="text-2xl font-bold font-display mb-6">{t("dashboard.transactions")}</h3>
           <div className="space-y-3">
             {transactions.map((tx) => (
               <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5">
@@ -254,7 +254,7 @@ const Dashboard = () => {
         className="glass p-8 rounded-3xl"
       >
         <div className="flex items-center justify-between mb-8">
-          <h3 className="text-2xl font-bold font-display">Recent Activity</h3>
+          <h3 className="text-2xl font-bold font-display">{t("dashboard.recentActivity")}</h3>
         </div>
         <div className="space-y-4">
           {investments.length === 0 ? (
