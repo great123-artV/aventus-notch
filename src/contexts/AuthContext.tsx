@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       password,
       options: {
         data: { first_name: firstName, last_name: lastName },
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: "https://avenntus-notch.vercel.app",
       },
     });
     if (error) throw error;
