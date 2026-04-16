@@ -12,6 +12,8 @@ interface AuthContextType {
   setBalance: (b: number) => void;
   refreshProfile: () => Promise<void>;
   signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  verifyOTP: (email: string, token: string) => Promise<void>;
+  resendOTP: (email: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -85,7 +87,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     });
     if (error) throw error;
-    toast.success("Account created! Check your email to verify.");
+    toast.success("Account created! A verification code has been sent to your email.");
+  };
+
+  const verifyOTP = async (email: string, token: string) => {
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'signup',
+    });
+    if (error) throw error;
+    toast.success("Email verified successfully!");
+  };
+
+  const resendOTP = async (email: string) => {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+    });
+    if (error) throw error;
+    toast.success("Verification code resent!");
   };
 
   const signIn = async (email: string, password: string) => {
@@ -104,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, isAdmin, balance, setBalance, refreshProfile, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, isAdmin, balance, setBalance, refreshProfile, signUp, verifyOTP, resendOTP, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -7,6 +7,7 @@ import { BarChart3, Shield, Lock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { OTPModal } from "@/components/auth/OTPModal";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -14,6 +15,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showOTP, setShowOTP] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ const Signup = () => {
     setLoading(true);
     try {
       await signUp(email, password, firstName, lastName);
-      navigate("/dashboard");
+      setShowOTP(true);
     } catch (err: any) {
       toast.error(err.message || "Signup failed");
     } finally {
@@ -46,6 +48,12 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative theme-auth">
+      <OTPModal
+        isOpen={showOTP}
+        onClose={() => setShowOTP(false)}
+        email={email}
+        onSuccess={() => navigate("/dashboard")}
+      />
       <div className="absolute inset-0 gradient-hero" />
       <div className="relative w-full max-w-md">
         <div className="text-center mb-8">
