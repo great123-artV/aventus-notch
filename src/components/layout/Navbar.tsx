@@ -6,6 +6,7 @@ import { LanguageSwitcher, languages } from "./LanguageSwitcher";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { usePWA } from "@/hooks/usePWA";
+import { InvestMenu } from "./InvestMenu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,12 +21,13 @@ export function Navbar() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [isInvestMenuOpen, setIsInvestMenuOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
 
   const navItems = [
     { label: t("nav.dashboard"), path: "/dashboard" },
     { label: t("nav.markets"), path: "/markets" },
-    { label: t("nav.invest"), path: "/#investment-plans", isScroll: true },
+    { label: t("nav.invest"), path: "#", isInvest: true },
     { label: t("nav.realEstate"), path: "/real-estate" },
     { label: t("nav.retirement"), path: "/retirement" },
   ];
@@ -44,19 +46,10 @@ export function Navbar() {
 
           <div className="hidden md:flex items-center gap-2">
             {navItems.map((item) => (
-              item.isScroll ? (
+              item.isInvest ? (
                 <button
-                  key={item.path}
-                  onClick={async () => {
-                    if (location.pathname !== '/') {
-                      await navigate('/');
-                      setTimeout(() => {
-                        document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
-                    } else {
-                      document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
+                  key={item.label}
+                  onClick={() => setIsInvestMenuOpen(true)}
                   className="px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all text-muted-foreground hover:text-foreground hover:bg-white/5"
                 >
                   {item.label}
@@ -156,6 +149,7 @@ export function Navbar() {
       </div>
 
       <LanguageSwitcher open={langOpen} onOpenChange={setLangOpen} />
+      <InvestMenu isOpen={isInvestMenuOpen} onClose={() => setIsInvestMenuOpen(false)} />
 
       {mobileOpen && (
         <div className="md:hidden glass-strong border-t border-border">
