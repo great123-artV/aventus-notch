@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Lock, ShieldAlert, ArrowUpDown, CheckCircle, XCircle, Layout, Map as MapIcon } from "lucide-react";
+import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Lock, ShieldAlert, ArrowUpDown, CheckCircle, XCircle, Layout, Map as MapIcon, MessageSquare } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CMSManager } from "@/components/admin/CMSManager";
 import { VisitorTracker } from "@/components/admin/VisitorTracker";
+import { SupportManager } from "@/components/admin/SupportManager";
 
 interface VisitorLog {
   id: string;
@@ -32,7 +33,7 @@ const AdminDashboard = () => {
   const { user, isAdmin, loading, signIn } = useAuth();
   const navigate = useNavigate();
   const [visitors, setVisitors] = useState<VisitorLog[]>([]);
-  const [activeTab, setActiveTab] = useState<"overview" | "cms" | "visitors" | "transactions">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "cms" | "visitors" | "transactions" | "support">("overview");
   const [todayCount, setTodayCount] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
   const [investments, setInvestments] = useState<InvestmentSummary[]>([]);
@@ -212,6 +213,7 @@ const AdminDashboard = () => {
         <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 overflow-x-auto no-scrollbar">
           {[
             { id: "overview", label: "Overview", icon: Activity },
+            { id: "support", label: "Support", icon: MessageSquare },
             { id: "cms", label: "CMS", icon: Layout },
             { id: "visitors", label: "Locations", icon: MapIcon },
             { id: "transactions", label: "Payments", icon: ArrowUpDown },
@@ -364,6 +366,12 @@ const AdminDashboard = () => {
       {activeTab === "visitors" && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <VisitorTracker />
+        </motion.div>
+      )}
+
+      {activeTab === "support" && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <SupportManager />
         </motion.div>
       )}
 
