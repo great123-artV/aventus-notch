@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download, ChevronDown, Globe, PiggyBank } from "lucide-react";
+import { BarChart3, Bell, Menu, X, User, Shield, LogOut, Download, ChevronDown, Globe, PiggyBank, Zap, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { LanguageSwitcher, languages } from "./LanguageSwitcher";
