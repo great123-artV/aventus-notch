@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Building2, PiggyBank, X, ArrowRight } from "lucide-react";
+import { Building2, PiggyBank, X, ArrowRight, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function InvestMenu({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
@@ -29,6 +29,23 @@ export function InvestMenu({ isOpen, onClose }: { isOpen: boolean, onClose: () =
             </div>
 
             <div className="grid gap-4">
+              <Link
+                to="/invest"
+                onClick={onClose}
+                className="group flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-primary/50 transition-all"
+              >
+                <div className="flex items-center gap-5">
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                    <Zap className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold">Investment Plans</h3>
+                    <p className="text-sm text-muted-foreground">High-yield short-term growth plans</p>
+                  </div>
+                </div>
+                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-transform group-hover:translate-x-1" />
+              </Link>
+
               <Link
                 to="/real-estate"
                 onClick={onClose}

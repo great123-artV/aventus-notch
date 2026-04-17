@@ -28,8 +28,6 @@ export function Navbar() {
     { label: t("nav.dashboard"), path: "/dashboard" },
     { label: t("nav.markets"), path: "/markets" },
     { label: t("nav.invest"), path: "#", isInvest: true },
-    { label: t("nav.realEstate"), path: "/real-estate" },
-    { label: t("nav.retirement"), path: "/retirement" },
   ];
   const { isInstallable, installApp } = usePWA();
 
@@ -47,13 +45,49 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-2">
             {navItems.map((item) => (
               item.isInvest ? (
-                <button
-                  key={item.label}
-                  onClick={() => setIsInvestMenuOpen(true)}
-                  className="px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all text-muted-foreground hover:text-foreground hover:bg-white/5"
-                >
-                  {item.label}
-                </button>
+                <DropdownMenu key={item.label}>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className={`flex items-center gap-1 px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
+                        ['/invest', '/real-estate', '/retirement'].includes(location.pathname)
+                          ? "bg-primary/15 text-primary"
+                          : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                      }`}
+                    >
+                      {item.label}
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 glass-strong border-white/10 p-2">
+                    <DropdownMenuItem asChild className="rounded-lg cursor-pointer">
+                      <Link to="/invest" className="flex items-center gap-2 py-2.5">
+                        <Zap className="w-4 h-4 text-primary" />
+                        <div>
+                          <div className="font-bold">Investment Plans</div>
+                          <div className="text-[10px] text-muted-foreground">High-yield growth</div>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="rounded-lg cursor-pointer">
+                      <Link to="/real-estate" className="flex items-center gap-2 py-2.5">
+                        <Building2 className="w-4 h-4 text-emerald-500" />
+                        <div>
+                          <div className="font-bold">Real Estate</div>
+                          <div className="text-[10px] text-muted-foreground">Premium properties</div>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="rounded-lg cursor-pointer">
+                      <Link to="/retirement" className="flex items-center gap-2 py-2.5">
+                        <PiggyBank className="w-4 h-4 text-pink-500" />
+                        <div>
+                          <div className="font-bold">Retirement</div>
+                          <div className="text-[10px] text-muted-foreground">Long-term saving</div>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <Link
                   key={item.path}
@@ -161,16 +195,29 @@ export function Navbar() {
               <Globe className="w-5 h-5" /> {t("nav.changeLanguage")}
             </button>
             {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setMobileOpen(false)}
-                className={`block px-4 py-3 rounded-lg text-sm font-medium ${
-                  location.pathname === item.path ? "bg-primary/10 text-primary" : "text-muted-foreground"
-                }`}
-              >
-                {item.label}
-              </Link>
+              item.isInvest ? (
+                <button
+                  key={item.label}
+                  onClick={() => {
+                    setIsInvestMenuOpen(true);
+                    setMobileOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium ${
+                    location.pathname === item.path ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
             {isAdmin && (
               <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground">

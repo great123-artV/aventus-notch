@@ -1,18 +1,44 @@
-import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
-import { Search, TrendingUp, TrendingDown } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Search, TrendingUp, TrendingDown, CheckCircle2, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useCryptoPrices } from "@/hooks/use-crypto-prices";
 import { mockStocks, mockForex } from "@/lib/mock-data";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 type TabKey = "all" | "stocks" | "crypto" | "forex";
 
 const Markets = () => {
   const { t } = useLanguage();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [tab, setTab] = useState<TabKey>("all");
   const [search, setSearch] = useState("");
+  const [planAmount, setPlanAmount] = useState<string | null>(null);
+  const [isConfirming, setIsConfirming] = useState(false);
   const { data: cryptoData } = useCryptoPrices();
+
+  useEffect(() => {
+    const plan = searchParams.get("plan");
+    if (plan) {
+      setPlanAmount(plan);
+      setIsConfirming(true);
+    }
+  }, [searchParams]);
+
+  const handleConfirmPlan = () => {
+    setIsConfirming(false);
+    toast.success(`Investment plan of $${planAmount} started successfully!`, {
+      icon: <CheckCircle2 className="w-5 h-5 text-profit" />
+    });
+    // Remove the plan param from URL
+    setSearchParams({});
+    // Redirect to dashboard after a short delay
+    setTimeout(() => navigate("/dashboard"), 2000);
+  };
 
   const allAssets = useMemo(() => {
     const crypto = (cryptoData || []).map((c) => ({ ...c, category: "crypto" as const }));
@@ -33,6 +59,49 @@ const Markets = () => {
 
   return (
     <div className="pt-20 pb-10 px-4 max-w-7xl mx-auto theme-markets relative">
+      <Dialog open={isConfirming} onOpenChange={(open) => {
+        setIsConfirming(open);
+        if (!open) setSearchParams({});
+      }}>
+        <DialogContent className="glass-strong border-white/10 sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold font-display flex items-center gap-2">
+              Confirm Investment
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground pt-4 text-lg">
+              You are about to start an investment plan of <span className="text-primary font-bold">${Number(planAmount).toLocaleString()}</span>.
+              <br /><br />
+              This amount will be dedicated to your active portfolio growth for the next 48 hours.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-6">
+            <div className="glass p-4 rounded-xl space-y-3">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Investment Amount</span>
+                <span className="font-bold">${Number(planAmount).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Expected Return</span>
+                <span className="font-bold text-profit">
+                  ${(Number(planAmount) * (planAmount === '100' ? 20.5 : planAmount === '200' ? 17.5 : planAmount === '300' ? 18.33 : planAmount === '500' ? 15 : 12.5)).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Duration</span>
+                <span className="font-bold text-yellow-500">48 Hours</span>
+              </div>
+            </div>
+          </div>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="ghost" onClick={() => setIsConfirming(false)} className="hover:bg-white/5">
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmPlan} className="gradient-primary border-0 text-[#050505] font-bold shadow-glow">
+              Confirm & Start Plan
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold font-display">{t("markets.title")}</h1>
         <p className="text-muted-foreground mt-1">{t("markets.subtitle")}</p>
