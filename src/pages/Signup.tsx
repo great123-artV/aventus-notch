@@ -7,7 +7,6 @@ import { BarChart3, Shield, Lock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { OTPModal } from "@/components/auth/OTPModal";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -15,7 +14,6 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showOTP, setShowOTP] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
 
@@ -26,7 +24,7 @@ const Signup = () => {
     setLoading(true);
     try {
       await signUp(email, password, firstName, lastName);
-      setShowOTP(true);
+      navigate("/dashboard");
     } catch (err: any) {
       toast.error(err.message || "Signup failed");
     } finally {
@@ -34,26 +32,8 @@ const Signup = () => {
     }
   };
 
-  const handleOAuthSignIn = async (provider: 'google' | 'apple') => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: { redirectTo: "https://avenntus-notch.vercel.app/dashboard" },
-      });
-      if (error) throw error;
-    } catch (err: any) {
-      toast.error(err.message || `${provider} login failed`);
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative theme-auth">
-      <OTPModal
-        isOpen={showOTP}
-        onClose={() => setShowOTP(false)}
-        email={email}
-        onSuccess={() => navigate("/dashboard")}
-      />
       <div className="absolute inset-0 gradient-hero" />
       <div className="relative w-full max-w-md">
         <div className="text-center mb-8">
@@ -71,34 +51,24 @@ const Signup = () => {
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="first">First Name</Label>
-              <Input id="first" placeholder="John" value={firstName} onChange={e => setFirstName(e.target.value)} className="bg-secondary/30 border-glass-border" />
+              <Input id="first" value={firstName} onChange={e => setFirstName(e.target.value)} className="bg-secondary/30 border-glass-border" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="last">Last Name</Label>
-              <Input id="last" placeholder="Doe" value={lastName} onChange={e => setLastName(e.target.value)} className="bg-secondary/30 border-glass-border" />
+              <Input id="last" value={lastName} onChange={e => setLastName(e.target.value)} className="bg-secondary/30 border-glass-border" />
             </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} className="bg-secondary/30 border-glass-border" />
+            <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} className="bg-secondary/30 border-glass-border" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} className="bg-secondary/30 border-glass-border" />
+            <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} className="bg-secondary/30 border-glass-border" />
           </div>
           <Button type="submit" disabled={loading} className="w-full gradient-primary border-0 text-foreground shadow-glow py-5">
             {loading ? "Creating account..." : "Create Account"}
           </Button>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-            <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">or continue with</span></div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <Button type="button" variant="outline" onClick={() => handleOAuthSignIn('google')} className="bg-secondary/30 border-glass-border">Google</Button>
-            <Button type="button" variant="outline" onClick={() => handleOAuthSignIn('apple')} className="bg-secondary/30 border-glass-border">Apple</Button>
-          </div>
 
           <p className="text-center text-sm text-muted-foreground">
             Already have an account? <Link to="/login" className="text-primary hover:underline">Sign in</Link>
