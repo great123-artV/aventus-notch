@@ -9,6 +9,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { AIChatWidget } from "@/components/AIChatWidget";
+import { SupportWidget } from "@/components/support/SupportWidget";
 import { useVisitorLog } from "@/hooks/useVisitorLog";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
@@ -23,6 +24,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
+import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 
 
@@ -68,11 +70,13 @@ function AppRoutes() {
         <Route path="/invest" element={<ProtectedRoute><Invest /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/support" element={<Support />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
       <AIChatWidget />
+      <SupportWidget />
     </>
   );
 }
