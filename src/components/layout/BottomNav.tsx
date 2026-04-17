@@ -29,20 +29,12 @@ export const BottomNav = () => {
           </NavLink>
 
           <button
-            onClick={async (e) => {
+            onClick={(e) => {
               e.preventDefault();
-              if (location.pathname !== '/') {
-                await navigate('/');
-                // Wait for navigation and then scroll
-                setTimeout(() => {
-                  document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              } else {
-                document.getElementById('investment-plans')?.scrollIntoView({ behavior: 'smooth' });
-              }
+              setIsInvestMenuOpen(true);
             }}
             className={`flex flex-col items-center gap-1 -mt-8 transition-transform active:scale-95 ${
-              location.pathname === '/real-estate' || location.pathname === '/retirement' ? 'text-primary' : ''
+              location.pathname === '/real-estate' || location.pathname === '/retirement' || location.pathname === '/invest' ? 'text-primary' : ''
             }`}
           >
             <div className="w-14 h-14 rounded-full gradient-primary shadow-glow neon-glow-primary flex items-center justify-center border-4 border-[#020617]">

@@ -18,6 +18,7 @@ import Markets from "./pages/Markets";
 import AssetDetail from "./pages/AssetDetail";
 import RealEstate from "./pages/RealEstate";
 import Retirement from "./pages/Retirement";
+import Invest from "./pages/Invest";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
@@ -64,6 +65,7 @@ function AppRoutes() {
         <Route path="/asset/:id" element={<ProtectedRoute><AssetDetail /></ProtectedRoute>} />
         <Route path="/real-estate" element={<ProtectedRoute><RealEstate /></ProtectedRoute>} />
         <Route path="/retirement" element={<ProtectedRoute><Retirement /></ProtectedRoute>} />
+        <Route path="/invest" element={<ProtectedRoute><Invest /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
 

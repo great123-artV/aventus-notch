@@ -23,7 +23,7 @@ export function InvestmentPlans() {
     }
 
     if (balance >= planAmount) {
-      navigate("/markets");
+      navigate(`/markets?plan=${planAmount}`);
     } else {
       navigate("/dashboard");
     }
