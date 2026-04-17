@@ -161,16 +161,29 @@ export function Navbar() {
               <Globe className="w-5 h-5" /> {t("nav.changeLanguage")}
             </button>
             {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setMobileOpen(false)}
-                className={`block px-4 py-3 rounded-lg text-sm font-medium ${
-                  location.pathname === item.path ? "bg-primary/10 text-primary" : "text-muted-foreground"
-                }`}
-              >
-                {item.label}
-              </Link>
+              item.isInvest ? (
+                <button
+                  key={item.label}
+                  onClick={() => {
+                    setIsInvestMenuOpen(true);
+                    setMobileOpen(false);
+                  }}
+                  className="w-full text-left block px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium ${
+                    location.pathname === item.path ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
             ))}
             {isAdmin && (
               <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground">

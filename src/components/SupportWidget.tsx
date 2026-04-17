@@ -123,13 +123,11 @@ export function SupportWidget() {
     setLoading(false);
   };
 
-  if (!user) return null;
-
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full gradient-primary shadow-glow flex items-center justify-center text-[#050505] hover:scale-110 transition-transform"
+        className="fixed bottom-24 left-6 z-50 w-14 h-14 rounded-full gradient-primary shadow-glow flex items-center justify-center text-[#050505] hover:scale-110 transition-transform"
       >
         <MessageSquare className="w-6 h-6" />
       </button>
@@ -140,7 +138,7 @@ export function SupportWidget() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 left-6 z-50 w-[350px] h-[500px] glass-strong rounded-2xl border border-white/10 flex flex-col overflow-hidden shadow-2xl"
+            className="fixed bottom-40 left-6 z-50 w-[320px] sm:w-[350px] h-[450px] sm:h-[500px] glass-strong rounded-2xl border border-white/10 flex flex-col overflow-hidden shadow-2xl"
           >
             <div className="p-4 gradient-primary flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -161,7 +159,20 @@ export function SupportWidget() {
             </div>
 
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.length === 0 && (
+              {!user ? (
+                <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="w-8 h-8 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg">Sign in to chat</h4>
+                    <p className="text-sm text-muted-foreground">Please log in to your account to start a conversation with our support team.</p>
+                  </div>
+                  <Button onClick={() => { setOpen(false); window.location.href = "/login"; }} className="w-full gradient-primary text-[#050505]">
+                    Go to Login
+                  </Button>
+                </div>
+              ) : messages.length === 0 && (
                 <div className="text-center py-10">
                   <p className="text-sm text-muted-foreground">Welcome! How can we help you today?</p>
                 </div>
