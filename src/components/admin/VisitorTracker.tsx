@@ -55,7 +55,7 @@ export function VisitorTracker() {
       .order("visited_at", { ascending: false })
       .limit(100);
 
-    if (data) setVisitors(data);
+    if (data) setVisitors(data as unknown as Visitor[]);
     setLoading(false);
   };
 
