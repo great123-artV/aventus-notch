@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { mockRealEstate } from "@/lib/mock-data";
 import { useState } from "react";
 import { TransactionModal } from "@/components/wallet/TransactionModal";
+import { InvestmentPlans } from "@/components/InvestmentPlans";
 
 const filters = ["All", "Residential", "Commercial", "Hospitality"];
 
@@ -94,6 +95,9 @@ const RealEstate = () => {
           type="buy"
         />
       )}
+      <div className="mt-20">
+        <InvestmentPlans />
+      </div>
     </div>
   );
 };

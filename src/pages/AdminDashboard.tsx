@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Lock, ShieldAlert, ArrowUpDown, CheckCircle, XCircle, Layout, Map as MapIcon } from "lucide-react";
+import { Users, Eye, DollarSign, TrendingUp, Shield, Activity, Globe, Calendar, Lock, ShieldAlert, ArrowUpDown, CheckCircle, XCircle, Layout, Map as MapIcon, MessageSquare } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -213,6 +213,8 @@ const AdminDashboard = () => {
           {[
             { id: "overview", label: "Overview", icon: Activity },
             { id: "cms", label: "CMS", icon: Layout },
+          { id: "plans", label: "Plans", icon: DollarSign },
+          { id: "support", label: "Support", icon: MessageSquare },
             { id: "visitors", label: "Locations", icon: MapIcon },
             { id: "transactions", label: "Payments", icon: ArrowUpDown },
           ].map(tab => (
@@ -358,6 +360,18 @@ const AdminDashboard = () => {
       {activeTab === "cms" && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <CMSManager />
+        </motion.div>
+      )}
+
+      {activeTab === "plans" && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <PlanManager />
+        </motion.div>
+      )}
+
+      {activeTab === "support" && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <SupportManager />
         </motion.div>
       )}
 

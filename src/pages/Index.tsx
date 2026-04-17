@@ -251,11 +251,6 @@ const Index = () => {
 
       <TrustBadges />
 
-      {/* Investment Plans */}
-      <div id="investment-plans" className="scroll-mt-24">
-        <InvestmentPlans />
-      </div>
-
       {/* Investment Categories */}
       <section className="py-32 px-4 relative">
         <div className="absolute top-1/2 left-0 w-64 h-64 bg-primary/10 blur-[120px]" />

@@ -5,6 +5,7 @@ import { retirementPlans } from "@/lib/mock-data";
 import { PiggyBank, TrendingUp, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TransactionModal } from "@/components/wallet/TransactionModal";
+import { InvestmentPlans } from "@/components/InvestmentPlans";
 
 const Retirement = () => {
   const [monthly, setMonthly] = useState(500);
@@ -153,6 +154,9 @@ const Retirement = () => {
           type="buy"
         />
       )}
+      <div className="mt-20">
+        <InvestmentPlans />
+      </div>
     </div>
   );
 };
