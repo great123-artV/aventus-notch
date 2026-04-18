@@ -155,7 +155,7 @@ export function AIChatWidget() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-24 right-6 z-50 flex items-center gap-2 group"
+            className="fixed bottom-[180px] right-6 z-40 flex items-center gap-2 group"
           >
             <div className="absolute -top-8 right-0 bg-primary/20 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               <span className="text-[10px] font-bold text-white uppercase tracking-tighter">Aventus AI Bot</span>

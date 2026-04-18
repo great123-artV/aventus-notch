@@ -138,6 +138,22 @@ export function SupportWidget() {
 
   const startChat = async () => {
     const guestId = !user ? `guest_${Math.random().toString(36).slice(2, 11)}` : null;
+
+    // Check if there's already an open chat for this guest in localStorage
+    const storedId = localStorage.getItem('aventus_support_chat_id');
+    if (storedId && !user) {
+      const { data: existingChat } = await supabase
+        .from('support_chats')
+        .select('id, status')
+        .eq('id', storedId)
+        .maybeSingle();
+
+      if (existingChat && existingChat.status === 'open') {
+        setChatId(existingChat.id);
+        return existingChat.id;
+      }
+    }
+
     const { data, error } = await supabase
       .from('support_chats')
       .insert([
@@ -148,9 +164,9 @@ export function SupportWidget() {
         }
       ])
       .select()
-      .single();
+      .maybeSingle();
 
-    if (error) {
+    if (error || !data) {
       console.error("[Support] Error starting chat:", error);
       toast.error("Could not start chat. Please try again.");
       return null;
@@ -164,9 +180,24 @@ export function SupportWidget() {
 
   const sendMessage = async () => {
     const messageContent = input.trim();
-    if (!messageContent && !isLoading) return;
+    if (!messageContent || isLoading) return;
 
     let currentChatId = chatId;
+
+    // Final check for existing chat if chatId is null (e.g. session refreshed)
+    if (!currentChatId && user) {
+      const { data } = await supabase
+        .from('support_chats')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('status', 'open')
+        .maybeSingle();
+      if (data) {
+        currentChatId = data.id;
+        setChatId(data.id);
+      }
+    }
+
     if (!currentChatId) {
       currentChatId = await startChat();
     }
@@ -270,7 +301,7 @@ export function SupportWidget() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+            className="fixed bottom-24 right-6 z-40 w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
           >
             <MessageCircle className="w-8 h-8 text-white" />
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse" />
@@ -284,7 +315,7 @@ export function SupportWidget() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 w-[350px] sm:w-[400px] h-[550px] bg-[#E5DDD5] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-4 left-4 sm:left-auto sm:right-6 z-40 w-auto sm:w-[400px] h-[550px] bg-[#E5DDD5] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
             {/* WhatsApp Header */}
             <div className="bg-[#075E54] p-4 flex items-center justify-between text-white">
@@ -365,7 +396,7 @@ export function SupportWidget() {
                 onChange={e => handleTyping(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && sendMessage()}
                 placeholder="Type a message"
-                className="flex-1 bg-white rounded-full px-4 py-2 text-sm focus:outline-none border-none shadow-sm"
+                className="flex-1 bg-white text-gray-900 placeholder:text-gray-500 rounded-full px-4 py-2 text-sm focus:outline-none border-none shadow-sm"
               />
               <button
                 onClick={sendMessage}
