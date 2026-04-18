@@ -127,7 +127,13 @@ export function SupportWidget() {
       .eq('chat_id', id)
       .order('created_at', { ascending: true });
 
-    if (data) setMessages(data);
+    if (error) {
+      console.error("[Support] Error fetching messages:", error);
+      return;
+    }
+    if (data) {
+      setMessages(data as unknown as Message[]);
+    }
   };
 
   const startChat = async () => {
@@ -145,17 +151,20 @@ export function SupportWidget() {
       .single();
 
     if (error) {
+      console.error("[Support] Error starting chat:", error);
       toast.error("Could not start chat. Please try again.");
       return null;
     }
 
     localStorage.setItem('aventus_support_chat_id', data.id);
     setChatId(data.id);
+    fetchMessages(data.id);
     return data.id;
   };
 
   const sendMessage = async () => {
-    if (!input.trim() && !isLoading) return;
+    const messageContent = input.trim();
+    if (!messageContent && !isLoading) return;
 
     let currentChatId = chatId;
     if (!currentChatId) {
@@ -164,6 +173,22 @@ export function SupportWidget() {
 
     if (!currentChatId) return;
 
+    const tempId = Math.random().toString(36).slice(2, 11);
+    const newMessage: Message = {
+      id: tempId,
+      chat_id: currentChatId,
+      sender_id: user?.id || null,
+      sender_type: user ? 'user' : 'guest',
+      content: messageContent,
+      attachments: [],
+      is_read: false,
+      created_at: new Date().toISOString()
+    };
+
+    // Optimistic update
+    setMessages(prev => [...prev, newMessage]);
+    setInput("");
+
     const { error } = await supabase
       .from('support_messages')
       .insert([
@@ -171,15 +196,16 @@ export function SupportWidget() {
           chat_id: currentChatId,
           sender_id: user?.id || null,
           sender_type: user ? 'user' : 'guest',
-          content: input.trim(),
+          content: messageContent,
           attachments: []
         }
       ]);
 
     if (error) {
+      console.error("Error sending message:", error);
       toast.error("Failed to send message");
-    } else {
-      setInput("");
+      // Remove the optimistic message on error
+      setMessages(prev => prev.filter(m => m.id !== tempId));
     }
   };
 

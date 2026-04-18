@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { MessageSquare, Send, Paperclip, CheckCircle2, User, Clock, Search, MoreVertical, Shield } from "lucide-react";
+import { MessageSquare, Send, Paperclip, CheckCircle2, User, RotateCw, Search, MoreVertical, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -119,7 +119,15 @@ export function SupportManager() {
       .from('support_chats')
       .select('*')
       .order('last_message_at', { ascending: false });
-    if (data) setChats(data);
+
+    if (error) {
+      console.error("[Support Admin] Error fetching chats:", error);
+      toast.error("Failed to load chats");
+      return;
+    }
+    if (data) {
+      setChats(data as unknown as Chat[]);
+    }
   };
 
   const fetchMessages = async (chatId: string) => {
@@ -128,8 +136,14 @@ export function SupportManager() {
       .select('*')
       .eq('chat_id', chatId)
       .order('created_at', { ascending: true });
+
+    if (error) {
+      console.error("Admin: Error fetching messages:", error);
+      return;
+    }
+
     if (data) {
-      setMessages(data);
+      setMessages(data as unknown as Message[]);
       // Mark messages as read
       await supabase
         .from('support_messages')
@@ -140,7 +154,24 @@ export function SupportManager() {
   };
 
   const sendMessage = async () => {
-    if (!input.trim() || !selectedChat) return;
+    const messageContent = input.trim();
+    if (!messageContent || !selectedChat) return;
+
+    const tempId = Math.random().toString(36).slice(2, 11);
+    const newMessage: Message = {
+      id: tempId,
+      chat_id: selectedChat.id,
+      sender_id: user?.id || null,
+      sender_type: 'admin',
+      content: messageContent,
+      attachments: [],
+      is_read: true,
+      created_at: new Date().toISOString()
+    };
+
+    // Optimistic update
+    setMessages(prev => [...prev, newMessage]);
+    setInput("");
 
     const { error } = await supabase
       .from('support_messages')
@@ -148,15 +179,24 @@ export function SupportManager() {
         chat_id: selectedChat.id,
         sender_id: user?.id,
         sender_type: 'admin',
-        content: input.trim()
+        content: messageContent
       }]);
 
     if (!error) {
-      setInput("");
-      // Update last_message_at
+      // Update last_message_at locally in the chats list
+      setChats(prev => prev.map(c =>
+        c.id === selectedChat.id
+          ? { ...c, last_message_at: new Date().toISOString() }
+          : c
+      ));
+
+      // Update last_message_at in DB
       await supabase.from('support_chats').update({ last_message_at: new Date().toISOString() }).eq('id', selectedChat.id);
     } else {
+      console.error("Admin: Error sending message:", error);
       toast.error("Failed to send message");
+      // Revert optimistic update
+      setMessages(prev => prev.filter(m => m.id !== tempId));
     }
   };
 
@@ -234,9 +274,14 @@ export function SupportManager() {
       {/* Sidebar: Chat List */}
       <div className="w-80 border-r border-white/10 flex flex-col bg-white/5">
         <div className="p-4 border-b border-white/10">
-          <h2 className="text-xl font-bold font-display flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-primary" /> Conversations
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold font-display flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-primary" /> Conversations
+            </h2>
+            <Button variant="ghost" size="icon" onClick={fetchChats} className="h-8 w-8 hover:bg-white/10" title="Refresh">
+              <RotateCw className="w-4 h-4 text-primary" />
+            </Button>
+          </div>
           <div className="mt-4 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input placeholder="Search chats..." className="pl-9 bg-black/20 border-white/10" />
