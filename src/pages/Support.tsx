@@ -26,7 +26,7 @@ export default function SupportPage() {
 
             <div className="flex flex-col gap-4">
               <Button
-                onClick={() => (window as any).$crisp?.push(['do', 'chat:open'])}
+                onClick={() => (window as any).Tawk_API?.toggle()}
                 className="w-full h-16 bg-[#075E54] hover:bg-[#075E54]/90 text-white rounded-2xl font-bold text-lg flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] transition-all"
               >
                 <MessageSquare className="w-6 h-6" /> Start Live Chat

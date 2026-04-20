@@ -133,18 +133,21 @@ export function CMSManager() {
         <TabsContent value="support" className="space-y-6">
           <div className="space-y-4">
             <h3 className="text-lg font-bold font-display flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-primary" /> Professional Support (Crisp.chat)
+              <ShieldCheck className="w-5 h-5 text-primary" /> Professional Support (Tawk.to)
             </h3>
             <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-200 leading-relaxed">
-              <p className="font-bold mb-1">How to set up:</p>
+              <p className="font-bold mb-1">How to set up Tawk.to:</p>
               <ol className="list-decimal ml-4 space-y-1">
-                <li>Create a free account at <a href="https://crisp.chat" target="_blank" rel="noopener noreferrer" className="underline font-bold text-white">Crisp.chat</a></li>
-                <li>Go to Settings {">"} Website Settings {">"} Setup Instructions</li>
-                <li>Copy your <b>Website ID</b> (it looks like a long code of letters and numbers)</li>
-                <li>Paste it below and click Save.</li>
+                <li>Log in to your <a href="https://dashboard.tawk.to" target="_blank" rel="noopener noreferrer" className="underline font-bold text-white">Tawk.to Dashboard</a></li>
+                <li>Go to <b>Administration</b> (gear icon) {">"} <b>Chat Widget</b></li>
+                <li>Look for the <b>Direct Chat Link</b> (e.g. `https://tawk.to/chat/PROPERTY_ID/WIDGET_ID`)</li>
+                <li>Copy the <b>Property ID</b> and <b>Widget ID</b> from that link and paste them below.</li>
               </ol>
             </div>
-            <TextField id="crisp_website_id" label="Crisp Website ID" />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <TextField id="tawk_property_id" label="Tawk.to Property ID" />
+              <TextField id="tawk_widget_id" label="Tawk.to Widget ID (Optional)" />
+            </div>
           </div>
         </TabsContent>
 

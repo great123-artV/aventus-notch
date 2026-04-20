@@ -36,19 +36,19 @@ export function SupportManager() {
       <div className="space-y-2">
         <h2 className="text-3xl font-bold font-display text-white">Professional Support Active</h2>
         <p className="text-muted-foreground max-w-md mx-auto">
-          The support system has been upgraded to <b>Crisp.chat</b> for a more reliable and professional experience.
+          The support system has been upgraded to <b>Tawk.to</b> for a more reliable and professional experience.
         </p>
       </div>
 
       <div className="grid gap-4 w-full max-w-sm">
         <Button
-          onClick={() => window.open('https://app.crisp.chat/', '_blank')}
+          onClick={() => window.open('https://dashboard.tawk.to/', '_blank')}
           className="w-full h-14 gradient-primary text-[#050505] font-bold rounded-xl text-lg flex items-center justify-center gap-2"
         >
-          <Shield className="w-5 h-5" /> Open Crisp Dashboard
+          <Shield className="w-5 h-5" /> Open Tawk.to Dashboard
         </Button>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
-          Reply to investors from the official Crisp portal
+          Reply to investors from the official Tawk.to portal
         </p>
       </div>
 
