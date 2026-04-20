@@ -100,6 +100,7 @@ export function CMSManager() {
       <Tabs defaultValue="hero" className="space-y-6">
         <TabsList className="bg-white/5 border border-white/10 p-1 rounded-xl">
           <TabsTrigger value="hero" className="rounded-lg font-bold text-xs uppercase tracking-wider">Hero Section</TabsTrigger>
+          <TabsTrigger value="support" className="rounded-lg font-bold text-xs uppercase tracking-wider">Support System</TabsTrigger>
           <TabsTrigger value="stats" className="rounded-lg font-bold text-xs uppercase tracking-wider">Stats & Trust</TabsTrigger>
           <TabsTrigger value="cta" className="rounded-lg font-bold text-xs uppercase tracking-wider">CTA & Footer</TabsTrigger>
         </TabsList>
@@ -126,6 +127,24 @@ export function CMSManager() {
                 {uploading ? "Uploading..." : "Replace Homepage Video"}
               </Label>
             </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="support" className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold font-display flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-primary" /> Professional Support (Crisp.chat)
+            </h3>
+            <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-200 leading-relaxed">
+              <p className="font-bold mb-1">How to set up:</p>
+              <ol className="list-decimal ml-4 space-y-1">
+                <li>Create a free account at <a href="https://crisp.chat" target="_blank" rel="noopener noreferrer" className="underline font-bold text-white">Crisp.chat</a></li>
+                <li>Go to Settings {">"} Website Settings {">"} Setup Instructions</li>
+                <li>Copy your <b>Website ID</b> (it looks like a long code of letters and numbers)</li>
+                <li>Paste it below and click Save.</li>
+              </ol>
+            </div>
+            <TextField id="crisp_website_id" label="Crisp Website ID" />
           </div>
         </TabsContent>
 

@@ -9,7 +9,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { AIChatWidget } from "@/components/AIChatWidget";
-import { SupportWidget } from "@/components/support/SupportWidget";
+import { CrispChat } from "@/components/support/CrispChat";
 import { useVisitorLog } from "@/hooks/useVisitorLog";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
@@ -76,7 +76,7 @@ function AppRoutes() {
       </Routes>
       <BottomNav />
       <AIChatWidget />
-      <SupportWidget />
+      <CrispChat />
     </>
   );
 }
